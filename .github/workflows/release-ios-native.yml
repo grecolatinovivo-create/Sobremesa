@@ -83,7 +83,7 @@ jobs:
       - name: Firma definitiva e upload su TestFlight
         working-directory: native-ios
         env:
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_KEY_ID: M8SV6RDZ7G  # ID della chiave ASC "Github Sobremesa admin" — non è un segreto
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
           xcodebuild -exportArchive \
