@@ -27,23 +27,27 @@ jobs:
         working-directory: native-ios
         run: xcodegen generate
 
+      # L'esito viene SOLO dal codice di uscita di xcodebuild: il log va su
+      # file e si filtra DOPO. Niente pipe vive (grep/head a valle + bash -e
+      # trasformano un broken pipe in un finto fallimento), e il rumore
+      # "CoreData: error:" di SwiftData al primo avvio è escluso dal riepilogo.
       - name: Compila (simulatore, nessuna firma)
         working-directory: native-ios
         run: |
-          set -o pipefail
+          set +e
           xcodebuild -project Sobremesa.xcodeproj \
             -scheme Sobremesa \
             -configuration Debug \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
-            build 2>&1 | tee /tmp/xcode-build.log \
-            | grep --line-buffered -E "error:|BUILD (FAILED|SUCCEEDED)" \
-            | head -120
-          BUILD_EXIT=${PIPESTATUS[0]}
+            build > /tmp/xcode-build.log 2>&1
+          BUILD_EXIT=$?
+          grep -E "BUILD (FAILED|SUCCEEDED)" /tmp/xcode-build.log || true
           if [ "$BUILD_EXIT" -ne 0 ]; then
             echo ""
-            echo "════ ERRORI COMPLETI ════"
-            grep "error:" /tmp/xcode-build.log | head -60
+            echo "════ ERRORI DI COMPILAZIONE ════"
+            grep -E "(^|[[:space:]])error:" /tmp/xcode-build.log \
+              | grep -v "CoreData: error:" | head -60 || true
           fi
           exit "$BUILD_EXIT"
 
@@ -51,19 +55,20 @@ jobs:
       - name: Unit test (SobremesaTests)
         working-directory: native-ios
         run: |
-          set -o pipefail
+          set +e
           xcodebuild -project Sobremesa.xcodeproj \
             -scheme Sobremesa \
             -configuration Debug \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             CODE_SIGNING_ALLOWED=NO \
-            test 2>&1 | tee /tmp/xcode-test.log \
-            | grep --line-buffered -E "error:|Test Suite|Executed|TEST (FAILED|SUCCEEDED)" \
-            | head -120
-          TEST_EXIT=${PIPESTATUS[0]}
+            test > /tmp/xcode-test.log 2>&1
+          TEST_EXIT=$?
+          echo "── Riepilogo test ──"
+          grep -E "Test Suite|Executed [0-9]+ tests|TEST (FAILED|SUCCEEDED)" /tmp/xcode-test.log | tail -25 || true
           if [ "$TEST_EXIT" -ne 0 ]; then
             echo ""
-            echo "════ ERRORI COMPLETI ════"
-            grep -E "error:|failed" /tmp/xcode-test.log | head -60
+            echo "════ ERRORI DEI TEST ════"
+            grep -E "(^|[[:space:]])(error:|failed)" /tmp/xcode-test.log \
+              | grep -v "CoreData: error:" | head -60 || true
           fi
           exit "$TEST_EXIT"
