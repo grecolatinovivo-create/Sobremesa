@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Segreti — MAI nel repo, in nessuna forma
+.env
+.env.*
+AuthKey*
+
+# Xcode: il progetto si GENERA con XcodeGen, non si versiona
+*.xcodeproj/
+DerivedData/
+**/build/
+*.xcuserstate
+xcuserdata/
+*.xcarchive
+*.ipa
+
+# Roba temporanea locale
+_to_delete/
+_setup/

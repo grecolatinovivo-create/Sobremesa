@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Font custom del design system (con fallback dichiarato in AppFont). -->
+	<key>UIAppFonts</key>
+	<array>
+		<string>YoungSerif-Regular.ttf</string>
+		<string>SourceSerif4-Variable.ttf</string>
+		<string>Inter-Variable.ttf</string>
+	</array>
+	<!-- Launch screen: la notte della sala lettura. -->
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>Ink</string>
+	</dict>
+	<!-- Niente crittografia proprietaria: evita la domanda a ogni upload su App Store Connect. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+</dict>
+</plist>

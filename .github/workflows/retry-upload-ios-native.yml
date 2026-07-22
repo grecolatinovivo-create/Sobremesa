@@ -1,0 +1,86 @@
+name: Retry upload iOS (senza ricompilare)
+
+# Quando App Store Connect rifiuta (es. errore 90382, limite giornaliero),
+# la build è già salva come artifact del run di release. Qui si scarica
+# quell'archivio e si rifà SOLO firma + upload: non si ricompila nulla.
+on:
+  workflow_dispatch:
+    inputs:
+      run_number:
+        description: "Numero del run di release fallito (artifact xcarchive-<numero>)"
+        required: true
+
+jobs:
+  retry-upload:
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Scarica l'archivio del run fallito
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          NAME="xcarchive-${{ github.event.inputs.run_number }}"
+          ARTIFACT_ID=$(gh api "repos/${{ github.repository }}/actions/artifacts?per_page=100" \
+            --paginate -q ".artifacts[] | select(.name==\"$NAME\") | .id" | head -1)
+          if [ -z "$ARTIFACT_ID" ]; then
+            echo "Artifact $NAME non trovato (scaduto? retention 7 giorni)"; exit 1
+          fi
+          gh api "repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/zip" > /tmp/archive.zip
+          mkdir -p native-ios/build/App.xcarchive
+          unzip -q /tmp/archive.zip -d native-ios/build/App.xcarchive
+          ls native-ios/build/App.xcarchive
+
+      - name: Prepara la chiave API di App Store Connect
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          mkdir -p ~/asc
+          python3 - <<'PY'
+          import os, re, sys, textwrap
+          raw = os.environ.get("ASC_API_KEY_P8", "")
+          b64 = re.sub(r'-----[^-]+-----', '', raw)
+          b64 = re.sub(r'\s+', '', b64)
+          if not b64:
+              sys.exit("ASC_API_KEY_P8 vuoto")
+          pem = ("-----BEGIN PRIVATE KEY-----\n"
+                 + "\n".join(textwrap.wrap(b64, 64))
+                 + "\n-----END PRIVATE KEY-----\n")
+          open(os.path.expanduser("~/asc/key.p8"), "w").write(pem)
+          PY
+
+      - name: Opzioni di export (upload diretto)
+        working-directory: native-ios
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          cat > ExportOptions.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Firma e upload su TestFlight
+        working-directory: native-ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/asc/key.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"

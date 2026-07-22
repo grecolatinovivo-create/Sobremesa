@@ -1,0 +1,95 @@
+name: Release iOS nativa (TestFlight)
+
+# Il rilascio è SEMPRE manuale: si decide QUANDO si pubblica.
+on:
+  workflow_dispatch:
+
+jobs:
+  release-ios-native:
+    runs-on: macos-26   # toolchain richiesta da Apple per gli upload
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Installa XcodeGen
+        run: brew install xcodegen
+
+      - name: Genera il progetto Xcode
+        working-directory: native-ios
+        run: |
+          xcodegen generate
+          xcodebuild -list -project Sobremesa.xcodeproj
+
+      - name: Prepara la chiave API di App Store Connect
+        env:
+          ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
+        run: |
+          mkdir -p ~/asc
+          python3 - <<'PY'
+          import os, re, sys, textwrap
+          raw = os.environ.get("ASC_API_KEY_P8", "")
+          b64 = re.sub(r'-----[^-]+-----', '', raw)
+          b64 = re.sub(r'\s+', '', b64)
+          if not b64:
+              sys.exit("ASC_API_KEY_P8 vuoto")
+          pem = ("-----BEGIN PRIVATE KEY-----\n"
+                 + "\n".join(textwrap.wrap(b64, 64))
+                 + "\n-----END PRIVATE KEY-----\n")
+          open(os.path.expanduser("~/asc/key.p8"), "w").write(pem)
+          PY
+
+      - name: Archive (senza firma — si firma all'export)
+        working-directory: native-ios
+        run: |
+          xcodebuild -project Sobremesa.xcodeproj \
+            -scheme Sobremesa \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/App.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CURRENT_PROJECT_VERSION=${{ github.run_number }} \
+            archive
+
+      # PARACADUTE: l'archivio si salva PRIMA dell'upload. Se lo store
+      # rifiuta (es. 90382, limite giornaliero), la build NON è persa.
+      - name: Salva l'archivio come artifact (riusabile per il retry)
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcarchive-${{ github.run_number }}
+          path: native-ios/build/App.xcarchive
+          retention-days: 7
+
+      - name: Opzioni di export (upload diretto)
+        working-directory: native-ios
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          cat > ExportOptions.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Firma definitiva e upload su TestFlight
+        working-directory: native-ios
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/asc/key.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"

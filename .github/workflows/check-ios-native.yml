@@ -1,0 +1,69 @@
+name: Check iOS nativa (build di prova)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "native-ios/**"
+      - ".github/workflows/check-ios-native.yml"
+
+# I runner macOS scalano ×10: se arriva un push mentre un check è in corsa,
+# il run vecchio viene ANNULLATO — si paga solo l'ultimo.
+concurrency:
+  group: check-ios-native
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Installa XcodeGen
+        run: brew install xcodegen
+
+      - name: Genera il progetto Xcode
+        working-directory: native-ios
+        run: xcodegen generate
+
+      - name: Compila (simulatore, nessuna firma)
+        working-directory: native-ios
+        run: |
+          set -o pipefail
+          xcodebuild -project Sobremesa.xcodeproj \
+            -scheme Sobremesa \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee /tmp/xcode-build.log \
+            | grep --line-buffered -E "error:|BUILD (FAILED|SUCCEEDED)" \
+            | head -120
+          BUILD_EXIT=${PIPESTATUS[0]}
+          if [ "$BUILD_EXIT" -ne 0 ]; then
+            echo ""
+            echo "════ ERRORI COMPLETI ════"
+            grep "error:" /tmp/xcode-build.log | head -60
+          fi
+          exit "$BUILD_EXIT"
+
+      # L'engine ha 12 unit test: girano sul simulatore, sempre senza firma.
+      - name: Unit test (SobremesaTests)
+        working-directory: native-ios
+        run: |
+          set -o pipefail
+          xcodebuild -project Sobremesa.xcodeproj \
+            -scheme Sobremesa \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            CODE_SIGNING_ALLOWED=NO \
+            test 2>&1 | tee /tmp/xcode-test.log \
+            | grep --line-buffered -E "error:|Test Suite|Executed|TEST (FAILED|SUCCEEDED)" \
+            | head -120
+          TEST_EXIT=${PIPESTATUS[0]}
+          if [ "$TEST_EXIT" -ne 0 ]; then
+            echo ""
+            echo "════ ERRORI COMPLETI ════"
+            grep -E "error:|failed" /tmp/xcode-test.log | head -60
+          fi
+          exit "$TEST_EXIT"
