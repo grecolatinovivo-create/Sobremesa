@@ -1,0 +1,10 @@
+{
+  "name": "sobremesa",
+  "private": true,
+  "type": "module",
+  "description": "Sobremesa — sito vetrina e backend serverless (/api) su Vercel",
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0",
+    "jose": "^5.9.6"
+  }
+}

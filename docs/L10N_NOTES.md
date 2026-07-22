@@ -39,3 +39,9 @@ Gestiti con le variazioni plurali del String Catalog (mai concatenazioni): `post
 ## Numeri nel copy
 
 Il copy non contiene mai numeri di business scritti a mano: le soglie e i punti arrivano da `ProductRules` come argomenti di formato (es. `toast.penalita` riceve il valore −2 dall'engine; `circoli.catalogo.pieno` riceve il 5). Unica eccezione dichiarata: i motti del prodotto ("Dodici è il numero giusto…", "doce sillas, cinco círculos" nel manifesto), che sono testo editoriale, e l'etichetta del pulsante di debug.
+
+## Multilingua interno (v1.1)
+
+La lingua non è più legata al dispositivo: da **Tu → Lingua** si sceglie tra "Come il telefono" e le sei lingue, elencate col loro **endonimo** (Italiano, English, Español, Français, Deutsch, Português) — che per definizione non si traduce. Il cambio è immediato: le `Text` SwiftUI si localizzano dal `\.locale` d'ambiente iniettato alla radice, mentre tutte le stringhe programmatiche passano da `String(localized:bundle: L10n.bundle)`, dove `L10n.bundle` punta all'`.lproj` scelto (o a `.main` per "Come il telefono"). Le notifiche della brace già programmate vengono rigenerate nella nuova lingua al momento del cambio. `AppleLanguages` viene aggiornato in parallelo così che, al riavvio successivo, anche gli elementi disegnati dal sistema (bottone Sign in with Apple, formati di data) si allineino. La preferenza vive in `UserDefaults` (`sobremesa.lingua`) — non è una credenziale.
+
+Nota per chi scrive codice: **mai** `String(localized:)` nudo — sempre con `bundle: L10n.bundle`, altrimenti quella stringa ignorerà la lingua scelta.

@@ -25,6 +25,9 @@ struct AppNotice: Identifiable, Equatable {
     let id = UUID()
     /// Messaggio già localizzato e formattato.
     let message: String
+    /// true = evento grave (penalità, espulsione): il banner resta finché
+    /// l'utente non lo chiude (UX_SPEC §3.3), niente auto-dismiss.
+    var sticky: Bool = false
 }
 
 // MARK: - Protocollo
@@ -35,11 +38,14 @@ struct AppNotice: Identifiable, Equatable {
 protocol DataService {
     var engine: SobremesaEngine { get }
 
-    /// Seed dei dati demo al primo avvio.
-    func bootstrapIfNeeded()
+    /// Esiste già il profilo dell'utente?
+    func hasProfile() -> Bool
+    /// Crea il profilo reale al primo accesso (Sign in with Apple).
+    func createProfile(name: String, appleUserID: String?)
 
     // Persone e tavola
     func me() -> Person?
+    func updateName(_ name: String)
     func friendCount() -> Int
     func isFriend(_ person: Person) -> Bool
     func pendingInvitee() -> Person?
@@ -56,6 +62,7 @@ protocol DataService {
     func myMemberships() -> [Membership]
     func membership(of circolo: Circolo) -> Membership?
     func joinCircle(_ circolo: Circolo) -> Bool
+    func createCircle(name: String, theme: String, category: PostCategory) -> [AppNotice]
     func leaveCircle(_ circolo: Circolo)
     func retakeWord(in circolo: Circolo) -> [AppNotice]
     func accept(_ request: JoinRequest) -> [AppNotice]
@@ -66,8 +73,17 @@ protocol DataService {
     /// Solo DEBUG: sposta indietro le date di attività per testare la meccanica.
     func simulateSilence(days: Int) -> [AppNotice]
 
+    // Backend
+    /// Riversa il mondo del server nello store locale (v. SyncApply).
+    func applySync(_ payload: SyncPayload)
+
     // Profilo
-    func resetDemoData()
+    func resetAllData()
+
+    #if DEBUG
+    /// Solo sviluppo: popola il mondo demo per esercitare le meccaniche.
+    func seedDemoData()
+    #endif
 }
 
 // MARK: - LocalDataService
@@ -77,7 +93,7 @@ protocol DataService {
 final class LocalDataService: DataService {
 
     let engine: SobremesaEngine
-    private let context: ModelContext
+    let context: ModelContext  // interno: usato anche da SyncApply
     private let seedFlagKey = "sobremesa.didSeed"
 
     init(context: ModelContext, engine: SobremesaEngine = SobremesaEngine()) {
@@ -95,6 +111,13 @@ final class LocalDataService: DataService {
 
     func friendCount() -> Int {
         (try? context.fetchCount(FetchDescriptor<Friendship>())) ?? 0
+    }
+
+    func updateName(_ name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let me = me() else { return }
+        me.name = trimmed
+        save()
     }
 
     func isFriend(_ person: Person) -> Bool {
@@ -142,6 +165,8 @@ final class LocalDataService: DataService {
     // MARK: Tavola
 
     func invite(_ person: Person) -> InviteOutcome {
+        // Già a tavola? Nessun doppione (doppio tap, richieste duplicate).
+        guard !isFriend(person) else { return .seated }
         if engine.canSeatNewFriend(currentFriendCount: friendCount()) {
             seat(person)
             return .seated
@@ -164,7 +189,7 @@ final class LocalDataService: DataService {
         if let pending = pendingInvitee(),
            engine.shouldAutoSeat(hasPendingInvite: true, currentFriendCount: friendCount()) {
             seat(pending)
-            notices.append(AppNotice(message: String(format: String(localized: "toast.seated"), pending.name)))
+            notices.append(AppNotice(message: String(format: String(localized: "toast.seated", bundle: L10n.bundle), pending.name)))
         }
         return notices
     }
@@ -185,14 +210,17 @@ final class LocalDataService: DataService {
 
     func publish(text: String, category: PostCategory, in circolo: Circolo?) -> [AppNotice] {
         guard let me = me() else { return [] }
+        // Destinazione stantia (es. espulsi mentre l'app era in background):
+        // il post va alla tavola, mai in un circolo che non si abita più.
+        let target = circolo.flatMap { membership(of: $0) != nil ? $0 : nil }
         var notices: [AppNotice] = []
-        let post = Post(author: me, circolo: circolo, category: category, text: text)
+        let post = Post(author: me, circolo: target, category: category, text: text)
         context.insert(post)
-        applyScore(.pubblicazione, to: me, in: circolo)
+        applyScore(.pubblicazione, to: me, in: target)
         // Pubblicare in un circolo è partecipazione attiva: azzera il silenzio.
-        if let circolo, let membership = membership(of: circolo) {
+        if let target, let membership = membership(of: target) {
             touchActivity(membership)
-            notices.append(braceNotice(for: circolo))
+            notices.append(braceNotice(for: target))
         }
         save()
         return notices
@@ -220,8 +248,8 @@ final class LocalDataService: DataService {
     }
 
     private func braceNotice(for circolo: Circolo) -> AppNotice {
-        AppNotice(message: String(format: String(localized: "toast.brace.viva"),
-                                  circolo.nameKey.loc))
+        AppNotice(message: String(format: String(localized: "toast.brace.viva", bundle: L10n.bundle),
+                                  circolo.displayName))
     }
 
     // MARK: Circoli
@@ -254,6 +282,12 @@ final class LocalDataService: DataService {
 
     func accept(_ request: JoinRequest) -> [AppNotice] {
         guard let person = request.person, let circolo = request.circolo else { return [] }
+        // Già membro? La richiesta è solo da archiviare.
+        guard !memberships(of: person).contains(where: { $0.circolo === circolo }) else {
+            context.delete(request)
+            save()
+            return []
+        }
         // Anche chi chiede di entrare abita al massimo 5 circoli.
         guard engine.canAcceptJoinRequest(requesterCircleCount: memberships(of: person).count) else {
             return []
@@ -262,8 +296,8 @@ final class LocalDataService: DataService {
         circolo.memberCount += 1
         context.delete(request)
         save()
-        return [AppNotice(message: String(format: String(localized: "toast.accolto"),
-                                          person.name, circolo.nameKey.loc))]
+        return [AppNotice(message: String(format: String(localized: "toast.accolto", bundle: L10n.bundle),
+                                          person.name, circolo.displayName))]
     }
 
     func decline(_ request: JoinRequest) {
@@ -278,6 +312,8 @@ final class LocalDataService: DataService {
         var notices: [AppNotice] = []
         for membership in myMemberships() {
             guard let circolo = membership.circolo else { continue }
+            // La brace ha senso solo in compagnia: da soli resta in attesa.
+            guard circolo.memberCount >= engine.rules.emberMinimumMembers else { continue }
             let evaluation = engine.evaluateEmber(lastActivity: membership.lastActivity,
                                                   now: now,
                                                   penaltyAlreadyApplied: membership.silencePenaltyApplied)
@@ -285,17 +321,20 @@ final class LocalDataService: DataService {
                 membership.silencePenaltyApplied = true
                 applyScore(.silenzio, to: me, in: circolo)
                 // Il valore della penalità viene da ProductRules, mai hardcoded nel copy.
-                notices.append(AppNotice(message: String(format: String(localized: "toast.penalita"),
-                                                         circolo.nameKey.loc,
-                                                         engine.points(for: .silenzio))))
+                notices.append(AppNotice(message: String(format: String(localized: "toast.penalita", bundle: L10n.bundle),
+                                                         circolo.displayName,
+                                                         engine.points(for: .silenzio)),
+                                         sticky: true))
             }
-            if evaluation.expel {
+            // L'animatore non viene espulso dal proprio circolo: il luogo è suo.
+            if evaluation.expel && !circolo.animatedByMe {
                 let days = engine.daysOfSilence(since: membership.lastActivity, now: now)
                 context.delete(membership)
                 circolo.memberCount = max(0, circolo.memberCount - 1)
                 applyScore(.espulsione, to: me, in: circolo)
-                notices.append(AppNotice(message: String(format: String(localized: "toast.espulsione"),
-                                                         circolo.nameKey.loc, days)))
+                notices.append(AppNotice(message: String(format: String(localized: "toast.espulsione", bundle: L10n.bundle),
+                                                         circolo.displayName, days),
+                                         sticky: true))
             }
         }
         save()
@@ -311,9 +350,50 @@ final class LocalDataService: DataService {
         return evaluateEmbers(now: .now)
     }
 
-    // MARK: Reset
+    // MARK: Profilo e reset
 
-    func resetDemoData() {
+    func hasProfile() -> Bool {
+        // Migrazione dalle build demo: quei dati erano finti, si riparte da zero.
+        if UserDefaults.standard.bool(forKey: seedFlagKey) {
+            purgeEverything()
+            UserDefaults.standard.set(false, forKey: seedFlagKey)
+            return false
+        }
+        return me() != nil
+    }
+
+    func createProfile(name: String, appleUserID: String?) {
+        guard me() == nil else { return }
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let displayName = trimmed.isEmpty
+            ? String(localized: "onboarding.fallback.name", bundle: L10n.bundle)
+            : trimmed
+        context.insert(Person(name: displayName,
+                              score: engine.rules.initialScore,
+                              isMe: true,
+                              appleUserID: appleUserID))
+        save()
+    }
+
+    func createCircle(name: String, theme: String, category: PostCategory) -> [AppNotice] {
+        guard let me = me(),
+              engine.canJoinCircle(currentCircleCount: myMemberships().count) else { return [] }
+        // Aperto: i circoli fondati dagli utenti si trovano con la ricerca.
+        let circolo = Circolo(nameKey: name, themeKey: theme, category: category,
+                              isOpen: true, animatedByMe: true,
+                              memberCount: 1, isSeedContent: false)
+        context.insert(circolo)
+        context.insert(Membership(person: me, circolo: circolo))
+        save()
+        return [AppNotice(message: String(format: String(localized: "toast.circolo.creato", bundle: L10n.bundle), name))]
+    }
+
+    func resetAllData() {
+        purgeEverything()
+        UserDefaults.standard.set(false, forKey: seedFlagKey)
+    }
+
+    private func purgeEverything() {
         try? context.delete(model: ParticipationEvent.self)
         try? context.delete(model: JoinRequest.self)
         try? context.delete(model: Comment.self)
@@ -322,21 +402,20 @@ final class LocalDataService: DataService {
         try? context.delete(model: Friendship.self)
         try? context.delete(model: Circolo.self)
         try? context.delete(model: Person.self)
-        UserDefaults.standard.set(false, forKey: seedFlagKey)
         save()
-        bootstrapIfNeeded()
     }
 
     private func save() {
         try? context.save()
     }
 
-    // MARK: Seed demo
+    // MARK: Seed demo (SOLO build di sviluppo)
 
-    func bootstrapIfNeeded() {
-        let alreadySeeded = UserDefaults.standard.bool(forKey: seedFlagKey)
-        let personCount = (try? context.fetchCount(FetchDescriptor<Person>())) ?? 0
-        guard !alreadySeeded || personCount == 0 else { return }
+    #if DEBUG
+    /// Popola il mondo demo. MAI chiamato in produzione: serve in sviluppo
+    /// per esercitare le meccaniche senza aspettare persone vere.
+    func seedDemoData() {
+        guard me() == nil else { return }
 
         let now = Date.now
         func hoursAgo(_ h: Double) -> Date { now.addingTimeInterval(-h * 3600) }
@@ -384,26 +463,26 @@ final class LocalDataService: DataService {
         // — Circoli (7: 2 abitati + 1 animato da me, 4 a catalogo)
         let novecento = Circolo(nameKey: "seed.circle.novecento.name",
                                 themeKey: "seed.circle.novecento.theme",
-                                category: .libro, isOpen: false, memberCount: 14)
+                                category: .libro, isOpen: false, memberCount: 14, isSeedContent: true)
         let cineforum = Circolo(nameKey: "seed.circle.cineforum.name",
                                 themeKey: "seed.circle.cineforum.theme",
-                                category: .film, isOpen: false, memberCount: 9)
+                                category: .film, isOpen: false, memberCount: 9, isSeedContent: true)
         let salaAscolto = Circolo(nameKey: "seed.circle.salaascolto.name",
                                   themeKey: "seed.circle.salaascolto.theme",
                                   category: .musica, isOpen: false,
-                                  animatedByMe: true, memberCount: 7)
+                                  animatedByMe: true, memberCount: 7, isSeedContent: true)
         let sguardi = Circolo(nameKey: "seed.circle.sguardi.name",
                               themeKey: "seed.circle.sguardi.theme",
-                              category: .arte, memberCount: 21)
+                              category: .arte, memberCount: 21, isSeedContent: true)
         let palcoscenico = Circolo(nameKey: "seed.circle.palcoscenico.name",
                                    themeKey: "seed.circle.palcoscenico.theme",
-                                   category: .teatro, memberCount: 12)
+                                   category: .teatro, memberCount: 12, isSeedContent: true)
         let ideeTramonto = Circolo(nameKey: "seed.circle.ideetramonto.name",
                                    themeKey: "seed.circle.ideetramonto.theme",
-                                   category: .idea, memberCount: 17)
+                                   category: .idea, memberCount: 17, isSeedContent: true)
         let taccuino = Circolo(nameKey: "seed.circle.taccuino.name",
                                themeKey: "seed.circle.taccuino.theme",
-                               category: .libro, memberCount: 11)
+                               category: .libro, memberCount: 11, isSeedContent: true)
         [novecento, cineforum, salaAscolto, sguardi, palcoscenico, ideeTramonto, taccuino]
             .forEach { context.insert($0) }
 
@@ -468,7 +547,7 @@ final class LocalDataService: DataService {
                                               date: daysAgo(day)))
         }
 
-        UserDefaults.standard.set(true, forKey: seedFlagKey)
         save()
     }
+    #endif
 }

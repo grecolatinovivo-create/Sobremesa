@@ -29,6 +29,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.sobremesa
+        # Sign In with Apple (capability abilitata sull'App ID app.sobremesa).
+        CODE_SIGN_ENTITLEMENTS: Config/Sobremesa.entitlements
         # Versione commerciale: si alza A MANO quando cambia la sostanza.
         MARKETING_VERSION: "1.0"
         # Build number: in release viene SOVRASCRITTO da github.run_number.

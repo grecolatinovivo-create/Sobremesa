@@ -19,6 +19,8 @@ struct CircoliView: View {
     @Query(filter: #Predicate<Person> { $0.isMe }) private var meQuery: [Person]
 
     @State private var circoloToLeave: Circolo?
+    @State private var showCreate = false
+    @State private var searchText = ""
 
     private var me: Person? { meQuery.first }
 
@@ -30,6 +32,15 @@ struct CircoliView: View {
     }
 
     var body: some View {
+        NavigationStack {
+            circoliList
+                .navigationDestination(for: Circolo.self) { circolo in
+                    CircoloRoomView(circolo: circolo)
+                }
+        }
+    }
+
+    private var circoliList: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 14) {
                 Text("circoli.title")
@@ -44,6 +55,7 @@ struct CircoliView: View {
 
                 scoreRow
                 slotCounter
+                createButton
 
                 SectionTitle(textKey: "circoli.miei.section")
                 if myMemberships.isEmpty {
@@ -61,6 +73,27 @@ struct CircoliView: View {
                 }
 
                 SectionTitle(textKey: "circoli.catalogo.section")
+
+                // La ricerca vive sul server: cerca tra tutti i circoli aperti.
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.brassSoft)
+                        .accessibilityHidden(true)
+                    TextField("circoli.cerca.placeholder", text: $searchText)
+                        .font(AppFont.ui())
+                        .foregroundStyle(Color.paper)
+                        .submitLabel(.search)
+                        .onSubmit { store.syncNow(query: searchText) }
+                }
+                .padding(12)
+                .background(Color.felt, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+                if catalog.isEmpty {
+                    Text("circoli.catalogo.empty")
+                        .font(AppFont.ui())
+                        .foregroundStyle(Color.brassSoft)
+                }
                 ForEach(catalog, id: \.persistentModelID) { circolo in
                     CatalogRow(circolo: circolo,
                                slotsFull: !store.engine.canJoinCircle(currentCircleCount: myMemberships.count))
@@ -79,8 +112,8 @@ struct CircoliView: View {
         }
         .background(Color.ink)
         .confirmationDialog(
-            Text(String(format: String(localized: "confirm.esci.title"),
-                        circoloToLeave?.nameKey.loc ?? "")),
+            Text(String(format: String(localized: "confirm.esci.title", bundle: L10n.bundle),
+                        circoloToLeave?.displayName ?? "")),
             isPresented: Binding(get: { circoloToLeave != nil },
                                  set: { if !$0 { circoloToLeave = nil } }),
             titleVisibility: .visible
@@ -93,6 +126,17 @@ struct CircoliView: View {
         } message: {
             Text("confirm.esci.message")
         }
+        .sheet(isPresented: $showCreate) {
+            CreateCircleSheet()
+        }
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    /// Da zero non c'è nulla da abitare: un circolo si può anche fondare.
+    private var createButton: some View {
+        Button("circoli.crea") { showCreate = true }
+            .buttonStyle(PillButtonStyle())
+            .disabled(!store.engine.canJoinCircle(currentCircleCount: myMemberships.count))
     }
 
     // MARK: Punteggio e slot
@@ -122,7 +166,7 @@ struct CircoliView: View {
     /// Contatore N/5 sempre visibile.
     private var slotCounter: some View {
         Text(verbatim: String.localizedStringWithFormat(
-            String(localized: "circoli.slot"),
+            String(localized: "circoli.slot", bundle: L10n.bundle),
             myMemberships.count, store.rules.maxCircles))
             .font(AppFont.ui())
             .foregroundStyle(Color.brassSoft)
@@ -147,14 +191,14 @@ private struct CircleCard: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(verbatim: circolo.nameKey.loc)
+                    Text(verbatim: circolo.displayName)
                         .font(AppFont.title(19, relativeTo: .title3))
                         .foregroundStyle(Color.ink)
-                    Text(verbatim: circolo.themeKey.loc)
+                    Text(verbatim: circolo.displayTheme)
                         .font(AppFont.caption())
                         .foregroundStyle(Color.felt)
                     Text(verbatim: String.localizedStringWithFormat(
-                        String(localized: "circolo.membri.count"), circolo.memberCount))
+                        String(localized: "circolo.membri.count", bundle: L10n.bundle), circolo.memberCount))
                         .font(AppFont.caption())
                         .foregroundStyle(Color.felt)
                 }
@@ -166,8 +210,38 @@ private struct CircleCard: View {
                 animatorBadge
             }
 
-            EmberRow(state: emberState) {
-                store.retakeWord(in: circolo)
+            // La porta della stanza: è qui che il circolo si abita davvero.
+            NavigationLink(value: circolo) {
+                HStack(spacing: 6) {
+                    Image(systemName: "bubble.left.and.bubble.right")
+                        .font(.system(size: 13))
+                    Text("circolo.conversazione")
+                        .font(AppFont.ui(14, relativeTo: .footnote))
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11))
+                }
+                .foregroundStyle(Color.brassDeep)
+                .frame(minHeight: 44)
+            }
+            .accessibilityLabel(Text(verbatim: String(
+                format: String(localized: "a11y.conversazione", bundle: L10n.bundle), circolo.displayName)))
+
+            if circolo.memberCount < store.rules.emberMinimumMembers {
+                // Da soli la brace non brucia né punisce: resta in attesa.
+                HStack(spacing: 6) {
+                    Image(systemName: "flame")
+                        .font(.system(size: 11))
+                        .accessibilityHidden(true)
+                    Text("brace.attesa")
+                        .font(AppFont.caption())
+                        .foregroundStyle(Color.felt)
+                }
+                .accessibilityElement(children: .combine)
+            } else {
+                EmberRow(state: emberState) {
+                    store.retakeWord(in: circolo)
+                }
             }
 
             if circolo.animatedByMe && !requests.isEmpty {
@@ -179,7 +253,7 @@ private struct CircleCard: View {
                 Button("action.esci", action: onLeave)
                     .buttonStyle(QuietPillButtonStyle(tint: .felt))
                     .accessibilityLabel(Text(verbatim: String(
-                        format: String(localized: "a11y.esci"), circolo.nameKey.loc)))
+                        format: String(localized: "a11y.esci", bundle: L10n.bundle), circolo.displayName)))
             }
         }
         .sobreCard()
@@ -199,7 +273,7 @@ private struct CircleCard: View {
     private var requestsPanel: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(verbatim: String.localizedStringWithFormat(
-                String(localized: "circoli.richieste.section"), requests.count))
+                String(localized: "circoli.richieste.section", bundle: L10n.bundle), requests.count))
                 .font(AppFont.ui(14, relativeTo: .footnote))
                 .foregroundStyle(Color.felt)
             ForEach(requests, id: \.persistentModelID) { request in
@@ -244,21 +318,21 @@ private struct EmberRow: View {
     var body: some View {
         switch state {
         case .viva:
-            label(color: .successTone, text: String(localized: "brace.viva"))
+            label(color: .successTone, text: String(localized: "brace.viva", bundle: L10n.bundle))
         case .affievolita(let giorni):
-            label(color: .brass, text: String.localizedStringWithFormat(
-                String(localized: "brace.affievolita"), giorni))
+            label(color: .brassDeep, text: String.localizedStringWithFormat(
+                String(localized: "brace.affievolita", bundle: L10n.bundle), giorni))
         case .avviso(let giorni):
             VStack(alignment: .leading, spacing: 8) {
                 label(color: .errorTone, text: String.localizedStringWithFormat(
-                    String(localized: "brace.avviso"), giorni))
+                    String(localized: "brace.avviso", bundle: L10n.bundle), giorni))
                 Button("action.riprendi", action: onRetake)
                     .buttonStyle(PillButtonStyle())
             }
         case .espulsione(let giorni):
             // In pratica non visibile: l'espulsione rimuove la membership.
             label(color: .errorTone, text: String.localizedStringWithFormat(
-                String(localized: "brace.avviso"), giorni))
+                String(localized: "brace.avviso", bundle: L10n.bundle), giorni))
         }
     }
 
@@ -285,14 +359,14 @@ private struct CatalogRow: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(verbatim: circolo.nameKey.loc)
+                    Text(verbatim: circolo.displayName)
                         .font(AppFont.title(17, relativeTo: .headline))
                         .foregroundStyle(Color.ink)
-                    Text(verbatim: circolo.themeKey.loc)
+                    Text(verbatim: circolo.displayTheme)
                         .font(AppFont.caption())
                         .foregroundStyle(Color.felt)
                     Text(verbatim: String.localizedStringWithFormat(
-                        String(localized: "circolo.membri.count"), circolo.memberCount))
+                        String(localized: "circolo.membri.count", bundle: L10n.bundle), circolo.memberCount))
                         .font(AppFont.caption())
                         .foregroundStyle(Color.felt)
                 }
@@ -300,18 +374,100 @@ private struct CatalogRow: View {
                 Button("action.entra") { store.joinCircle(circolo) }
                     .buttonStyle(PillButtonStyle())
                     .disabled(slotsFull)
-                    .opacity(slotsFull ? 0.45 : 1)
                     .accessibilityLabel(Text(verbatim: String(
-                        format: String(localized: "a11y.entra"), circolo.nameKey.loc)))
+                        format: String(localized: "a11y.entra", bundle: L10n.bundle), circolo.displayName)))
             }
             if slotsFull {
                 // Disabilitato e spiegato, mai nascosto.
                 Text(verbatim: String.localizedStringWithFormat(
-                    String(localized: "circoli.catalogo.pieno"), store.rules.maxCircles))
+                    String(localized: "circoli.catalogo.pieno", bundle: L10n.bundle), store.rules.maxCircles))
                     .font(AppFont.caption())
                     .foregroundStyle(Color.errorTone)
             }
         }
         .sobreCard(.paperDim)
+    }
+}
+
+
+// MARK: - Creazione di un circolo
+
+/// "Un circolo non si segue: si abita." E qualcuno deve pure aprirlo.
+private struct CreateCircleSheet: View {
+    @Environment(AppStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
+    @State private var name = ""
+    @State private var theme = ""
+    @State private var category: PostCategory = .libro
+    @State private var showEmptyError = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("crea.titolo")
+                .font(AppFont.title(22, relativeTo: .title2))
+                .foregroundStyle(Color.paperDim)
+                .accessibilityAddTraits(.isHeader)
+
+            VStack(alignment: .leading, spacing: 10) {
+                TextField("crea.nome.placeholder", text: $name)
+                    .font(AppFont.bodySerif())
+                    .foregroundStyle(Color.ink)
+                    .onChange(of: name) { _, newValue in
+                        if !newValue.isEmpty { showEmptyError = false }
+                    }
+                if showEmptyError {
+                    // Errore inline, mai alert.
+                    Text("crea.error.empty")
+                        .font(AppFont.caption())
+                        .foregroundStyle(Color.errorTone)
+                }
+                TextField("crea.tema.placeholder", text: $theme)
+                    .font(AppFont.bodySerif(15, relativeTo: .subheadline))
+                    .foregroundStyle(Color.ink)
+            }
+            .sobreCard()
+
+            Text("crea.categoria")
+                .font(AppFont.caption())
+                .foregroundStyle(Color.brassSoft)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    ForEach(PostCategory.allCases) { cat in
+                        Button {
+                            category = cat
+                        } label: {
+                            CategoryChip(category: cat, isSelected: cat == category, onDark: true)
+                                .frame(minHeight: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text(verbatim: cat.labelKey.loc))
+                        .accessibilityAddTraits(cat == category ? [.isSelected] : [])
+                    }
+                }
+            }
+
+            HStack {
+                Spacer()
+                Button("crea.conferma") { create() }
+                    .buttonStyle(PillButtonStyle())
+            }
+            Spacer()
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Color.ink)
+        .presentationDetents([.medium])
+    }
+
+    private func create() {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else {
+            showEmptyError = true
+            return
+        }
+        store.createCircle(name: trimmedName,
+                           theme: theme.trimmingCharacters(in: .whitespacesAndNewlines),
+                           category: category)
+        dismiss()
     }
 }

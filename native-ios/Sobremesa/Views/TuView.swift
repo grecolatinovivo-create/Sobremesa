@@ -8,14 +8,13 @@
 
 import SwiftUI
 import SwiftData
-import UIKit
 
 struct TuView: View {
     @Environment(AppStore.self) private var store
-    @Environment(\.openURL) private var openURL
     @Query(filter: #Predicate<Person> { $0.isMe }) private var meQuery: [Person]
 
     @State private var confirmReset = false
+    @State private var draftName = ""
 
     private var me: Person? { meQuery.first }
 
@@ -33,6 +32,7 @@ struct TuView: View {
 
                 manifestoCard
                 languageCard
+                creditsCard
                 resetButton
             }
             .padding(16)
@@ -42,7 +42,7 @@ struct TuView: View {
                             isPresented: $confirmReset,
                             titleVisibility: .visible) {
             Button("tu.reset.confirm.action", role: .destructive) {
-                store.resetDemoData()
+                store.resetAllData()
             }
             Button("confirm.cancel", role: .cancel) { confirmReset = false }
         } message: {
@@ -55,9 +55,15 @@ struct TuView: View {
             HStack(spacing: 12) {
                 AvatarView(initials: me.initials, size: 56)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(verbatim: me.name)
+                    // Il nome è tuo: si corregge quando vuoi (Apple lo dà solo
+                    // alla prima autorizzazione, e a volte nemmeno).
+                    TextField("tu.nome.placeholder", text: $draftName)
                         .font(AppFont.title(22, relativeTo: .title2))
                         .foregroundStyle(Color.ink)
+                        .submitLabel(.done)
+                        .onAppear { draftName = me.name }
+                        .onSubmit { store.updateName(draftName) }
+                        .accessibilityLabel(Text("tu.nome.placeholder"))
                     ScoreBadge(score: me.score, band: store.engine.band(for: me.score))
                 }
             }
@@ -67,9 +73,11 @@ struct TuView: View {
                     .foregroundStyle(Color.felt)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Text(verbatim: me.interestKeys.map(\.loc).joined(separator: ", "))
-                .font(AppFont.caption())
-                .foregroundStyle(Color.felt)
+            if !me.interestKeys.isEmpty {
+                Text(verbatim: me.interestKeys.map(\.loc).joined(separator: ", "))
+                    .font(AppFont.caption())
+                    .foregroundStyle(Color.felt)
+            }
         }
         .sobreCard()
     }
@@ -88,8 +96,8 @@ struct TuView: View {
         .sobreCard()
     }
 
-    /// La lingua dell'app segue quella del dispositivo (String Catalog):
-    /// da qui si apre la scheda dell'app nelle Impostazioni di sistema.
+    /// Il multilingua interno: di serie l'app segue il telefono, ma da qui
+    /// la lingua si sceglie a mano e cambia subito, senza riavviare.
     private var languageCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("tu.lingua.label")
@@ -99,12 +107,48 @@ struct TuView: View {
                 .font(AppFont.caption())
                 .foregroundStyle(Color.felt)
                 .fixedSize(horizontal: false, vertical: true)
-            Button("tu.lingua.apri") {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    openURL(url)
+            Menu {
+                Picker("tu.lingua.label", selection: Binding(
+                    get: { store.language },
+                    set: { store.language = $0 }
+                )) {
+                    Text("tu.lingua.sistema").tag(AppLanguage.system)
+                    // Gli endonimi non si traducono: ognuno riconosce la sua.
+                    ForEach(AppLanguage.choices, id: \.self) { lingua in
+                        Text(verbatim: lingua.endonym).tag(lingua)
+                    }
                 }
+            } label: {
+                HStack(spacing: 6) {
+                    if store.language == .system {
+                        Text("tu.lingua.sistema")
+                    } else {
+                        Text(verbatim: store.language.endonym)
+                    }
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 11, weight: .semibold))
+                }
+                .font(AppFont.ui(14, relativeTo: .subheadline))
             }
             .buttonStyle(QuietPillButtonStyle(tint: .felt))
+            .accessibilityLabel(Text("tu.lingua.label"))
+            .accessibilityValue(store.language == .system
+                ? Text("tu.lingua.sistema")
+                : Text(verbatim: store.language.endonym))
+        }
+        .sobreCard(.paperDim)
+    }
+
+    /// Riconoscimenti: i caratteri OFL viaggiano con la loro licenza (nel bundle).
+    private var creditsCard: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("tu.riconoscimenti.title")
+                .font(AppFont.ui(15, relativeTo: .subheadline))
+                .foregroundStyle(Color.ink)
+            Text("tu.riconoscimenti.text")
+                .font(AppFont.caption())
+                .foregroundStyle(Color.felt)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .sobreCard(.paperDim)
     }

@@ -28,6 +28,10 @@ struct SalottoView: View {
 
                 ComposerCard()
 
+                if showFirstSteps {
+                    firstSteps
+                }
+
                 if feed.isEmpty {
                     emptyState
                 } else {
@@ -40,6 +44,40 @@ struct SalottoView: View {
         }
         .background(Color.ink)
         .scrollDismissesKeyboard(.interactively)
+    }
+
+    // MARK: Primi passi (cold start): un percorso, non tre stanze vuote
+
+    private var hasMyPost: Bool {
+        allPosts.contains { $0.author?.isMe == true }
+    }
+
+    private var showFirstSteps: Bool {
+        !hasMyPost || store.myMemberships.isEmpty
+    }
+
+    private var firstSteps: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("passi.title")
+                .font(AppFont.title(17, relativeTo: .headline))
+                .foregroundStyle(Color.ink)
+            stepRow(done: hasMyPost, key: "passi.post")
+            stepRow(done: !store.myMemberships.isEmpty, key: "passi.circolo")
+            stepRow(done: false, key: "passi.brace")
+        }
+        .sobreCard(.paperDim)
+    }
+
+    private func stepRow(done: Bool, key: LocalizedStringKey) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: done ? "checkmark.circle.fill" : "circle")
+                .foregroundStyle(done ? Color.successTone : Color.felt)
+                .accessibilityLabel(Text(done ? "a11y.passo.fatto" : "a11y.passo.dafare"))
+            Text(key)
+                .font(AppFont.ui(14, relativeTo: .footnote))
+                .foregroundStyle(Color.ink)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var emptyState: some View {
@@ -133,7 +171,7 @@ private struct ComposerCard: View {
                     Button {
                         destination = circolo
                     } label: {
-                        Label { Text(verbatim: circolo.nameKey.loc) } icon: {
+                        Label { Text(verbatim: circolo.displayName) } icon: {
                             Image(systemName: circolo.category.symbolName)
                         }
                     }
@@ -143,8 +181,8 @@ private struct ComposerCard: View {
             HStack(spacing: 4) {
                 Image(systemName: destination?.category.symbolName ?? "table.furniture")
                     .font(.system(size: 12))
-                Text(verbatim: destination.map { $0.nameKey.loc }
-                     ?? String(localized: "composer.dest.tavola"))
+                Text(verbatim: destination.map { $0.displayName }
+                     ?? String(localized: "composer.dest.tavola", bundle: L10n.bundle))
                     .font(AppFont.caption())
                 Image(systemName: "chevron.down")
                     .font(.system(size: 9))
@@ -153,6 +191,8 @@ private struct ComposerCard: View {
             .frame(minHeight: 44)
         }
         .accessibilityLabel(Text("a11y.destination"))
+        .accessibilityValue(Text(verbatim: destination.map { $0.displayName }
+                                 ?? String(localized: "composer.dest.tavola", bundle: L10n.bundle)))
     }
 
     private func publish() {
@@ -161,7 +201,9 @@ private struct ComposerCard: View {
             showEmptyError = true
             return
         }
-        store.publish(text: trimmed, category: category, in: destination)
+        // Se nel frattempo il circolo scelto non è più abitato, si pubblica alla tavola.
+        let target = destination.flatMap { store.membership(of: $0) != nil ? $0 : nil }
+        store.publish(text: trimmed, category: category, in: target)
         text = ""
         showEmptyError = false
         destination = nil
@@ -170,7 +212,7 @@ private struct ComposerCard: View {
 
 // MARK: - Card di un post
 
-private struct PostCard: View {
+struct PostCard: View {
     @Environment(AppStore.self) private var store
     let post: Post
     @State private var commentsExpanded = false
@@ -217,9 +259,9 @@ private struct PostCard: View {
 
     private var provenance: String {
         if let circolo = post.circolo {
-            return String(format: String(localized: "post.provenance.circolo"), circolo.nameKey.loc)
+            return String(format: String(localized: "post.provenance.circolo", bundle: L10n.bundle), circolo.displayName)
         }
-        return String(localized: "post.provenance.tavola")
+        return String(localized: "post.provenance.tavola", bundle: L10n.bundle)
     }
 
     private var actions: some View {
@@ -247,6 +289,7 @@ private struct PostCard: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(post.nutritoDaMe ? "a11y.nutre.on" : "a11y.nutre.off"))
+        .accessibilityValue(Text(verbatim: "\(post.nutreCount + (post.nutritoDaMe ? 1 : 0))"))
     }
 
     private var commentsToggle: some View {
@@ -256,7 +299,7 @@ private struct PostCard: View {
             HStack(spacing: 5) {
                 Image(systemName: "bubble.left")
                 Text(verbatim: String.localizedStringWithFormat(
-                    String(localized: "post.comments.count"), post.comments.count))
+                    String(localized: "post.comments.count", bundle: L10n.bundle), post.comments.count))
                     .font(AppFont.caption())
                 Image(systemName: commentsExpanded ? "chevron.up" : "chevron.down")
                     .font(.system(size: 9))

@@ -54,6 +54,10 @@ final class Person {
     var isCandidate: Bool
     /// Ha un invito in sospeso (tavola piena al momento dell'invito)?
     var hasPendingInvite: Bool
+    /// Identificatore stabile di Sign in with Apple (solo per l'utente).
+    var appleUserID: String?
+    /// Id lato server (backend Sobremesa); nil per righe puramente locali.
+    var serverID: String?
 
     init(name: String,
          bioKey: String? = nil,
@@ -61,7 +65,8 @@ final class Person {
          score: Int,
          isMe: Bool = false,
          isCandidate: Bool = false,
-         hasPendingInvite: Bool = false) {
+         hasPendingInvite: Bool = false,
+         appleUserID: String? = nil) {
         self.name = name
         self.bioKey = bioKey
         self.interestKeys = interestKeys
@@ -69,6 +74,7 @@ final class Person {
         self.isMe = isMe
         self.isCandidate = isCandidate
         self.hasPendingInvite = hasPendingInvite
+        self.appleUserID = appleUserID
     }
 
     /// Iniziali per gli avatar e le sedie della tavola.
@@ -110,22 +116,34 @@ final class Circolo {
     var animatedByMe: Bool
     /// Numero membri complessivo, membri "di sfondo" inclusi (DECISIONI.md #7).
     var memberCount: Int
+    /// true = contenuto demo (nome/tema sono chiavi del String Catalog);
+    /// false = circolo creato dall'utente (nome/tema sono testo puro).
+    var isSeedContent: Bool
+    /// Id lato server; nil per circoli puramente locali (demo).
+    var serverID: String?
 
     init(nameKey: String,
          themeKey: String,
          category: PostCategory,
          isOpen: Bool = true,
          animatedByMe: Bool = false,
-         memberCount: Int) {
+         memberCount: Int,
+         isSeedContent: Bool = false) {
         self.nameKey = nameKey
         self.themeKey = themeKey
         self.categoryRaw = category.rawValue
         self.isOpen = isOpen
         self.animatedByMe = animatedByMe
         self.memberCount = memberCount
+        self.isSeedContent = isSeedContent
     }
 
     var category: PostCategory { PostCategory(rawValue: categoryRaw) ?? .idea }
+
+    /// Nome visualizzabile (risolve la chiave solo per i contenuti demo).
+    var displayName: String { isSeedContent ? nameKey.loc : nameKey }
+    /// Tema visualizzabile.
+    var displayTheme: String { isSeedContent ? themeKey.loc : themeKey }
 }
 
 // MARK: - Membership
@@ -163,8 +181,10 @@ final class Post {
     var text: String
     var isSeedContent: Bool
     var createdAt: Date
-    /// "Nutre" ricevuti da altri (seed) — il mio è tracciato a parte.
+    /// "Nutre" ricevuti da altri — il mio è tracciato a parte.
     var nutreCount: Int
+    /// Id lato server; nil per post puramente locali.
+    var serverID: String?
     /// L'utente ha nutrito questo post? (toggle, mai doppio conteggio)
     var nutritoDaMe: Bool
 
@@ -225,6 +245,8 @@ final class JoinRequest {
     var circolo: Circolo?
     var person: Person?
     var createdAt: Date
+    /// Id lato server.
+    var serverID: String?
 
     init(circolo: Circolo, person: Person, createdAt: Date = .now) {
         self.circolo = circolo

@@ -21,6 +21,8 @@ extension Color {
     static let brassSoft  = Color("BrassSoft")   // dettagli ottone su scuro
     static let errorTone  = Color("ErrorTone")   // errori, avviso brace
     static let successTone = Color("SuccessTone")// conferme, brace viva
+    static let brassDeep  = Color("BrassDeep")   // testi ottone su carta (AA 4,6:1)
+    static let errorSoft  = Color("ErrorSoft")   // testi d'errore su fondo notte (AA)
 }
 
 // MARK: - Tipografia (con fallback dichiarato)
@@ -97,7 +99,9 @@ extension View {
 // MARK: - Bottoni
 
 /// CTA a pillola: fondo ottone, testo notte. Tap target ≥ 44pt.
+/// Lo stato disabilitato si vede da sé: gli stili leggono isEnabled.
 struct PillButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(AppFont.ui(15, relativeTo: .subheadline))
@@ -105,12 +109,13 @@ struct PillButtonStyle: ButtonStyle {
             .frame(minHeight: 44)
             .background(Capsule().fill(Color.brass))
             .foregroundStyle(Color.ink)
-            .opacity(configuration.isPressed ? 0.75 : 1)
+            .opacity(configuration.isPressed ? 0.75 : (isEnabled ? 1 : 0.45))
     }
 }
 
 /// Variante silenziosa: bordo ottone su fondo trasparente.
 struct QuietPillButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
     var tint: Color = .brassSoft
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -119,7 +124,7 @@ struct QuietPillButtonStyle: ButtonStyle {
             .frame(minHeight: 44)
             .overlay(Capsule().strokeBorder(tint, lineWidth: 1))
             .foregroundStyle(tint)
-            .opacity(configuration.isPressed ? 0.6 : 1)
+            .opacity(configuration.isPressed ? 0.6 : (isEnabled ? 1 : 0.45))
     }
 }
 
@@ -154,16 +159,16 @@ struct ScoreBadge: View {
     private var bandColor: Color {
         switch band {
         case .voceViva:         return .successTone
-        case .presenzaDiscreta: return .brass
+        case .presenzaDiscreta: return .brassDeep   // Brass puro su carta è 2,3:1: sotto AA
         case .ombraAlTavolo:    return .errorTone
         }
     }
 
     private var bandLabel: String {
         switch band {
-        case .voceViva:         return String(localized: "band.voceViva")
-        case .presenzaDiscreta: return String(localized: "band.presenzaDiscreta")
-        case .ombraAlTavolo:    return String(localized: "band.ombraAlTavolo")
+        case .voceViva:         return String(localized: "band.voceViva", bundle: L10n.bundle)
+        case .presenzaDiscreta: return String(localized: "band.presenzaDiscreta", bundle: L10n.bundle)
+        case .ombraAlTavolo:    return String(localized: "band.ombraAlTavolo", bundle: L10n.bundle)
         }
     }
 
@@ -180,7 +185,7 @@ struct ScoreBadge: View {
         .overlay(Capsule().strokeBorder(bandColor.opacity(0.7), lineWidth: 1))
         .foregroundStyle(bandColor)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(String(format: String(localized: "a11y.score"), score, bandLabel)))
+        .accessibilityLabel(Text(String(format: String(localized: "a11y.score", bundle: L10n.bundle), score, bandLabel)))
     }
 }
 
@@ -210,22 +215,33 @@ struct CategoryChip: View {
 
 struct ToastView: View {
     let notice: AppNotice
+    var onDismiss: () -> Void = {}
 
     var body: some View {
-        Text(verbatim: notice.message)
-            .font(AppFont.ui(14, relativeTo: .footnote))
-            .foregroundStyle(Color.paper)
-            .multilineTextAlignment(.center)
-            .padding(.horizontal, 18)
-            .padding(.vertical, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color.felt)
-                    .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .strokeBorder(Color.brassSoft.opacity(0.6), lineWidth: 1))
-            )
-            .padding(.horizontal, 24)
-            .accessibilityAddTraits(.updatesFrequently)
+        HStack(alignment: .top, spacing: 10) {
+            Text(verbatim: notice.message)
+                .font(AppFont.ui(14, relativeTo: .footnote))
+                .foregroundStyle(Color.paper)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Button(action: onDismiss) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.brassSoft)
+                    .frame(width: 32, height: 32)
+            }
+            .accessibilityLabel(Text("a11y.toast.chiudi"))
+        }
+        .padding(.leading, 18)
+        .padding(.trailing, 8)
+        .padding(.vertical, 10)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color.felt)
+                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(Color.brassSoft.opacity(0.6), lineWidth: 1))
+        )
+        .padding(.horizontal, 24)
     }
 }
 

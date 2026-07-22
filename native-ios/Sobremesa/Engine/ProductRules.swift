@@ -28,6 +28,9 @@ struct ProductRules: Equatable, Sendable {
     var emberWarningAfterDays: Int = 4
     /// Da questo numero di giorni il posto si libera automaticamente.
     var emberExpulsionAfterDays: Int = 7
+    /// La brace si valuta solo se il circolo ha almeno questi membri:
+    /// da soli non c'è conversazione da tenere viva.
+    var emberMinimumMembers: Int = 2
 
     // MARK: Punteggio di partecipazione
     /// Punti per una pubblicazione.

@@ -13,7 +13,6 @@ struct RootTabView: View {
     @Environment(AppStore.self) private var store
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var didBootstrap = false
 
     var body: some View {
         TabView {
@@ -28,14 +27,9 @@ struct RootTabView: View {
         }
         .tint(.brass)
         .overlay(alignment: .bottom) { toastOverlay }
-        .onAppear {
-            guard !didBootstrap else { return }
-            didBootstrap = true
-            store.bootstrap()
-        }
         .onChange(of: scenePhase) { _, newPhase in
             // Il tempo è reale: a ogni ritorno in foreground la brace va rivalutata.
-            if newPhase == .active && didBootstrap {
+            if newPhase == .active {
                 store.appBecameActive()
             }
         }
@@ -44,7 +38,7 @@ struct RootTabView: View {
     @ViewBuilder
     private var toastOverlay: some View {
         if let toast = store.toast {
-            ToastView(notice: toast)
+            ToastView(notice: toast) { store.dismissToast() }
                 .padding(.bottom, 64)
                 .transition(reduceMotion
                             ? .opacity

@@ -18,6 +18,9 @@ struct TavolaView: View {
 
     /// Amico di cui si sta per liberare la sedia (conferma in corso).
     @State private var friendshipToFree: Friendship?
+    /// Codice d'invito appena generato, pronto da condividere.
+    @State private var inviteCode: String?
+    @State private var redeemCode = ""
 
     var body: some View {
         ScrollView {
@@ -40,6 +43,7 @@ struct TavolaView: View {
                     fullTablePanel(for: pending)
                 }
 
+                inviteCard
                 friendsSection
                 candidatesSection
             }
@@ -47,7 +51,7 @@ struct TavolaView: View {
         }
         .background(Color.ink)
         .confirmationDialog(
-            Text(String(format: String(localized: "confirm.libera.title"),
+            Text(String(format: String(localized: "confirm.libera.title", bundle: L10n.bundle),
                         friendshipToFree?.person?.name ?? "")),
             isPresented: Binding(get: { friendshipToFree != nil },
                                  set: { if !$0 { friendshipToFree = nil } }),
@@ -71,7 +75,7 @@ struct TavolaView: View {
     /// l'invitato in sospeso si siede automaticamente.
     private func fullTablePanel(for pending: Person) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(verbatim: String(format: String(localized: "tavola.full.message"), pending.name))
+            Text(verbatim: String(format: String(localized: "tavola.full.message", bundle: L10n.bundle), pending.name))
                 .font(AppFont.ui())
                 .foregroundStyle(Color.ink)
                 .fixedSize(horizontal: false, vertical: true)
@@ -88,7 +92,53 @@ struct TavolaView: View {
         .accessibilityElement(children: .combine)
     }
 
-    // MARK: Sezioni
+    // MARK: Inviti reali
+
+    /// Ci si trova con un codice: lo generi, lo mandi tu a chi vuoi.
+    /// Niente ricerca pubblica delle persone: la tavola resta intima.
+    private var inviteCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("tavola.invito.title")
+                .font(AppFont.ui(15, relativeTo: .subheadline))
+                .foregroundStyle(Color.ink)
+
+            if let code = inviteCode {
+                HStack(spacing: 12) {
+                    Text(verbatim: code)
+                        .font(AppFont.title(20, relativeTo: .title3))
+                        .foregroundStyle(Color.ink)
+                        .textSelection(.enabled)
+                    Spacer()
+                    ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle), code)) {
+                        Label("tavola.invito.condividi", systemImage: "square.and.arrow.up")
+                    }
+                    .buttonStyle(PillButtonStyle())
+                }
+            } else {
+                Button("tavola.invito.crea") {
+                    Task { inviteCode = await store.createInviteCode() }
+                }
+                .buttonStyle(QuietPillButtonStyle(tint: .felt))
+            }
+
+            Divider().overlay(Color.felt.opacity(0.2))
+
+            HStack(spacing: 8) {
+                TextField("invito.codice.campo", text: $redeemCode)
+                    .font(AppFont.ui())
+                    .foregroundStyle(Color.ink)
+                    .textInputAutocapitalization(.characters)
+                    .autocorrectionDisabled()
+                Button("invito.usa") {
+                    store.redeemInvite(code: redeemCode)
+                    redeemCode = ""
+                }
+                .buttonStyle(QuietPillButtonStyle(tint: .felt))
+                .disabled(redeemCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .sobreCard(.paperDim)
+    }
 
     private var friendsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -104,7 +154,7 @@ struct TavolaView: View {
                         Button("action.libera.sedia") { friendshipToFree = friendship }
                             .buttonStyle(QuietPillButtonStyle(tint: .felt))
                             .accessibilityLabel(Text(verbatim: String(
-                                format: String(localized: "a11y.libera.sedia"), person.name)))
+                                format: String(localized: "a11y.libera.sedia", bundle: L10n.bundle), person.name)))
                     }
                 }
             }
@@ -114,6 +164,13 @@ struct TavolaView: View {
     private var candidatesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionTitle(textKey: "tavola.candidates.section")
+            if candidates.isEmpty {
+                // Onestà del prodotto: senza backend non c'è ancora nessuno da invitare.
+                Text("tavola.candidates.empty")
+                    .font(AppFont.ui())
+                    .foregroundStyle(Color.brassSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             ForEach(candidates, id: \.persistentModelID) { person in
                 PersonRow(person: person) {
                     if person.hasPendingInvite {
@@ -124,7 +181,7 @@ struct TavolaView: View {
                         Button("action.invita") { store.invite(person) }
                             .buttonStyle(PillButtonStyle())
                             .accessibilityLabel(Text(verbatim: String(
-                                format: String(localized: "a11y.invita"), person.name)))
+                                format: String(localized: "a11y.invita", bundle: L10n.bundle), person.name)))
                     }
                 }
             }
@@ -169,6 +226,8 @@ struct TableRingView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let friends: [Person]
     let maxChairs: Int
+    /// Altezza del disegno: parametrica, così l'onboarding può usarne una ridotta.
+    var height: CGFloat = 300
 
     private let chairSize: CGFloat = 40
 
@@ -197,7 +256,7 @@ struct TableRingView: View {
                         .font(AppFont.display(30, relativeTo: .title))
                         .foregroundStyle(Color.paperDim)
                     Text(verbatim: String.localizedStringWithFormat(
-                        String(localized: "tavola.sedie.libere"),
+                        String(localized: "tavola.sedie.libere", bundle: L10n.bundle),
                         max(0, maxChairs - friends.count)))
                         .font(AppFont.caption())
                         .foregroundStyle(Color.brassSoft)
@@ -205,13 +264,13 @@ struct TableRingView: View {
                 .position(center)
             }
         }
-        .frame(height: 300)
+        .frame(height: height)
         .animation(reduceMotion ? .default.speed(2) : .spring(duration: 0.5, bounce: 0.25),
                    value: friends.count)
         // La tavola grafica ha una descrizione testuale equivalente.
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(verbatim: String.localizedStringWithFormat(
-            String(localized: "a11y.table"),
+            String(localized: "a11y.table", bundle: L10n.bundle),
             friends.count, maxChairs, max(0, maxChairs - friends.count))))
     }
 

@@ -185,3 +185,9 @@ Lingua dell'app → (apre Impostazioni di sistema)
 **F5 — Entrare in un circolo.** Catalogo → Entra (se slot <5) → card passa tra "I tuoi circoli" con brace viva. A 5/5 il bottone resta visibile, disabilitato, con la spiegazione.
 
 **F6 — Ritorno in foreground.** A ogni avvio/foreground l'app rivaluta il silenzio reale di tutti i circoli abitati e applica avvisi/penalità/espulsioni con relative notifiche in-app.
+
+---
+
+## Addendum v1.1 — Da zero e la stanza del circolo (post-audit)
+
+L'app parte **da zero**: onboarding con Sign in with Apple (solo nome; se Apple non lo fornisce lo chiede un campo dedicato), nessun dato demo, card "I primi passi" nel Salotto (3 tappe con spunte) come percorso del primo minuto. Ogni circolo ha ora la sua **stanza** (`CircoloRoomView`): dalla card, riga "Conversazione" → testata con tema/membri/brace, composer con destinazione già decisa, cronologia dei soli post del circolo. La **brace** è valutata solo con ≥2 membri ("La brace si accenderà quando sarete almeno in due"), ha **richiami locali** al giorno 4 e 7, e gli eventi gravi usano banner **persistenti** con chiusura esplicita, annunciati a VoiceOver. Nuovi colori `BrassDeep` (ottone su carta, AA) ed `ErrorSoft` (errori su notte). "Azzera i dati demo" è diventato "Ricomincia da zero". Il nome è modificabile in Tu; in Tu vive anche "Riconoscimenti" (font OFL).

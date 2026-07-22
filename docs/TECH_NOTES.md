@@ -64,3 +64,28 @@ Secrets richiesti (GitHub → Settings → Secrets and variables → Actions): `
 - Il toggle "Nutre" è un flag sul post (`nutritoDaMe`) sommato al contatore seed: impossibile il doppio conteggio per costruzione.
 - `ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO` + accesso ai colori per nome centralizzato in `Theme.swift`: un solo punto di verità, zero rischio di collisioni di simboli generati.
 - Chi si alza dalla tavola torna tra i candidati invitabili (nessun "buco nero" di persone).
+
+## Accesso e partenza da zero (v1.0 build ≥4)
+
+Al primo avvio `AppRootView` mostra `OnboardingView` con **Sign in with Apple** (`AuthenticationServices`, scope solo `fullName`; entitlement `com.apple.developer.applesignin` in `Config/Sobremesa.entitlements`, capability abilitata sull'App ID `app.sobremesa`). Il nome fornito da Apple (solo alla prima autorizzazione) crea il profilo reale via `createProfile`; senza nome si usa il fallback localizzato. Nessun dato demo: `hasProfile()` fa anche da migrazione — se rileva il flag delle vecchie build demo, ripulisce tutto e ripropone l'accesso. Il vecchio seed vive solo come `seedDemoData()` dentro `#if DEBUG`. I circoli ora possono essere **creati dall'utente** (`createCircle`: animatore = creatore, slot occupato, testo puro non localizzato — `Circolo.isSeedContent` distingue i due mondi per la risoluzione dei nomi).
+
+## Il backend (v1.1): Vercel `/api` + Postgres (Neon, Francoforte)
+
+Il progetto Vercel che serve il sito ora ospita anche il backend: funzioni serverless in `/api` (Node, ESM — `package.json` con `@vercel/postgres` e `jose`), database **Neon Postgres** collegato al progetto (risorsa `sobremesa-db`, regione `fra1`, variabili con prefisso `POSTGRES` → `POSTGRES_URL` e sorelle). Tre segreti di progetto: `POSTGRES_*` (creati dal collegamento Neon), `SESSION_SECRET` (firma delle sessioni), `CRON_SECRET` (migrazioni e cron).
+
+**Architettura in una riga:** il server decide, il client fotografa. Ogni mutazione fa tre passi — effetto locale ottimistico, chiamata API, `GET /api/sync` che riallinea l'intero mondo (`SyncApply` svuota e ricostruisce SwiftData; la UI con `@Query` non cambia di una riga). Se la rete manca, l'effetto locale resta e un toast lo dice con onestà.
+
+**Gli endpoint** (tutti autenticati con `Authorization: Bearer <jwt>`, tranne dove indicato):
+
+- `POST /api/auth/apple` (pubblico) — verifica il token di identità SIWA contro le JWKS di Apple (`aud = app.sobremesa`), upserta l'utente su `apple_sub`, restituisce sessione JWT HS256 a 90 giorni.
+- `GET /api/sync[?q=...]` — l'intero mondo in un colpo: profilo, amici, inviti pendenti, circoli abitati, catalogo dei circoli aperti (con ricerca `ILIKE`), richieste da decidere, post e commenti.
+- `GET/PATCH/DELETE /api/me` — profilo, rinomina, **cancellazione account** (cascata totale via foreign key; Apple 5.1.1(v)).
+- `POST /api/invites` / `POST /api/invites?accept=1` — codice d'invito alla tavola; se la tavola dell'invitante è piena il posto resta "in attesa" e si libera col primo alzarsi (`friends/remove` fa l'auto-seat del più anziano in attesa).
+- `POST /api/circles`, `POST /api/circles/membership` (join/leave/retake; join in circolo chiuso → richiesta), `POST /api/requests/decide` — vita dei circoli; l'animatore che lascia chiude il circolo.
+- `POST /api/posts` (+2, tocca l'attività), `POST /api/posts/react` (nutre toggle / commento +1).
+- `GET /api/cron/embers` — **cron orario Vercel** (`vercel.json` → `crons`), protetto da `CRON_SECRET`: valuta la brace di ogni membership (salta i circoli sotto `emberMinimumMembers`, mai l'animatore), penalità una sola volta per periodo (`penalty_applied`), espulsione al giorno 7.
+- `POST /api/admin/migrate` — schema idempotente, da lanciare dopo il deploy: `curl -X POST https://sobremesa-psi.vercel.app/api/admin/migrate -H "Authorization: Bearer $CRON_SECRET"`.
+
+Le regole numeriche vivono in **due specchi dichiarati**: `ProductRules.swift` (client) e `api/_lib/rules.js` (server). Chi cambia un numero deve cambiarli entrambi — il commento in testa a ciascuno lo ricorda.
+
+**Lato client:** `APIClient.swift` (DTO tipizzati, `SessionStore` nel Keychain — mai UserDefaults), `SyncApply.swift` (riversamento del payload in SwiftData), `AppStore` orchestration (`remote {}` esegue l'operazione e risincronizza; `.notAuthenticated` resta silenzioso per l'uso offline-locale). L'onboarding passa il token di identità SIWA al server e salva la sessione prima di creare il profilo locale.
