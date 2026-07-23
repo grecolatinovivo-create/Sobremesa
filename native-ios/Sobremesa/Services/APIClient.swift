@@ -124,7 +124,7 @@ struct APIClient {
     /// Cancella l'account sul server (GDPR / Apple 5.1.1(v)). Il token viene
     /// passato esplicitamente: chi chiama può aver già svuotato il Keychain.
     func deleteAccount(token: String) async throws {
-        var request = URLRequest(url: Self.baseURL.appending(path: "me"))
+        var request = URLRequest(url: URL(string: "\(Self.baseURL.absoluteString)/me")!)
         request.httpMethod = "DELETE"
         request.timeoutInterval = 20
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -183,7 +183,12 @@ struct APIClient {
                                     method: String = "GET",
                                     body: (any Encodable)? = nil,
                                     authenticated: Bool = true) async throws -> T {
-        var request = URLRequest(url: Self.baseURL.appending(path: path))
+        // Nota bene: appending(path:) percent-encoderebbe il "?" della query
+        // (invites?accept=1, sync?q=...): l'URL si compone come stringa.
+        guard let url = URL(string: "\(Self.baseURL.absoluteString)/\(path)") else {
+            throw APIError.http(0, "URL non valido")
+        }
+        var request = URLRequest(url: url)
         request.httpMethod = method
         request.timeoutInterval = 20
         if authenticated {
