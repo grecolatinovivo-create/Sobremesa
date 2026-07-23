@@ -12,6 +12,9 @@ export default async function handler(req, res) {
     const token = await issueSession(user.id);
     res.status(200).json({ token, user });
   } catch (e) {
+    // Il motivo vero resta nei log del server (mai nella risposta).
+    console.error("auth/apple fallita:", e.code || e.name || "", e.message);
+    if (e.claim) console.error("claim in errore:", e.claim, "atteso:", e.payload ? JSON.stringify(e.payload[e.claim]) : "?");
     res.status(401).json({ error: "token Apple non valido" });
   }
 }
