@@ -38,16 +38,28 @@ jobs:
           open(os.path.expanduser("~/asc/key.p8"), "w").write(pem)
           PY
 
-      - name: Archive (senza firma — si firma all'export)
+      # La firma avviene GIÀ all'archive (cloud signing con la chiave ASC):
+      # solo così gli entitlement (Sign in with Apple) si imprimono nel
+      # binario. Un archive senza firma produce un'app SENZA entitlement,
+      # e Sign in with Apple fallisce sul dispositivo prima di ogni rete.
+      - name: Archive (firma cloud — gli entitlement si imprimono qui)
         working-directory: native-ios
+        env:
+          ASC_KEY_ID: M8SV6RDZ7G  # ID della chiave ASC "Github Sobremesa admin" — non è un segreto
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           xcodebuild -project Sobremesa.xcodeproj \
             -scheme Sobremesa \
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath build/App.xcarchive \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/asc/key.p8 \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic \
             CURRENT_PROJECT_VERSION=${{ github.run_number }} \
             archive
 
