@@ -255,6 +255,25 @@ final class JoinRequest {
     }
 }
 
+// MARK: - SeatProposal
+
+/// Una proposta di sedia alla tavola: nasce nei circoli ("Proponi una sedia")
+/// e vive finché l'altro non risponde. `isIncoming` = qualcuno la propone a me.
+@Model
+final class SeatProposal {
+    var person: Person?
+    var isIncoming: Bool
+    var createdAt: Date
+    /// Id lato server (solo per le proposte in arrivo, che si possono decidere).
+    var serverID: String?
+
+    init(person: Person, isIncoming: Bool, createdAt: Date = .now) {
+        self.person = person
+        self.isIncoming = isIncoming
+        self.createdAt = createdAt
+    }
+}
+
 // MARK: - ParticipationEvent
 
 /// Registro degli eventi che hanno mosso il punteggio (audit trail).

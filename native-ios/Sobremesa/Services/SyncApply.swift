@@ -19,6 +19,7 @@ extension LocalDataService {
         try? context.delete(model: Friendship.self)
         try? context.delete(model: Membership.self)
         try? context.delete(model: JoinRequest.self)
+        try? context.delete(model: SeatProposal.self)
         try? context.delete(model: Comment.self)
         try? context.delete(model: Post.self)
         try? context.delete(model: Circolo.self)
@@ -81,6 +82,27 @@ extension LocalDataService {
             }
         }
         for remote in payload.catalog { _ = circle(remote) }
+
+        // 5b. Chi siede ai miei circoli: membership reali anche per gli altri
+        // (myMemberships filtra su isMe, quindi brace e regole non ne risentono).
+        for member in payload.circleMembers {
+            guard let circleRow = circles[member.circle_id],
+                  member.user_id != payload.me.id else { continue }
+            let row = person(id: member.user_id, name: member.name, score: member.score)
+            context.insert(Membership(person: row, circolo: circleRow))
+        }
+
+        // 5c. Le proposte di sedia: in arrivo (da decidere) e in uscita (attese).
+        for remote in payload.seatRequestsIn {
+            let row = person(id: remote.user_id, name: remote.name, score: remote.score)
+            let proposal = SeatProposal(person: row, isIncoming: true)
+            proposal.serverID = remote.id
+            context.insert(proposal)
+        }
+        for userID in payload.seatRequestsOut {
+            guard let row = people[userID] else { continue }
+            context.insert(SeatProposal(person: row, isIncoming: false))
+        }
 
         // 6. Le richieste d'ingresso (nei circoli che animo).
         for remote in payload.requests {

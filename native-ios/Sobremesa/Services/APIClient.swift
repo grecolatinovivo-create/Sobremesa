@@ -72,6 +72,20 @@ struct RemoteComment: Codable {
     let author_name: String
 }
 
+struct RemoteCircleMember: Codable {
+    let circle_id: String
+    let user_id: String
+    let name: String
+    let score: Int
+}
+
+struct RemoteSeatRequest: Codable {
+    let id: String
+    let user_id: String
+    let name: String
+    let score: Int
+}
+
 struct SyncPayload: Codable {
     let me: RemoteUser
     let friends: [RemoteUser]
@@ -79,6 +93,9 @@ struct SyncPayload: Codable {
     let myCircles: [RemoteCircle]
     let catalog: [RemoteCircle]
     let requests: [RemoteRequest]
+    let circleMembers: [RemoteCircleMember]
+    let seatRequestsIn: [RemoteSeatRequest]
+    let seatRequestsOut: [String]
     let posts: [RemotePost]
     let comments: [RemoteComment]
 }
@@ -140,6 +157,18 @@ struct APIClient {
         try await send("invites?accept=1", method: "POST", body: ["code": code])
     }
 
+    /// "Proponi una sedia" a un membro di circolo. Se era reciproca, si siede.
+    func proposeSeat(userID: String) async throws {
+        let _: SeatResponse = try await send("friends/request", method: "POST", body: ["userId": userID])
+    }
+
+    /// Risposta a una proposta di sedia in arrivo.
+    func respondSeat(requestID: String, accept: Bool) async throws {
+        struct Body: Encodable { let requestId: String; let accept: Bool }
+        let _: SeatResponse = try await send("friends/respond", method: "POST",
+                                             body: Body(requestId: requestID, accept: accept))
+    }
+
     func removeFriend(serverID: String) async throws {
         let _: OKResponse = try await send("friends/remove", method: "POST", body: ["friendId": serverID])
     }
@@ -178,6 +207,7 @@ struct APIClient {
     private struct OKResponse: Codable { let ok: Bool?; let closed: Bool?; let left: Bool?; let joined: Bool?; let requested: Bool?; let accepted: Bool? }
     private struct IDResponse: Codable { let id: String }
     private struct FlexResponse: Codable { let nutrito: Bool?; let id: String? }
+    private struct SeatResponse: Codable { let requested: Bool?; let seated: Bool?; let declined: Bool? }
 
     private func send<T: Decodable>(_ path: String,
                                     method: String = "GET",

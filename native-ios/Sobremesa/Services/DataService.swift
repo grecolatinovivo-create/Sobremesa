@@ -76,6 +76,10 @@ protocol DataService {
     // Backend
     /// Riversa il mondo del server nello store locale (v. SyncApply).
     func applySync(_ payload: SyncPayload)
+    /// Ottimismo locale: registra una proposta di sedia in uscita.
+    func recordSeatProposal(to person: Person)
+    /// Ottimismo locale: chiude una proposta in arrivo (e siede, se accolta e c'è posto).
+    func resolveSeatProposal(_ proposal: SeatProposal, accepted: Bool)
 
     // Profilo
     func resetAllData()
@@ -129,6 +133,24 @@ final class LocalDataService: DataService {
         var d = FetchDescriptor<Person>(predicate: #Predicate { $0.hasPendingInvite })
         d.fetchLimit = 1
         return (try? context.fetch(d))?.first
+    }
+
+    func recordSeatProposal(to person: Person) {
+        // Una sola proposta per persona: il doppio tocco non duplica.
+        let all = (try? context.fetch(FetchDescriptor<SeatProposal>())) ?? []
+        guard !all.contains(where: { $0.person === person && !$0.isIncoming }) else { return }
+        context.insert(SeatProposal(person: person, isIncoming: false))
+        try? context.save()
+    }
+
+    func resolveSeatProposal(_ proposal: SeatProposal, accepted: Bool) {
+        if accepted, let person = proposal.person,
+           !isFriend(person),
+           engine.canSeatNewFriend(currentFriendCount: friendCount()) {
+            context.insert(Friendship(person: person))
+        }
+        context.delete(proposal)
+        try? context.save()
     }
 
     func myMemberships() -> [Membership] {

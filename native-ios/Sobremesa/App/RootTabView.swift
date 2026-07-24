@@ -2,7 +2,7 @@
 //  RootTabView.swift
 //  Sobremesa
 //
-//  Le 4 stanze dell'app: Salotto, Tavola, Circoli, Tu.
+//  Le 4 stanze dell'app: Salotto, Circoli, Tavola, Tu.
 //  Qui vivono anche il bootstrap (seed + prima valutazione della brace),
 //  la rivalutazione al ritorno in foreground e l'overlay dei toast.
 //
@@ -15,15 +15,22 @@ struct RootTabView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        TabView {
+        @Bindable var store = store
+        // L'ordine racconta il flusso: dal salotto ai circoli (dove si
+        // conosce gente), poi alla tavola (dove la si porta). DECISIONI #34.
+        TabView(selection: $store.stanzaCorrente) {
             SalottoView()
                 .tabItem { Label("tab.salotto", systemImage: "cup.and.saucer.fill") }
-            TavolaView()
-                .tabItem { Label("tab.tavola", systemImage: "table.furniture") }
+                .tag(AppStore.Stanza.salotto)
             CircoliView()
                 .tabItem { Label("tab.circoli", systemImage: "flame") }
+                .tag(AppStore.Stanza.circoli)
+            TavolaView()
+                .tabItem { Label("tab.tavola", systemImage: "table.furniture") }
+                .tag(AppStore.Stanza.tavola)
             TuView()
                 .tabItem { Label("tab.tu", systemImage: "person.crop.circle") }
+                .tag(AppStore.Stanza.tu)
         }
         .tint(.brass)
         .overlay(alignment: .bottom) { toastOverlay }

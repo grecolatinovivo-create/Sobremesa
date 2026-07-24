@@ -52,6 +52,24 @@ export default async function handler(req, res) {
     WHERE i.inviter = ${me.id} AND i.status = 'pending_seat'
     ORDER BY i.created_at`;
 
+  // Chi siede ai miei circoli: i membri (il ponte circoli -> tavola).
+  const myCircleIds = myCircles.map((c) => c.id);
+  const circleMembers = myCircleIds.length
+    ? (await sql.query(
+        `SELECT m.circle_id, u.id AS user_id, u.name, u.score
+         FROM memberships m JOIN users u ON u.id = m.user_id
+         WHERE m.circle_id = ANY($1)
+         ORDER BY m.joined_at`, [myCircleIds])).rows
+    : [];
+
+  // Proposte di sedia: in arrivo (da decidere) e in uscita (gia' proposte).
+  const { rows: seatRequestsIn } = await sql`
+    SELECT r.id, r.created_at, u.id AS user_id, u.name, u.score
+    FROM friend_requests r JOIN users u ON u.id = r.from_user
+    WHERE r.to_user = ${me.id} ORDER BY r.created_at`;
+  const { rows: seatRequestsOut } = await sql`
+    SELECT to_user FROM friend_requests WHERE from_user = ${me.id}`;
+
   // Feed: post degli amici alla tavola + post dei circoli abitati.
   const circleIds = myCircles.map((c) => c.id);
   const authorIds = [...fids, me.id];
@@ -82,6 +100,9 @@ export default async function handler(req, res) {
     myCircles,
     catalog,
     requests,
+    circleMembers,
+    seatRequestsIn,
+    seatRequestsOut: seatRequestsOut.map((r) => r.to_user),
     posts,
     comments,
   });

@@ -81,6 +81,14 @@ export default async function handler(req, res) {
     points INT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )`;
+  await sql`CREATE TABLE IF NOT EXISTS friend_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    from_user UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    to_user UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (from_user, to_user),
+    CHECK (from_user <> to_user)
+  )`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_circle ON posts (circle_id, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_author ON posts (author, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships (user_id)`;

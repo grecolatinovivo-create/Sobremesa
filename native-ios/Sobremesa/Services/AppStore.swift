@@ -57,6 +57,10 @@ final class AppStore {
     /// Il Locale da iniettare nell'ambiente SwiftUI alla radice.
     var appLocale: Locale { language.locale }
 
+    /// Le quattro stanze; serve a saltare di stanza dai richiami del Salotto.
+    enum Stanza: Hashable { case salotto, circoli, tavola, tu }
+    var stanzaCorrente: Stanza = .salotto
+
     private var toastTask: Task<Void, Never>?
 
     init(data: DataService) {
@@ -179,6 +183,22 @@ final class AppStore {
             return data.membership(of: circolo) != nil
         }
         return post.author?.isMe == true || post.author.map(data.isFriend) == true
+    }
+
+    // MARK: Sedie (il ponte circoli → tavola)
+
+    /// "Proponi una sedia" a un membro di circolo.
+    func proposeSeat(to person: Person) {
+        guard let id = person.serverID else { return }
+        data.recordSeatProposal(to: person)
+        remote { try await self.api.proposeSeat(userID: id) }
+    }
+
+    /// Risposta a una proposta in arrivo ("X vuole sedersi alla tua tavola").
+    func respondSeat(_ proposal: SeatProposal, accept: Bool) {
+        guard let id = proposal.serverID else { return }
+        data.resolveSeatProposal(proposal, accepted: accept)
+        remote { try await self.api.respondSeat(requestID: id, accept: accept) }
     }
 
     // MARK: Salotto

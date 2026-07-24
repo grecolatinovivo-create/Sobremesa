@@ -78,8 +78,9 @@ Il progetto Vercel che serve il sito ora ospita anche il backend: funzioni serve
 **Gli endpoint** (tutti autenticati con `Authorization: Bearer <jwt>`, tranne dove indicato):
 
 - `POST /api/auth/apple` (pubblico) — verifica il token di identità SIWA contro le JWKS di Apple (`aud = app.sobremesa`), upserta l'utente su `apple_sub`, restituisce sessione JWT HS256 a 90 giorni.
-- `GET /api/sync[?q=...]` — l'intero mondo in un colpo: profilo, amici, inviti pendenti, circoli abitati, catalogo dei circoli aperti (con ricerca `ILIKE`), richieste da decidere, post e commenti.
+- `GET /api/sync[?q=...]` — l'intero mondo in un colpo: profilo, amici, inviti pendenti, circoli abitati, catalogo dei circoli aperti (con ricerca `ILIKE`), richieste da decidere, **membri dei miei circoli** e **proposte di sedia** (in arrivo e in uscita), post e commenti.
 - `GET/PATCH/DELETE /api/me` — profilo, rinomina, **cancellazione account** (cascata totale via foreign key; Apple 5.1.1(v)).
+- `POST /api/friends/request` ("Proponi una sedia": reciprocità = amicizia immediata), `POST /api/friends/respond` (accetta/declina; guardie sul limite di 12 per entrambi) — il ponte circoli → tavola (DECISIONI #34).
 - `POST /api/invites` / `POST /api/invites?accept=1` — codice d'invito alla tavola; se la tavola dell'invitante è piena il posto resta "in attesa" e si libera col primo alzarsi (`friends/remove` fa l'auto-seat del più anziano in attesa).
 - `POST /api/circles`, `POST /api/circles/membership` (join/leave/retake; join in circolo chiuso → richiesta), `POST /api/requests/decide` — vita dei circoli; l'animatore che lascia chiude il circolo.
 - `POST /api/posts` (+2, tocca l'attività), `POST /api/posts/react` (nutre toggle / commento +1).

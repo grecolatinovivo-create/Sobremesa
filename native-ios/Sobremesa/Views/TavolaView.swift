@@ -15,6 +15,10 @@ struct TavolaView: View {
     @Query(sort: \Friendship.since) private var friendships: [Friendship]
     @Query(filter: #Predicate<Person> { $0.isCandidate || $0.hasPendingInvite },
            sort: \Person.name) private var candidates: [Person]
+    @Query(filter: #Predicate<SeatProposal> { $0.isIncoming },
+           sort: \SeatProposal.createdAt) private var seatProposals: [SeatProposal]
+    @Query private var allProposals: [SeatProposal]
+    @Query private var allMemberships: [Membership]
 
     /// Amico di cui si sta per liberare la sedia (conferma in corso).
     @State private var friendshipToFree: Friendship?
@@ -39,13 +43,20 @@ struct TavolaView: View {
                               maxChairs: store.rules.maxFriends)
                     .frame(maxWidth: .infinity)
 
+                if !seatProposals.isEmpty {
+                    richiesteSection
+                }
+
                 if let pending = store.pendingInvitee {
                     fullTablePanel(for: pending)
                 }
 
-                inviteCard
                 friendsSection
-                candidatesSection
+                daiCircoliSection
+                if !candidates.isEmpty {
+                    candidatesSection
+                }
+                inviteCard
             }
             .padding(16)
         }
@@ -101,6 +112,10 @@ struct TavolaView: View {
             Text("tavola.invito.title")
                 .font(AppFont.ui(15, relativeTo: .subheadline))
                 .foregroundStyle(Color.ink)
+            Text("tavola.invito.hint")
+                .font(AppFont.caption())
+                .foregroundStyle(Color.felt)
+                .fixedSize(horizontal: false, vertical: true)
 
             if let code = inviteCode {
                 HStack(spacing: 12) {
@@ -140,6 +155,78 @@ struct TavolaView: View {
         .sobreCard(.paperDim)
     }
 
+    // MARK: Vogliono sedersi con te
+
+    private var richiesteSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionTitle(textKey: "tavola.richieste.section")
+            ForEach(seatProposals, id: \.persistentModelID) { proposal in
+                if let person = proposal.person {
+                    PersonRow(person: person) {
+                        VStack(spacing: 6) {
+                            Button("sedia.accetta") { store.respondSeat(proposal, accept: true) }
+                                .buttonStyle(PillButtonStyle())
+                            Button("sedia.declina") { store.respondSeat(proposal, accept: false) }
+                                .buttonStyle(QuietPillButtonStyle(tint: .felt))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: Dai tuoi circoli — le sedie nascono ai tavoli
+
+    /// Le persone che siedono ai circoli che abiti e non sono ancora
+    /// alla tua tavola: è il vivaio naturale delle amicizie.
+    private var conoscenzeDaiCircoli: [Person] {
+        let mieiCircoli = store.myMemberships.compactMap(\.circolo)
+        var seen = Set<PersistentIdentifier>()
+        var result: [Person] = []
+        for membership in allMemberships {
+            guard let circolo = membership.circolo,
+                  let person = membership.person,
+                  !person.isMe,
+                  mieiCircoli.contains(where: { $0 === circolo }),
+                  !friendships.contains(where: { $0.person === person }),
+                  !seen.contains(person.persistentModelID) else { continue }
+            seen.insert(person.persistentModelID)
+            result.append(person)
+        }
+        return result
+    }
+
+    private func hasProposed(to person: Person) -> Bool {
+        allProposals.contains { $0.person === person && !$0.isIncoming }
+    }
+
+    private var daiCircoliSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionTitle(textKey: "tavola.circoli.section")
+            if conoscenzeDaiCircoli.isEmpty {
+                Text("tavola.circoli.empty")
+                    .font(AppFont.ui())
+                    .foregroundStyle(Color.brassSoft)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            ForEach(conoscenzeDaiCircoli, id: \.persistentModelID) { person in
+                PersonRow(person: person) {
+                    if hasProposed(to: person) {
+                        Text("sedia.proposta")
+                            .font(AppFont.caption())
+                            .foregroundStyle(Color.felt)
+                    } else {
+                        Button("sedia.proponi") { store.proposeSeat(to: person) }
+                            .buttonStyle(PillButtonStyle())
+                            .accessibilityLabel(Text(verbatim: String(
+                                format: String(localized: "a11y.sedia.proponi", bundle: L10n.bundle),
+                                person.name)))
+                    }
+                }
+            }
+        }
+    }
+
     private var friendsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionTitle(textKey: "tavola.friends.section")
@@ -164,13 +251,6 @@ struct TavolaView: View {
     private var candidatesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionTitle(textKey: "tavola.candidates.section")
-            if candidates.isEmpty {
-                // Onestà del prodotto: senza backend non c'è ancora nessuno da invitare.
-                Text("tavola.candidates.empty")
-                    .font(AppFont.ui())
-                    .foregroundStyle(Color.brassSoft)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
             ForEach(candidates, id: \.persistentModelID) { person in
                 PersonRow(person: person) {
                     if person.hasPendingInvite {

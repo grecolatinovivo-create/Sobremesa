@@ -16,6 +16,9 @@ struct CircoloRoomView: View {
     let circolo: Circolo
 
     @Query(sort: \Post.createdAt, order: .reverse) private var allPosts: [Post]
+    @Query private var allMemberships: [Membership]
+    @Query private var friendships: [Friendship]
+    @Query private var proposals: [SeatProposal]
     @State private var text = ""
     @State private var category: PostCategory = .libro
     @State private var showEmptyError = false
@@ -28,10 +31,29 @@ struct CircoloRoomView: View {
         store.membership(of: circolo)
     }
 
+    /// Chi siede a questo tavolo, oltre a me (il ponte verso la tavola).
+    private var altriMembri: [Person] {
+        allMemberships
+            .filter { $0.circolo === circolo && $0.person?.isMe != true }
+            .compactMap(\.person)
+    }
+
+    private func isFriend(_ person: Person) -> Bool {
+        friendships.contains { $0.person === person }
+    }
+
+    private func hasProposed(to person: Person) -> Bool {
+        proposals.contains { $0.person === person && !$0.isIncoming }
+    }
+
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 14) {
                 header
+
+                if membership != nil && !altriMembri.isEmpty {
+                    membersCard
+                }
 
                 if membership != nil {
                     composer
@@ -90,6 +112,46 @@ struct CircoloRoomView: View {
                 }
             }
         }
+    }
+
+    // MARK: Chi siede qui — dal circolo si apre la tavola
+
+    /// I membri del circolo, ciascuno con l'azione giusta: già alla tua
+    /// tavola, sedia proposta, o "Proponi una sedia". È QUI che le
+    /// conoscenze diventano amicizie (DECISIONI #34).
+    private var membersCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionTitle(textKey: "stanza.tavolo.section")
+            ForEach(altriMembri, id: \.persistentModelID) { person in
+                HStack(spacing: 10) {
+                    AvatarView(initials: person.initials, size: 32)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(verbatim: person.name)
+                            .font(AppFont.ui(14, relativeTo: .footnote))
+                            .foregroundStyle(Color.ink)
+                        ScoreBadge(score: person.score, band: store.engine.band(for: person.score))
+                    }
+                    Spacer()
+                    if isFriend(person) {
+                        Label("sedia.alla.tavola", systemImage: "checkmark")
+                            .font(AppFont.caption())
+                            .foregroundStyle(Color.felt)
+                            .labelStyle(.titleAndIcon)
+                    } else if hasProposed(to: person) {
+                        Text("sedia.proposta")
+                            .font(AppFont.caption())
+                            .foregroundStyle(Color.felt)
+                    } else {
+                        Button("sedia.proponi") { store.proposeSeat(to: person) }
+                            .buttonStyle(QuietPillButtonStyle(tint: .felt))
+                            .accessibilityLabel(Text(verbatim: String(
+                                format: String(localized: "a11y.sedia.proponi", bundle: L10n.bundle),
+                                person.name)))
+                    }
+                }
+            }
+        }
+        .sobreCard()
     }
 
     // MARK: Composer della stanza (destinazione già decisa: qui)

@@ -191,3 +191,27 @@ Lingua dell'app → (apre Impostazioni di sistema)
 ## Addendum v1.1 — Da zero e la stanza del circolo (post-audit)
 
 L'app parte **da zero**: onboarding con Sign in with Apple (solo nome; se Apple non lo fornisce lo chiede un campo dedicato), nessun dato demo, card "I primi passi" nel Salotto (3 tappe con spunte) come percorso del primo minuto. Ogni circolo ha ora la sua **stanza** (`CircoloRoomView`): dalla card, riga "Conversazione" → testata con tema/membri/brace, composer con destinazione già decisa, cronologia dei soli post del circolo. La **brace** è valutata solo con ≥2 membri ("La brace si accenderà quando sarete almeno in due"), ha **richiami locali** al giorno 4 e 7, e gli eventi gravi usano banner **persistenti** con chiusura esplicita, annunciati a VoiceOver. Nuovi colori `BrassDeep` (ottone su carta, AA) ed `ErrorSoft` (errori su notte). "Azzera i dati demo" è diventato "Ricomincia da zero". Il nome è modificabile in Tu; in Tu vive anche "Riconoscimenti" (font OFL).
+
+---
+
+## Addendum v1.2 — I circoli aprono la tavola (redesign IA)
+
+**Il problema.** Tavola e Circoli usavano la stessa metafora (sedie, tavoli, sedersi) senza gerarchia né percorso: due stanze parallele che si contendevano lo stesso immaginario. L'utente non capiva quale delle due fosse "il posto dove succedono le cose".
+
+**Il modello nuovo — tre luoghi, una gerarchia:**
+
+1. **Circoli** — i *tavoli tematici*: è qui che si conversa e si conoscono le persone. Sono il motore sociale.
+2. **La Tavola** — le *tue persone*: le 12 sedie si riempiono dai circoli ("Proponi una sedia") o da fuori (codice d'invito).
+3. **Salotto** — il *colpo d'occhio*: le tue braci, le cose da decidere, le conversazioni recenti.
+
+**Flusso canonico:** trova/fonda un circolo → conversa → "Proponi una sedia" a chi ti somiglia → l'altro accetta → sedia occupata alla tavola.
+
+**Cambi per schermata:**
+
+- **Tab bar**: Salotto · Circoli · Tavola · Tu (i Circoli promossi al secondo posto: il flusso si legge da sinistra a destra).
+- **Salotto**: striscia orizzontale "Le tue braci" (chip: simbolo categoria + nome + pallino brace; tap → stanza). Da zero: card-invito "Trova un tavolo aperto, o fondane uno tuo" che porta ai Circoli. Sezione "Da decidere": proposte di sedia in arrivo (Fai sedere / Non ora) e riepilogo richieste d'ingresso. Primi passi riordinati (circolo → conversazione → sedia → ritorno). Composer dopo la guida, feed in coda.
+- **Stanza del circolo**: sezione "Chi siede qui" — ogni membro con lo stato giusto: "Alla tua tavola" (già amico), "Sedia proposta" (in attesa), bottone "Proponi una sedia". È il ponte.
+- **Tavola**: "Vogliono sedersi con te" (proposte in arrivo, decisione a due bottoni), "Le tue persone" (le sedie occupate), "Dai tuoi circoli" (il vivaio: chi siede ai tuoi tavoli e non è ancora alla tavola), "Porta qualcuno da fuori" (il codice, spiegato). I "candidati" demo spariscono dal prodotto.
+- **Microcopy**: mai "amici"/"follow" — sedie, tavoli, sedersi. La proposta è un gesto ospitale ("Fai sedere"), il rifiuto è gentile ("Non ora").
+
+**Regole invariate:** 12 sedie, 5 circoli, brace, punteggio — nessun numero è cambiato (ProductRules/`rules.js` intatti).
