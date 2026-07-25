@@ -7,19 +7,18 @@ export default async function handler(req, res) {
   if (!requireCronSecret(req, res)) return;
 
   await sql`CREATE EXTENSION IF NOT EXISTS pgcrypto`;
+
+  // Pivot v2 "solo tavoli" (DECISIONI #36): il grafo di amicizia personale
+  // e i commenti spariscono — restano tavoli, sedie, messaggi, nutre.
+  await sql`DROP TABLE IF EXISTS friend_requests`;
+  await sql`DROP TABLE IF EXISTS friendships`;
+  await sql`DROP TABLE IF EXISTS comments`;
   await sql`CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     apple_sub TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     score INT NOT NULL DEFAULT 50,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`;
-  await sql`CREATE TABLE IF NOT EXISTS friendships (
-    a UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    b UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY (a, b),
-    CHECK (a < b)
   )`;
   await sql`CREATE TABLE IF NOT EXISTS invites (
     code TEXT PRIMARY KEY,
@@ -60,13 +59,6 @@ export default async function handler(req, res) {
     text TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )`;
-  await sql`CREATE TABLE IF NOT EXISTS comments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    post_id UUID NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
-    author UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    text TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`;
   await sql`CREATE TABLE IF NOT EXISTS nutre (
     post_id UUID NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -81,14 +73,8 @@ export default async function handler(req, res) {
     points INT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )`;
-  await sql`CREATE TABLE IF NOT EXISTS friend_requests (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    from_user UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    to_user UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    UNIQUE (from_user, to_user),
-    CHECK (from_user <> to_user)
-  )`;
+  // v2: l'invito porta a UN tavolo preciso.
+  await sql`ALTER TABLE invites ADD COLUMN IF NOT EXISTS circle_id UUID REFERENCES circles(id) ON DELETE CASCADE`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_circle ON posts (circle_id, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_author ON posts (author, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships (user_id)`;

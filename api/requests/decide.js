@@ -1,5 +1,5 @@
 // POST /api/requests/decide { requestId, accept: bool } — solo l'animatore.
-import { sql, myCircleIds } from "../_lib/db.js";
+import { sql, myTableIds, seatCount } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
 import { RULES } from "../_lib/rules.js";
 
@@ -17,10 +17,13 @@ export default async function handler(req, res) {
   if (request.animator !== me.id) return res.status(403).json({ error: "non sei l'animatore" });
 
   if (accept) {
-    // Anche chi entra abita al massimo 5 circoli.
-    if ((await myCircleIds(request.user_id)).length >= RULES.maxCircles) {
+    // Anche chi entra siede al massimo a 5 tavoli, e il tavolo ha 12 sedie.
+    if ((await myTableIds(request.user_id)).length >= RULES.maxCircles) {
       await sql`DELETE FROM join_requests WHERE id = ${requestId}`;
-      return res.status(409).json({ error: "il richiedente non ha slot liberi" });
+      return res.status(409).json({ error: "il richiedente non ha tavoli liberi" });
+    }
+    if ((await seatCount(request.circle_id)) >= RULES.maxFriends) {
+      return res.status(409).json({ error: "il tavolo è al completo" });
     }
     await sql`INSERT INTO memberships (user_id, circle_id)
               VALUES (${request.user_id}, ${request.circle_id}) ON CONFLICT DO NOTHING`;

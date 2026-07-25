@@ -1,7 +1,7 @@
-// GET /api/sync — l'intero mondo dell'utente in una chiamata:
-// profilo, tavola, circoli (abitati + catalogo), richieste, feed.
-// Il client lo riversa in SwiftData e la UI resta reattiva com'era.
-import { sql, friendIds } from "./_lib/db.js";
+// GET /api/sync — il mondo dell'utente in una chiamata, modello v2 "solo
+// tavoli": profilo, i miei tavoli (con chi ci siede), il catalogo dei
+// tavoli aperti, le richieste da decidere, i messaggi delle conversazioni.
+import { sql } from "./_lib/db.js";
 import { requireAuth } from "./_lib/auth.js";
 import { RULES } from "./_lib/rules.js";
 
@@ -9,16 +9,10 @@ export default async function handler(req, res) {
   const me = await requireAuth(req, res);
   if (!me) return;
 
-  const fids = await friendIds(me.id);
   const q = (req.query.q || "").trim();
 
-  const friends = fids.length
-    ? (await sql.query(
-        `SELECT id, name, score FROM users WHERE id = ANY($1)`, [fids])).rows
-    : [];
-
-  // I miei circoli (con conteggio membri e la mia membership).
-  const { rows: myCircles } = await sql`
+  // I miei tavoli (in SQL: `circles`), con la mia sedia (last_activity).
+  const { rows: myTables } = await sql`
     SELECT c.id, c.name, c.theme, c.category, c.is_open, c.animator,
            m.last_activity, m.joined_at,
            (SELECT COUNT(*)::int FROM memberships mm WHERE mm.circle_id = c.id) AS member_count
@@ -26,7 +20,17 @@ export default async function handler(req, res) {
     WHERE m.user_id = ${me.id}
     ORDER BY m.joined_at`;
 
-  // Catalogo: circoli aperti che non abito (con eventuale ricerca).
+  // Chi siede ai miei tavoli.
+  const tableIds = myTables.map((t) => t.id);
+  const seats = tableIds.length
+    ? (await sql.query(
+        `SELECT m.circle_id, u.id AS user_id, u.name, u.score
+         FROM memberships m JOIN users u ON u.id = m.user_id
+         WHERE m.circle_id = ANY($1)
+         ORDER BY m.joined_at`, [tableIds])).rows
+    : [];
+
+  // Catalogo: tavoli aperti dove non siedo, con posto e ricerca.
   const { rows: catalog } = await sql.query(
     `SELECT c.id, c.name, c.theme, c.category, c.is_open, c.animator,
             (SELECT COUNT(*)::int FROM memberships mm WHERE mm.circle_id = c.id) AS member_count
@@ -36,7 +40,7 @@ export default async function handler(req, res) {
        AND ($2 = '' OR c.name ILIKE '%' || $2 || '%' OR c.theme ILIKE '%' || $2 || '%')
      ORDER BY c.created_at DESC LIMIT 50`, [me.id, q]);
 
-  // Richieste d'ingresso nei circoli che animo.
+  // Richieste d'ingresso ai tavoli che animo.
   const { rows: requests } = await sql`
     SELECT r.id, r.circle_id, r.created_at, u.id AS user_id, u.name, u.score
     FROM join_requests r
@@ -45,65 +49,25 @@ export default async function handler(req, res) {
     WHERE c.animator = ${me.id}
     ORDER BY r.created_at`;
 
-  // Inviti alla tavola in sospeso (tavola piena al momento del riscatto).
-  const { rows: pendingInvites } = await sql`
-    SELECT i.code, u.id AS user_id, u.name, u.score
-    FROM invites i JOIN users u ON u.id = i.used_by
-    WHERE i.inviter = ${me.id} AND i.status = 'pending_seat'
-    ORDER BY i.created_at`;
-
-  // Chi siede ai miei circoli: i membri (il ponte circoli -> tavola).
-  const myCircleIds = myCircles.map((c) => c.id);
-  const circleMembers = myCircleIds.length
-    ? (await sql.query(
-        `SELECT m.circle_id, u.id AS user_id, u.name, u.score
-         FROM memberships m JOIN users u ON u.id = m.user_id
-         WHERE m.circle_id = ANY($1)
-         ORDER BY m.joined_at`, [myCircleIds])).rows
-    : [];
-
-  // Proposte di sedia: in arrivo (da decidere) e in uscita (gia' proposte).
-  const { rows: seatRequestsIn } = await sql`
-    SELECT r.id, r.created_at, u.id AS user_id, u.name, u.score
-    FROM friend_requests r JOIN users u ON u.id = r.from_user
-    WHERE r.to_user = ${me.id} ORDER BY r.created_at`;
-  const { rows: seatRequestsOut } = await sql`
-    SELECT to_user FROM friend_requests WHERE from_user = ${me.id}`;
-
-  // Feed: post degli amici alla tavola + post dei circoli abitati.
-  const circleIds = myCircles.map((c) => c.id);
-  const authorIds = [...fids, me.id];
-  const { rows: posts } = await sql.query(
-    `SELECT p.id, p.author, p.circle_id, p.category, p.text, p.created_at,
-            u.name AS author_name, u.score AS author_score,
-            (SELECT COUNT(*)::int FROM nutre n WHERE n.post_id = p.id) AS nutre_count,
-            EXISTS(SELECT 1 FROM nutre n WHERE n.post_id = p.id AND n.user_id = $3) AS nutrito_da_me
-     FROM posts p JOIN users u ON u.id = p.author
-     WHERE (p.circle_id IS NULL AND p.author = ANY($1))
-        OR (p.circle_id = ANY($2))
-     ORDER BY p.created_at DESC LIMIT 100`,
-    [authorIds, circleIds.length ? circleIds : ["00000000-0000-0000-0000-000000000000"], me.id]);
-
-  const postIds = posts.map((p) => p.id);
-  const comments = postIds.length
-    ? (await sql.query(
-        `SELECT c.id, c.post_id, c.text, c.created_at, u.id AS author_id, u.name AS author_name
-         FROM comments c JOIN users u ON u.id = c.author
-         WHERE c.post_id = ANY($1) ORDER BY c.created_at`, [postIds])).rows
-    : [];
+  // Le conversazioni: i messaggi dei miei tavoli (in SQL: `posts`).
+  const { rows: messages } = tableIds.length
+    ? await sql.query(
+        `SELECT p.id, p.author, p.circle_id, p.text, p.created_at,
+                u.name AS author_name, u.score AS author_score,
+                (SELECT COUNT(*)::int FROM nutre n WHERE n.post_id = p.id) AS nutre_count,
+                EXISTS(SELECT 1 FROM nutre n WHERE n.post_id = p.id AND n.user_id = $2) AS nutrito_da_me
+         FROM posts p JOIN users u ON u.id = p.author
+         WHERE p.circle_id = ANY($1)
+         ORDER BY p.created_at DESC LIMIT 300`, [tableIds, me.id])
+    : { rows: [] };
 
   res.status(200).json({
     rules: RULES,
     me,
-    friends,
-    pendingInvites,
-    myCircles,
+    myTables,
+    seats,
     catalog,
     requests,
-    circleMembers,
-    seatRequestsIn,
-    seatRequestsOut: seatRequestsOut.map((r) => r.to_user),
-    posts,
-    comments,
+    messages,
   });
 }

@@ -215,3 +215,23 @@ L'app parte **da zero**: onboarding con Sign in with Apple (solo nome; se Apple 
 - **Microcopy**: mai "amici"/"follow" — sedie, tavoli, sedersi. La proposta è un gesto ospitale ("Fai sedere"), il rifiuto è gentile ("Non ora").
 
 **Regole invariate:** 12 sedie, 5 circoli, brace, punteggio — nessun numero è cambiato (ProductRules/`rules.js` intatti).
+
+---
+
+## Addendum v2.0 — Solo tavoli (pivot di prodotto)
+
+**Il modello, in una frase:** *Sobremesa = tavoli. Un tavolo è una conversazione a tema con al massimo 12 sedie; ne abiti al massimo 5; dentro si parla come a cena; ogni tavolo ha una brace che vive dei tuoi ritorni.*
+
+**Perché.** L'architettura precedente (tavola personale + circoli + salotto-feed) chiedeva all'utente di imparare una mitologia. Il test sul prodotto reale l'ha bocciata: "si parla ma non si parla". Il pivot fa coincidere luogo e persone, come a una cena vera.
+
+**Le tre stanze:**
+
+1. **Salotto** — la home, in forma di *chat-list colta*: una riga per tavolo (categoria, nome, pallino-brace, ultimo intervento, quando), tap → conversazione. Sopra, "Da decidere": le richieste ai tavoli che animi. Da zero: una sola card che spiega il modello e porta ai Tavoli.
+2. **Tavoli** — trovare e fondare: riscatto di un codice ricevuto, fondazione (nome, tema, categoria), catalogo dei tavoli aperti con ricerca, sedie contate (n/12), "Siediti" o "Chiedi di sederti".
+3. **Tu** — profilo, punteggio, lingua, riconoscimenti, "Ricomincia da zero".
+
+**La conversazione (stile chat, registro Sobremesa):** filo cronologico dall'alto in basso, ancorato in fondo; bolle — le mie a destra su PaperDim, le altrui a sinistra su Felt con avatar e nome; ora e "Nutre" (foglia + contatore) in calce alla bolla; barra di scrittura in fondo ("Di' la tua…", invio a freccia). In testata: tema in corsivo, sedie (n/12, tap → sheet con l'anello delle 12 sedie e i commensali col punteggio), stato della brace. Menu del tavolo: Invita (codice + share), Riprendi la parola, Alzati / Chiudi (animatore, con conferma dedicata).
+
+**Meccaniche:** messaggio +1 e brace ravvivata; ripresa +1; silenzio −2 (una volta per periodo); espulsione al 7° giorno −5 (mai l'animatore, mai nei tavoli sotto 2 persone). L'invito è A un tavolo: il codice porta a sedersi lì (limiti: 12 sedie, 5 tavoli). L'animatore che si alza chiude il tavolo per tutti — detto chiaramente prima.
+
+**Lessico:** mai "gruppo", "chat", "membri", "amici" — tavolo, sedie, sedersi, alzarsi, apparecchiare, commensali, animatore. Il rifiuto è gentile, la penalità spiegata, i numeri di business SOLO da ProductRules.

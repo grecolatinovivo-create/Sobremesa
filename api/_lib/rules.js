@@ -2,8 +2,8 @@
 // la fonte di verità (l'engine Swift resta per gli stati di presentazione).
 // Stessi numeri di ProductRules.swift — se cambiano, cambiano in entrambi.
 export const RULES = {
-  maxFriends: 12,
-  maxCircles: 5,
+  maxFriends: 12,   // v2: le sedie di UN tavolo
+  maxCircles: 5,    // v2: i tavoli abitabili in contemporanea
   emberDimAfterDays: 2,
   emberWarningAfterDays: 4,
   emberExpulsionAfterDays: 7,

@@ -1,5 +1,5 @@
 // POST /api/circles — fonda un circolo (chi crea è l'animatore).
-import { sql, myCircleIds } from "../_lib/db.js";
+import { sql, myTableIds } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
 import { RULES } from "../_lib/rules.js";
 
@@ -13,8 +13,8 @@ export default async function handler(req, res) {
   const { name, theme = "", category = "idea", isOpen = true } = req.body || {};
   const cleanName = (name || "").trim().slice(0, 60);
   if (!cleanName) return res.status(400).json({ error: "nome mancante" });
-  if ((await myCircleIds(me.id)).length >= RULES.maxCircles) {
-    return res.status(409).json({ error: "abiti già il massimo dei circoli" });
+  if ((await myTableIds(me.id)).length >= RULES.maxCircles) {
+    return res.status(409).json({ error: "siedi già al massimo dei tavoli" });
   }
   const cat = CATEGORIES.includes(category) ? category : "idea";
   const { rows } = await sql`

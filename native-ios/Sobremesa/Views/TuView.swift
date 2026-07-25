@@ -67,17 +67,6 @@ struct TuView: View {
                     ScoreBadge(score: me.score, band: store.engine.band(for: me.score))
                 }
             }
-            if let bioKey = me.bioKey {
-                Text(verbatim: bioKey.loc)
-                    .font(AppFont.bodySerif(15, relativeTo: .subheadline))
-                    .foregroundStyle(Color.felt)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            if !me.interestKeys.isEmpty {
-                Text(verbatim: me.interestKeys.map(\.loc).joined(separator: ", "))
-                    .font(AppFont.caption())
-                    .foregroundStyle(Color.felt)
-            }
         }
         .sobreCard()
     }

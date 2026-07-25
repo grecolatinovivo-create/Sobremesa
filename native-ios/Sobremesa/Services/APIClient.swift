@@ -2,9 +2,9 @@
 //  APIClient.swift
 //  Sobremesa
 //
-//  Il client delle API di Sobremesa (Vercel /api). La sessione vive nel
-//  Keychain; ogni chiamata è async e tipizzata. Il client non decide nulla:
-//  le regole stanno sul server, qui si trasporta.
+//  Il client delle API di Sobremesa (Vercel /api), modello v2 "solo tavoli".
+//  La sessione vive nel Keychain; ogni chiamata è async e tipizzata.
+//  Il client non decide nulla: le regole stanno sul server, qui si trasporta.
 //
 
 import Foundation
@@ -23,14 +23,7 @@ struct RemoteUser: Codable {
     let score: Int
 }
 
-struct RemotePendingInvite: Codable {
-    let code: String
-    let user_id: String
-    let name: String
-    let score: Int
-}
-
-struct RemoteCircle: Codable {
+struct RemoteTable: Codable {
     let id: String
     let name: String
     let theme: String
@@ -42,6 +35,13 @@ struct RemoteCircle: Codable {
     let joined_at: String?
 }
 
+struct RemoteSeat: Codable {
+    let circle_id: String
+    let user_id: String
+    let name: String
+    let score: Int
+}
+
 struct RemoteRequest: Codable {
     let id: String
     let circle_id: String
@@ -50,11 +50,10 @@ struct RemoteRequest: Codable {
     let score: Int
 }
 
-struct RemotePost: Codable {
+struct RemoteMessage: Codable {
     let id: String
     let author: String
-    let circle_id: String?
-    let category: String
+    let circle_id: String
     let text: String
     let created_at: String
     let author_name: String
@@ -63,48 +62,16 @@ struct RemotePost: Codable {
     let nutrito_da_me: Bool
 }
 
-struct RemoteComment: Codable {
-    let id: String
-    let post_id: String
-    let text: String
-    let created_at: String
-    let author_id: String
-    let author_name: String
-}
-
-struct RemoteCircleMember: Codable {
-    let circle_id: String
-    let user_id: String
-    let name: String
-    let score: Int
-}
-
-struct RemoteSeatRequest: Codable {
-    let id: String
-    let user_id: String
-    let name: String
-    let score: Int
-}
-
 struct SyncPayload: Codable {
     let me: RemoteUser
-    let friends: [RemoteUser]
-    let pendingInvites: [RemotePendingInvite]
-    let myCircles: [RemoteCircle]
-    let catalog: [RemoteCircle]
+    let myTables: [RemoteTable]
+    let seats: [RemoteSeat]
+    let catalog: [RemoteTable]
     let requests: [RemoteRequest]
-    let circleMembers: [RemoteCircleMember]
-    let seatRequestsIn: [RemoteSeatRequest]
-    let seatRequestsOut: [String]
-    let posts: [RemotePost]
-    let comments: [RemoteComment]
+    let messages: [RemoteMessage]
 }
 
 struct InviteCodeResponse: Codable { let code: String }
-struct InviteAcceptResponse: Codable {
-    let seated: Bool?
-    let pending: Bool?
-}
 
 enum APIError: Error {
     case notAuthenticated
@@ -148,40 +115,26 @@ struct APIClient {
         _ = try await URLSession.shared.data(for: request)
     }
 
-    func createInvite() async throws -> String {
-        let response: InviteCodeResponse = try await send("invites", method: "POST", body: [String: String]())
+    /// Un invito nasce sempre A un tavolo.
+    func createInvite(tableID: String) async throws -> String {
+        let response: InviteCodeResponse = try await send("invites", method: "POST",
+                                                          body: ["tableId": tableID])
         return response.code
     }
 
-    func redeemInvite(code: String) async throws -> InviteAcceptResponse {
-        try await send("invites?accept=1", method: "POST", body: ["code": code])
+    func redeemInvite(code: String) async throws {
+        let _: OKResponse = try await send("invites?accept=1", method: "POST", body: ["code": code])
     }
 
-    /// "Proponi una sedia" a un membro di circolo. Se era reciproca, si siede.
-    func proposeSeat(userID: String) async throws {
-        let _: SeatResponse = try await send("friends/request", method: "POST", body: ["userId": userID])
-    }
-
-    /// Risposta a una proposta di sedia in arrivo.
-    func respondSeat(requestID: String, accept: Bool) async throws {
-        struct Body: Encodable { let requestId: String; let accept: Bool }
-        let _: SeatResponse = try await send("friends/respond", method: "POST",
-                                             body: Body(requestId: requestID, accept: accept))
-    }
-
-    func removeFriend(serverID: String) async throws {
-        let _: OKResponse = try await send("friends/remove", method: "POST", body: ["friendId": serverID])
-    }
-
-    func createCircle(name: String, theme: String, category: String, isOpen: Bool) async throws {
+    func createTable(name: String, theme: String, category: String, isOpen: Bool) async throws {
         struct Body: Encodable { let name, theme, category: String; let isOpen: Bool }
         let _: IDResponse = try await send("circles", method: "POST",
                                            body: Body(name: name, theme: theme, category: category, isOpen: isOpen))
     }
 
-    func circleAction(_ action: String, circleID: String) async throws {
+    func tableAction(_ action: String, tableID: String) async throws {
         let _: OKResponse = try await send("circles/membership", method: "POST",
-                                           body: ["circleId": circleID, "action": action])
+                                           body: ["circleId": tableID, "action": action])
     }
 
     func decideRequest(id: String, accept: Bool) async throws {
@@ -190,24 +143,21 @@ struct APIClient {
                                            body: Body(requestId: id, accept: accept))
     }
 
-    func publish(text: String, category: String, circleID: String?) async throws {
-        struct Body: Encodable { let text, category: String; let circleId: String? }
+    func sendMessage(_ text: String, tableID: String) async throws {
         let _: IDResponse = try await send("posts", method: "POST",
-                                           body: Body(text: text, category: category, circleId: circleID))
+                                           body: ["tableId": tableID, "text": text])
     }
 
-    func react(postID: String, action: String, text: String? = nil) async throws {
-        struct Body: Encodable { let postId, action: String; let text: String? }
-        let _: FlexResponse = try await send("posts/react", method: "POST",
-                                             body: Body(postId: postID, action: action, text: text))
+    func toggleNutre(messageID: String) async throws {
+        let _: NutreResponse = try await send("posts/react", method: "POST",
+                                              body: ["postId": messageID, "action": "nutre"])
     }
 
     // MARK: Trasporto
 
-    private struct OKResponse: Codable { let ok: Bool?; let closed: Bool?; let left: Bool?; let joined: Bool?; let requested: Bool?; let accepted: Bool? }
+    private struct OKResponse: Codable { let ok: Bool?; let closed: Bool?; let left: Bool?; let joined: Bool?; let requested: Bool?; let accepted: Bool?; let seated: Bool? }
     private struct IDResponse: Codable { let id: String }
-    private struct FlexResponse: Codable { let nutrito: Bool?; let id: String? }
-    private struct SeatResponse: Codable { let requested: Bool?; let seated: Bool?; let declined: Bool? }
+    private struct NutreResponse: Codable { let nutrito: Bool }
 
     private func send<T: Decodable>(_ path: String,
                                     method: String = "GET",

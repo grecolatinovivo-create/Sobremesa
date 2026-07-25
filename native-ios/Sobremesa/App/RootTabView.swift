@@ -2,7 +2,7 @@
 //  RootTabView.swift
 //  Sobremesa
 //
-//  Le 4 stanze dell'app: Salotto, Circoli, Tavola, Tu.
+//  Le 3 stanze dell'app: Salotto, Tavoli, Tu.
 //  Qui vivono anche il bootstrap (seed + prima valutazione della brace),
 //  la rivalutazione al ritorno in foreground e l'overlay dei toast.
 //
@@ -22,12 +22,9 @@ struct RootTabView: View {
             SalottoView()
                 .tabItem { Label("tab.salotto", systemImage: "cup.and.saucer.fill") }
                 .tag(AppStore.Stanza.salotto)
-            CircoliView()
-                .tabItem { Label("tab.circoli", systemImage: "flame") }
-                .tag(AppStore.Stanza.circoli)
-            TavolaView()
-                .tabItem { Label("tab.tavola", systemImage: "table.furniture") }
-                .tag(AppStore.Stanza.tavola)
+            TavoliView()
+                .tabItem { Label("tab.tavoli", systemImage: "table.furniture") }
+                .tag(AppStore.Stanza.tavoli)
             TuView()
                 .tabItem { Label("tab.tu", systemImage: "person.crop.circle") }
                 .tag(AppStore.Stanza.tu)

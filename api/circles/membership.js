@@ -1,6 +1,6 @@
 // POST /api/circles/membership { circleId, action: "join" | "leave" | "retake" }
 // join: circolo aperto → si entra; chiuso → richiesta all'animatore.
-import { sql, myCircleIds, applyScore } from "../_lib/db.js";
+import { sql, myTableIds, seatCount, applyScore } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
 import { RULES } from "../_lib/rules.js";
 
@@ -16,8 +16,11 @@ export default async function handler(req, res) {
   if (!circle) return res.status(404).json({ error: "circolo inesistente" });
 
   if (action === "join") {
-    if ((await myCircleIds(me.id)).length >= RULES.maxCircles) {
-      return res.status(409).json({ error: "abiti già il massimo dei circoli" });
+    if ((await myTableIds(me.id)).length >= RULES.maxCircles) {
+      return res.status(409).json({ error: "siedi già al massimo dei tavoli" });
+    }
+    if ((await seatCount(circleId)) >= RULES.maxFriends) {
+      return res.status(409).json({ error: "il tavolo è al completo" });
     }
     if (!circle.is_open) {
       await sql`INSERT INTO join_requests (circle_id, user_id)

@@ -82,11 +82,6 @@ struct OnboardingView: View {
             .foregroundStyle(Color.brassSoft)
             .multilineTextAlignment(.center)
 
-        #if DEBUG
-        // Solo sviluppo: il vecchio mondo demo, per esercitare le meccaniche.
-        Button("debug.seed") { store.seedDemoWorld() }
-            .buttonStyle(QuietPillButtonStyle())
-        #endif
     }
 
     // MARK: Passo 2 — il nome, se Apple non l'ha condiviso

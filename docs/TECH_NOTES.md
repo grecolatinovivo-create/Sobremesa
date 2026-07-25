@@ -90,3 +90,10 @@ Il progetto Vercel che serve il sito ora ospita anche il backend: funzioni serve
 Le regole numeriche vivono in **due specchi dichiarati**: `ProductRules.swift` (client) e `api/_lib/rules.js` (server). Chi cambia un numero deve cambiarli entrambi — il commento in testa a ciascuno lo ricorda.
 
 **Lato client:** `APIClient.swift` (DTO tipizzati, `SessionStore` nel Keychain — mai UserDefaults), `SyncApply.swift` (riversamento del payload in SwiftData), `AppStore` orchestration (`remote {}` esegue l'operazione e risincronizza; `.notAuthenticated` resta silenzioso per l'uso offline-locale). L'onboarding passa il token di identità SIWA al server e salva la sessione prima di creare il profilo locale.
+
+
+## Pivot v2 — "solo tavoli" (DECISIONI #36)
+
+Modello dati client: `Tavolo`, `Membership` (una sedia), `Messaggio`, `JoinRequest`, `Person`, `ParticipationEvent` — spariscono `Friendship`, `Comment`, `SeatProposal` e i campi demo di `Person`. Le view: `SalottoView` (chat-list dei tavoli + richieste), `TavoliView` (catalogo/fondazione/codici), `TavoloRoomView` (conversazione in stile chat: `defaultScrollAnchor(.bottom)`, barra in `safeAreaInset`, bolle con Nutre), `TuView`, 3 tab. L'engine è INVARIATO (e con lui i 12 test): `maxFriends` ora significa "sedie di un tavolo", `maxCircles` "tavoli abitabili" — commentato in `ProductRules`/`rules.js`, i numeri non sono cambiati; ogni messaggio vale `pointsComment` (+1).
+
+Server: `sync` restituisce `{me, myTables, seats, catalog, requests, messages}`; `posts` richiede `tableId` (un messaggio al tavolo, +1, brace ravvivata); `posts/react` è solo Nutre; `invites` è legato al tavolo (`invites.circle_id`, riscatto = sedersi lì con guardie 12/5); `circles/membership` controlla anche le 12 sedie; droppate `friendships`, `friend_requests`, `comments`. La migrazione (`admin/migrate`) è idempotente e fa lei i DROP/ALTER del pivot.

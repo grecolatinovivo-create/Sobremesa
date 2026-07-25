@@ -40,9 +40,8 @@ struct SobremesaApp: App {
 
     private static func makeContainerOnce() throws -> ModelContainer {
         try ModelContainer(
-            for: Person.self, Friendship.self, Circolo.self, Membership.self,
-            Post.self, Comment.self, JoinRequest.self, SeatProposal.self,
-            ParticipationEvent.self
+            for: Person.self, Tavolo.self, Membership.self,
+            Messaggio.self, JoinRequest.self, ParticipationEvent.self
         )
     }
 

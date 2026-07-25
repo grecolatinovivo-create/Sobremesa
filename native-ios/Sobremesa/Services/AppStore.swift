@@ -4,7 +4,7 @@
 //
 //  Lo store osservabile (MVVM, @Observable): le view leggono con @Query
 //  e mutano SOLO attraverso questi metodi. Qui vivono anche i toast
-//  (le notifiche in-app) e lo stato dell'invito in sospeso.
+//  (le notifiche in-app), la lingua e la sincronizzazione col server.
 //
 
 import Foundation
@@ -15,7 +15,7 @@ import SwiftUI
 @Observable
 final class AppStore {
 
-    /// Il backend (oggi locale, domani remoto): mai le view direttamente sui modelli.
+    /// Le operazioni locali (SwiftData): mai le view direttamente sui modelli.
     private let data: DataService
     /// Richiami locali della brace (giorno 4 e giorno 7).
     private let notifications: NotificationScheduler
@@ -30,8 +30,6 @@ final class AppStore {
 
     /// Toast corrente (notifica in-app).
     var toast: AppNotice?
-    /// Persona con invito in sospeso (tavola piena): guida il pannello in Tavola.
-    var pendingInvitee: Person?
     /// Serve l'onboarding (nessun profilo)? Deciso in bootstrap().
     var needsOnboarding = true
 
@@ -57,8 +55,8 @@ final class AppStore {
     /// Il Locale da iniettare nell'ambiente SwiftUI alla radice.
     var appLocale: Locale { language.locale }
 
-    /// Le quattro stanze; serve a saltare di stanza dai richiami del Salotto.
-    enum Stanza: Hashable { case salotto, circoli, tavola, tu }
+    /// Le tre stanze; serve a saltare di stanza dai richiami del Salotto.
+    enum Stanza: Hashable { case salotto, tavoli, tu }
     var stanzaCorrente: Stanza = .salotto
 
     private var toastTask: Task<Void, Never>?
@@ -79,7 +77,6 @@ final class AppStore {
     func bootstrap() {
         needsOnboarding = !data.hasProfile()
         guard !needsOnboarding else { return }
-        pendingInvitee = data.pendingInvitee()
         show(notices: data.evaluateEmbers(now: .now))
         refreshEmberReminders()
         syncNow()
@@ -116,7 +113,7 @@ final class AppStore {
 
     // MARK: Sincronizzazione col server
 
-    /// Ricerca corrente nel catalogo dei circoli aperti.
+    /// Ricerca corrente nel catalogo dei tavoli aperti.
     var catalogQuery = ""
 
     func syncNow(query: String? = nil) {
@@ -129,7 +126,6 @@ final class AppStore {
         do {
             let payload = try await api.sync(catalogQuery: catalogQuery)
             data.applySync(payload)
-            pendingInvitee = data.pendingInvitee()
             refreshEmberReminders()
         } catch {
             // Offline: si resta sulla fotografia locale, senza drammi.
@@ -143,7 +139,7 @@ final class AppStore {
                 try await operation()
                 await performSync()
             } catch APIError.notAuthenticated {
-                // Profili nati prima del backend: si continua in locale.
+                // Nessuna sessione: si resta in locale.
             } catch {
                 show(message: String(localized: "toast.offline", bundle: L10n.bundle))
             }
@@ -161,10 +157,10 @@ final class AppStore {
     /// Riallinea i richiami locali della brace alle date reali.
     private func refreshEmberReminders() {
         let memberships = data.myMemberships().compactMap { membership -> (String, Date, Bool)? in
-            guard let circolo = membership.circolo else { return nil }
-            return (circolo.displayName,
+            guard let tavolo = membership.tavolo else { return nil }
+            return (tavolo.name,
                     membership.lastActivity,
-                    circolo.memberCount < rules.emberMinimumMembers)
+                    tavolo.memberCount < rules.emberMinimumMembers)
         }
         notifications.reschedule(memberships: memberships)
     }
@@ -172,149 +168,58 @@ final class AppStore {
     // MARK: Derivati
 
     var me: Person? { data.me() }
-    var friendCount: Int { data.friendCount() }
     var myMemberships: [Membership] { data.myMemberships() }
 
-    func membership(of circolo: Circolo) -> Membership? { data.membership(of: circolo) }
+    func membership(of tavolo: Tavolo) -> Membership? { data.membership(of: tavolo) }
 
-    /// Il post appartiene al mio feed? (solo amici e circoli abitati)
-    func isInMyFeed(_ post: Post) -> Bool {
-        if let circolo = post.circolo {
-            return data.membership(of: circolo) != nil
-        }
-        return post.author?.isMe == true || post.author.map(data.isFriend) == true
-    }
+    // MARK: Tavoli
 
-    // MARK: Sedie (il ponte circoli → tavola)
-
-    /// "Proponi una sedia" a un membro di circolo.
-    func proposeSeat(to person: Person) {
-        guard let id = person.serverID else { return }
-        data.recordSeatProposal(to: person)
-        remote { try await self.api.proposeSeat(userID: id) }
-    }
-
-    /// Risposta a una proposta in arrivo ("X vuole sedersi alla tua tavola").
-    func respondSeat(_ proposal: SeatProposal, accept: Bool) {
-        guard let id = proposal.serverID else { return }
-        data.resolveSeatProposal(proposal, accepted: accept)
-        remote { try await self.api.respondSeat(requestID: id, accept: accept) }
-    }
-
-    // MARK: Salotto
-
-    func publish(text: String, category: PostCategory, in circolo: Circolo?) {
-        show(notices: data.publish(text: text, category: category, in: circolo))
+    /// Fonda un nuovo tavolo: chi lo fonda ne è l'animatore.
+    func createTable(name: String, theme: String, category: PostCategory) {
+        show(notices: data.createTable(name: name, theme: theme, category: category))
+        notifications.requestAuthorizationIfNeeded()
         refreshEmberReminders()
-        let circleID = circolo?.serverID
-        remote { try await self.api.publish(text: text, category: category.rawValue, circleID: circleID) }
+        remote { try await self.api.createTable(name: name, theme: theme,
+                                                category: category.rawValue, isOpen: true) }
     }
 
-    func toggleNutre(on post: Post) {
-        data.toggleNutre(on: post)
-        if let id = post.serverID {
-            remote { try await self.api.react(postID: id, action: "nutre") }
-        }
-    }
-
-    func addComment(to post: Post, text: String) {
-        show(notices: data.addComment(to: post, text: text))
-        refreshEmberReminders()
-        if let id = post.serverID {
-            remote { try await self.api.react(postID: id, action: "comment", text: text) }
-        }
-    }
-
-    // MARK: Tavola
-
-    func invite(_ person: Person) {
-        switch data.invite(person) {
-        case .seated:
-            pendingInvitee = nil
-            show(message: String(format: String(localized: "toast.seated", bundle: L10n.bundle), person.name))
-        case .tableFull:
-            pendingInvitee = person
-        }
-    }
-
-    func freeChair(_ friendship: Friendship) {
-        let serverID = friendship.person?.serverID
-        show(notices: data.freeChair(friendship))
-        pendingInvitee = data.pendingInvitee()
-        if let serverID {
-            remote { try await self.api.removeFriend(serverID: serverID) }
-        }
-    }
-
-    // MARK: Inviti reali alla tavola
-
-    /// Genera un codice d'invito da condividere (share sheet).
-    func createInviteCode() async -> String? {
-        try? await api.createInvite()
-    }
-
-    /// Riscatta un codice ricevuto: ci si siede alla stessa tavola.
-    func redeemInvite(code: String) {
-        let clean = code.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !clean.isEmpty else { return }
-        Task {
-            do {
-                let result = try await api.redeemInvite(code: clean)
-                if result.pending == true {
-                    show(message: String(localized: "toast.invito.sospeso", bundle: L10n.bundle))
-                } else {
-                    show(message: String(localized: "toast.invito.seduti", bundle: L10n.bundle))
-                }
-                await performSync()
-            } catch {
-                show(message: String(localized: "toast.invito.errore", bundle: L10n.bundle))
-            }
-        }
-    }
-
-    func cancelPendingInvite() {
-        data.cancelPendingInvite()
-        pendingInvitee = nil
-    }
-
-    // MARK: Circoli
-
+    /// Siediti a un tavolo aperto (dal catalogo).
     @discardableResult
-    func joinCircle(_ circolo: Circolo) -> Bool {
-        let joined = data.joinCircle(circolo)
+    func joinTable(_ tavolo: Tavolo) -> Bool {
+        let joined = data.joinTable(tavolo)
         if joined {
             notifications.requestAuthorizationIfNeeded()
             refreshEmberReminders()
-            if let id = circolo.serverID {
-                remote { try await self.api.circleAction("join", circleID: id) }
+            if let id = tavolo.serverID {
+                remote { try await self.api.tableAction("join", tableID: id) }
             }
         }
         return joined
     }
 
-    /// Fonda un nuovo circolo: chi lo crea ne è l'animatore.
-    func createCircle(name: String, theme: String, category: PostCategory) {
-        show(notices: data.createCircle(name: name, theme: theme, category: category))
-        notifications.requestAuthorizationIfNeeded()
-        refreshEmberReminders()
-        remote { try await self.api.createCircle(name: name, theme: theme,
-                                                 category: category.rawValue, isOpen: true) }
+    /// Chiedi di sederti a un tavolo chiuso.
+    func requestSeat(at tavolo: Tavolo) {
+        guard let id = tavolo.serverID else { return }
+        show(message: String(localized: "toast.richiesta.inviata", bundle: L10n.bundle))
+        remote { try await self.api.tableAction("join", tableID: id) }
     }
 
-    func leaveCircle(_ circolo: Circolo) {
-        let serverID = circolo.serverID
-        data.leaveCircle(circolo)
+    /// Alzati da un tavolo (l'animatore, alzandosi, lo chiude).
+    func leaveTable(_ tavolo: Tavolo) {
+        let serverID = tavolo.serverID
+        data.leaveTable(tavolo)
         refreshEmberReminders()
         if let serverID {
-            remote { try await self.api.circleAction("leave", circleID: serverID) }
+            remote { try await self.api.tableAction("leave", tableID: serverID) }
         }
     }
 
-    func retakeWord(in circolo: Circolo) {
-        show(notices: data.retakeWord(in: circolo))
+    /// "Riprendi la parola": ravviva la brace senza scrivere.
+    func retakeWord(at tavolo: Tavolo) {
+        show(notices: data.retakeWord(at: tavolo))
         refreshEmberReminders()
-        if let id = circolo.serverID {
-            remote { try await self.api.circleAction("retake", circleID: id) }
+        if let id = tavolo.serverID {
+            remote { try await self.api.tableAction("retake", tableID: id) }
         }
     }
 
@@ -334,21 +239,51 @@ final class AppStore {
         }
     }
 
+    // MARK: Conversazione
+
+    func sendMessage(_ text: String, at tavolo: Tavolo) {
+        show(notices: data.sendMessage(text, at: tavolo))
+        refreshEmberReminders()
+        if let id = tavolo.serverID {
+            remote { try await self.api.sendMessage(text, tableID: id) }
+        }
+    }
+
+    func toggleNutre(on messaggio: Messaggio) {
+        data.toggleNutre(on: messaggio)
+        if let id = messaggio.serverID {
+            remote { try await self.api.toggleNutre(messageID: id) }
+        }
+    }
+
+    // MARK: Inviti al tavolo
+
+    /// Genera un codice d'invito per un tavolo (share sheet).
+    func createInviteCode(for tavolo: Tavolo) async -> String? {
+        guard let id = tavolo.serverID else { return nil }
+        return try? await api.createInvite(tableID: id)
+    }
+
+    /// Riscatta un codice ricevuto: ci si siede a quel tavolo.
+    func redeemInvite(code: String) {
+        let clean = code.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !clean.isEmpty else { return }
+        Task {
+            do {
+                try await api.redeemInvite(code: clean)
+                show(message: String(localized: "toast.invito.seduti", bundle: L10n.bundle))
+                await performSync()
+            } catch {
+                show(message: String(localized: "toast.invito.errore", bundle: L10n.bundle))
+            }
+        }
+    }
+
     #if DEBUG
     /// Solo build DEBUG: simula N giorni di silenzio spostando indietro le date reali.
     func simulateSilence(days: Int) {
         show(notices: data.simulateSilence(days: days))
         refreshEmberReminders()
-    }
-
-    /// Solo build DEBUG: popola il mondo demo dall'onboarding, per sviluppo.
-    func seedDemoWorld() {
-        data.seedDemoData()
-        needsOnboarding = !data.hasProfile()
-        if !needsOnboarding {
-            pendingInvitee = data.pendingInvitee()
-            refreshEmberReminders()
-        }
     }
     #endif
 
@@ -367,7 +302,6 @@ final class AppStore {
         notifications.reschedule(memberships: [])
         toastTask?.cancel()
         toast = nil
-        pendingInvitee = nil
         withAnimation { needsOnboarding = true }
     }
 
@@ -403,11 +337,10 @@ final class AppStore {
     }
 }
 
-// MARK: - Risoluzione delle chiavi di localizzazione dei contenuti seed
+// MARK: - Risoluzione delle chiavi di localizzazione
 
 extension String {
-    /// Risolve la stringa come chiave del String Catalog.
-    /// Usata per i contenuti demo, che memorizzano chiavi e non testo.
+    /// Risolve la stringa come chiave del String Catalog (bundle della lingua scelta).
     var loc: String {
         String(localized: String.LocalizationValue(self), bundle: L10n.bundle)
     }

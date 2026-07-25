@@ -15,10 +15,12 @@ struct ProductRules: Equatable, Sendable {
 
     // MARK: Tavola
     /// Le sedie della tavola: massimo numero di amici reciproci.
+    /// v2 "solo tavoli": le sedie di UN tavolo (il nome resta per compatibilità con engine e test).
     var maxFriends: Int = 12
 
     // MARK: Circoli
     /// Massimo numero di circoli abitati contemporaneamente.
+    /// v2 "solo tavoli": i tavoli a cui si può sedere contemporaneamente.
     var maxCircles: Int = 5
 
     // MARK: La regola della brace (giorni di silenzio per circolo)
