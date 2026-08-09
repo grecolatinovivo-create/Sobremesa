@@ -15,6 +15,10 @@ struct SalottoView: View {
     @Environment(AppStore.self) private var store
     @Query(sort: \Messaggio.createdAt, order: .reverse) private var allMessages: [Messaggio]
     @Query(sort: \JoinRequest.createdAt) private var joinRequests: [JoinRequest]
+    // @Query e non store.myMemberships: la fondazione del primo tavolo deve
+    // aggiornare il Salotto da sola (Observation non traccia le fetch).
+    @Query(filter: #Predicate<Membership> { $0.person?.isMe == true },
+           sort: \Membership.joinedAt) private var mieSedie: [Membership]
 
     var body: some View {
         NavigationStack {
@@ -29,7 +33,7 @@ struct SalottoView: View {
                         daDecidere
                     }
 
-                    if store.myMemberships.isEmpty {
+                    if mieSedie.isEmpty {
                         heroVuoto
                     } else {
                         conversazioni
@@ -71,7 +75,7 @@ struct SalottoView: View {
     private var conversazioni: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionTitle(textKey: "salotto.conversazioni.section")
-            ForEach(store.myMemberships, id: \.persistentModelID) { membership in
+            ForEach(mieSedie, id: \.persistentModelID) { membership in
                 if let tavolo = membership.tavolo {
                     NavigationLink(value: tavolo) {
                         rigaTavolo(tavolo: tavolo, membership: membership)
@@ -86,24 +90,42 @@ struct SalottoView: View {
         allMessages.first { $0.tavolo === tavolo }
     }
 
+    /// Interventi altrui successivi all'ultima lettura.
+    private func nuoviInterventi(tavolo: Tavolo, membership: Membership) -> Int {
+        allMessages.filter {
+            $0.tavolo === tavolo && $0.author?.isMe != true && $0.createdAt > membership.lastReadAt
+        }.count
+    }
+
     private func rigaTavolo(tavolo: Tavolo, membership: Membership) -> some View {
-        HStack(spacing: 12) {
+        let nuovi = nuoviInterventi(tavolo: tavolo, membership: membership)
+        return HStack(spacing: 12) {
             Image(systemName: tavolo.category.symbolName)
-                .font(.system(size: 18))
-                .foregroundStyle(Color.brass)
+                .font(AppFont.ui(16, relativeTo: .callout))
+                .foregroundStyle(Color.brassSoft)
                 .frame(width: 36, height: 36)
-                .background(Color.felt.opacity(0.6), in: SwiftUI.Circle())
+                .background(Color.felt, in: SwiftUI.Circle())
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(verbatim: tavolo.name)
                         .font(AppFont.ui(15, relativeTo: .subheadline))
+                        .fontWeight(nuovi > 0 ? .semibold : .regular)
                         .foregroundStyle(Color.ink)
                         .lineLimit(1)
+                    Text(verbatim: "\(tavolo.memberCount)/\(store.rules.maxFriends)")
+                        .font(AppFont.caption(11, relativeTo: .caption2))
+                        .foregroundStyle(Color.felt.opacity(0.8))
                     braceDot(membership: membership, tavolo: tavolo)
                 }
-                if let ultimo = ultimoMessaggio(di: tavolo) {
+                if nuovi > 0 {
+                    // La ricompensa alla riapertura: cosa è successo da ieri.
+                    Text(verbatim: String.localizedStringWithFormat(
+                        String(localized: "salotto.nuovi.interventi", bundle: L10n.bundle), nuovi))
+                        .font(AppFont.caption())
+                        .foregroundStyle(Color.brassDeep)
+                } else if let ultimo = ultimoMessaggio(di: tavolo) {
                     Text(verbatim: "\(ultimo.author?.isMe == true ? String(localized: "salotto.tu", bundle: L10n.bundle) : (ultimo.author?.name ?? "—")): \(ultimo.text)")
                         .font(AppFont.caption())
                         .foregroundStyle(Color.felt)
@@ -122,10 +144,10 @@ struct SalottoView: View {
                         .font(AppFont.caption(11, relativeTo: .caption2))
                         .foregroundStyle(Color.felt.opacity(0.8))
                 }
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.felt)
-                    .accessibilityHidden(true)
+                if nuovi > 0 {
+                    SwiftUI.Circle().fill(Color.brass).frame(width: 9, height: 9)
+                        .accessibilityHidden(true)
+                }
             }
         }
         .sobreCard()
@@ -136,18 +158,33 @@ struct SalottoView: View {
     private func braceDot(membership: Membership, tavolo: Tavolo) -> some View {
         SwiftUI.Circle()
             .fill(braceColor(membership: membership, tavolo: tavolo))
-            .frame(width: 7, height: 7)
-            .accessibilityHidden(true)
+            .frame(width: 10, height: 10)
+            .accessibilityLabel(Text(verbatim: braceLabel(membership: membership, tavolo: tavolo)))
     }
 
     private func braceColor(membership: Membership, tavolo: Tavolo) -> Color {
+        // Su carta chiara: colori a contrasto vero (BrassDeep, non BrassSoft).
         guard tavolo.memberCount >= store.rules.emberMinimumMembers else {
-            return .brassSoft.opacity(0.5)
+            return .felt.opacity(0.45)
         }
         switch store.engine.emberState(lastActivity: membership.lastActivity, now: .now) {
         case .viva: return .successTone
-        case .affievolita: return .brassSoft
-        case .avviso, .espulsione: return .errorSoft
+        case .affievolita: return .brassDeep
+        case .avviso, .espulsione: return .errorTone
+        }
+    }
+
+    private func braceLabel(membership: Membership, tavolo: Tavolo) -> String {
+        guard tavolo.memberCount >= store.rules.emberMinimumMembers else {
+            return String(localized: "brace.attesa", bundle: L10n.bundle)
+        }
+        switch store.engine.emberState(lastActivity: membership.lastActivity, now: .now) {
+        case .viva:
+            return String(localized: "brace.viva", bundle: L10n.bundle)
+        case .affievolita(let giorni):
+            return String.localizedStringWithFormat(String(localized: "brace.affievolita", bundle: L10n.bundle), giorni)
+        case .avviso(let giorni), .espulsione(let giorni):
+            return String.localizedStringWithFormat(String(localized: "brace.avviso", bundle: L10n.bundle), giorni)
         }
     }
 

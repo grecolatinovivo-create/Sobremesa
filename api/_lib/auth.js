@@ -61,9 +61,15 @@ export async function requireAuth(req, res) {
 }
 
 /// Protezione del cron e delle rotte di amministrazione (CRON_SECRET env).
+import { timingSafeEqual } from "node:crypto";
 export function requireCronSecret(req, res) {
+  const secret = process.env.CRON_SECRET;
   const header = req.headers.authorization || "";
-  if (header === `Bearer ${process.env.CRON_SECRET}`) return true;
+  if (secret) {
+    const expected = Buffer.from(`Bearer ${secret}`);
+    const got = Buffer.from(header);
+    if (expected.length === got.length && timingSafeEqual(expected, got)) return true;
+  }
   res.status(401).json({ error: "non autorizzato" });
   return false;
 }

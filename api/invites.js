@@ -40,8 +40,16 @@ export default async function handler(req, res) {
   if ((await seatCount(invite.circle_id)) >= RULES.maxFriends) {
     return res.status(409).json({ error: "il tavolo è al completo" });
   }
-  await sql`INSERT INTO memberships (user_id, circle_id)
-            VALUES (${me.id}, ${invite.circle_id}) ON CONFLICT DO NOTHING`;
-  await sql`UPDATE invites SET status = 'used', used_by = ${me.id} WHERE code = ${code}`;
+  // Consumo atomico del codice: solo UN riscatto passa (status='open' nel WHERE).
+  const { rowCount: consumed } = await sql`
+    UPDATE invites SET status = 'used', used_by = ${me.id}
+    WHERE code = ${code} AND status = 'open'`;
+  if (!consumed) return res.status(404).json({ error: "codice non valido" });
+  const { rowCount: seated } = await sql`
+    INSERT INTO memberships (user_id, circle_id)
+    SELECT ${me.id}, ${invite.circle_id}
+    WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${invite.circle_id}) < ${RULES.maxFriends}
+    ON CONFLICT DO NOTHING`;
+  if (!seated) return res.status(409).json({ error: "il tavolo è al completo" });
   res.status(200).json({ seated: true });
 }

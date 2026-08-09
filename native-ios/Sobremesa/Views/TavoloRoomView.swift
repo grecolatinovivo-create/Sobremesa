@@ -4,8 +4,8 @@
 //
 //  Il tavolo: LA stanza di Sobremesa. Si parla come a cena — il filo
 //  del discorso scorre dall'alto in basso, si scrive in fondo, sul
-//  messaggio degli altri si può fare "Nutre". In testata: chi siede,
-//  come sta la brace, e il menu del tavolo (invita, riprendi, alzati).
+//  messaggio degli altri si può fare "Nutre". La testata (sedie, brace)
+//  è FISSA in alto: la conversazione scorre, il contesto resta.
 //
 
 import SwiftUI
@@ -18,11 +18,18 @@ struct TavoloRoomView: View {
 
     @Query(sort: \Messaggio.createdAt) private var allMessages: [Messaggio]
     @Query private var allMemberships: [Membership]
+    @Query private var allTables: [Tavolo]
 
     @State private var draft = ""
     @State private var inviteCode: String?
+    @State private var showInvite = false
     @State private var showMembers = false
     @State private var confirmLeave = false
+
+    /// Il tavolo esiste ancora? (l'animatore può averlo chiuso durante un sync)
+    private var isAlive: Bool {
+        allTables.contains { $0 === tavolo }
+    }
 
     /// La conversazione di QUESTO tavolo, in ordine di discorso.
     private var messaggi: [Messaggio] {
@@ -41,12 +48,45 @@ struct TavoloRoomView: View {
             .compactMap(\.person)
     }
 
+    private var soloAlTavolo: Bool {
+        tavolo.memberCount < store.rules.emberMinimumMembers
+    }
+
     var body: some View {
+        Group {
+            if isAlive {
+                conversazione
+            } else {
+                // Il tavolo si è chiuso mentre eravamo qui: nessun crash, una spiegazione.
+                VStack(spacing: 10) {
+                    Image(systemName: "moon.zzz")
+                        .font(.system(size: 30))
+                        .foregroundStyle(Color.brassSoft)
+                        .accessibilityHidden(true)
+                    Text("stanza.chiusa")
+                        .font(AppFont.ui())
+                        .foregroundStyle(Color.brassSoft)
+                        .multilineTextAlignment(.center)
+                    Button("stanza.chiusa.torna") { dismiss() }
+                        .buttonStyle(PillButtonStyle())
+                }
+                .padding(24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.ink)
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color.ink, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+    }
+
+    private var conversazione: some View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 10) {
-                    header
-
+                    if soloAlTavolo {
+                        invitaCard
+                    }
                     if messaggi.isEmpty {
                         emptyState
                     } else {
@@ -62,24 +102,26 @@ struct TavoloRoomView: View {
             .scrollDismissesKeyboard(.interactively)
             .defaultScrollAnchor(.bottom)
             .onChange(of: messaggi.count) {
+                store.markRead(tavolo)
                 if let last = messaggi.last {
                     withAnimation { proxy.scrollTo(last.persistentModelID, anchor: .bottom) }
                 }
             }
         }
+        .safeAreaInset(edge: .top) { topBar }
         .safeAreaInset(edge: .bottom) {
             if membership != nil {
                 inputBar
             }
         }
         .navigationTitle(tavolo.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.ink, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) { tableMenu }
         }
         .sheet(isPresented: $showMembers) { membersSheet }
+        .sheet(isPresented: $showInvite) { inviteSheet }
+        .onAppear { store.markRead(tavolo) }
+        .onDisappear { if isAlive { store.markRead(tavolo) } }
         .confirmationDialog(
             Text(tavolo.animatedByMe ? "conferma.chiudi.title" : "conferma.alzati.title"),
             isPresented: $confirmLeave, titleVisibility: .visible
@@ -95,63 +137,95 @@ struct TavoloRoomView: View {
         }
     }
 
-    // MARK: Testata
+    // MARK: Testata fissa: il contesto non scorre via
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
+    private var emberState: EmberState? {
+        guard let membership, !soloAlTavolo else { return nil }
+        return store.engine.emberState(lastActivity: membership.lastActivity, now: .now)
+    }
+
+    private var braceInAvviso: Bool {
+        if case .avviso = emberState { return true }
+        if case .espulsione = emberState { return true }
+        return false
+    }
+
+    private var topBar: some View {
+        VStack(alignment: .leading, spacing: 4) {
             if !tavolo.theme.isEmpty {
                 Text(verbatim: tavolo.theme)
-                    .font(AppFont.bodySerif(15, relativeTo: .subheadline))
+                    .font(AppFont.bodySerif(14, relativeTo: .footnote))
                     .italic()
                     .foregroundStyle(Color.brassSoft)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(1)
             }
-            HStack(spacing: 10) {
+            HStack(spacing: 12) {
                 Button {
                     showMembers = true
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "person.2")
-                            .font(.system(size: 12))
+                            .font(AppFont.caption())
                             .accessibilityHidden(true)
                         Text(verbatim: "\(tavolo.memberCount)/\(store.rules.maxFriends)")
                             .font(AppFont.caption())
                     }
                     .foregroundStyle(Color.brassSoft)
                     .frame(minHeight: 44)
+                    .contentShape(Rectangle())
                 }
                 .accessibilityLabel(Text("a11y.commensali"))
 
                 if let membership {
-                    if tavolo.memberCount < store.rules.emberMinimumMembers {
-                        // Da soli la brace non si valuta: lo diciamo, non lo nascondiamo.
+                    if soloAlTavolo {
                         Text("brace.attesa")
                             .font(AppFont.caption())
                             .foregroundStyle(Color.brassSoft)
                     } else {
                         EmberLine(state: store.engine.emberState(
-                            lastActivity: membership.lastActivity, now: .now))
+                                    lastActivity: membership.lastActivity, now: .now),
+                                  sinceDays: giorniAlTavolo)
                     }
                 }
                 Spacer()
-            }
-
-            if let code = inviteCode {
-                HStack(spacing: 10) {
-                    Text(verbatim: code)
-                        .font(AppFont.title(18, relativeTo: .title3))
-                        .foregroundStyle(Color.ink)
-                        .textSelection(.enabled)
-                    Spacer()
-                    ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle),
-                                           tavolo.name, code)) {
-                        Label("tavola.invito.condividi", systemImage: "square.and.arrow.up")
-                    }
-                    .buttonStyle(PillButtonStyle())
+                if braceInAvviso {
+                    // La brace langue: due vie, riprendere la parola o portare
+                    // una voce nuova (audit neuromarketing #12).
+                    Button("azione.riprendi.breve") { store.retakeWord(at: tavolo) }
+                        .buttonStyle(QuietPillButtonStyle(tint: .brassSoft))
                 }
-                .sobreCard(.paperDim)
             }
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 6)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.ink.opacity(0.97))
+        .overlay(alignment: .bottom) {
+            Divider().overlay(Color.felt.opacity(0.4))
+        }
+    }
+
+    private var giorniAlTavolo: Int? {
+        guard let membership else { return nil }
+        let giorni = Int(Date.now.timeIntervalSince(membership.joinedAt) / 86_400)
+        return giorni >= 1 ? giorni : nil
+    }
+
+    // MARK: Da soli: la strada è invitare, non parlarsi addosso
+
+    private var invitaCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("stanza.soli.title")
+                .font(AppFont.ui(15, relativeTo: .subheadline))
+                .foregroundStyle(Color.ink)
+            Text("stanza.soli.testo")
+                .font(AppFont.caption())
+                .foregroundStyle(Color.felt)
+                .fixedSize(horizontal: false, vertical: true)
+            Button("stanza.invita") { openInvite() }
+                .buttonStyle(PillButtonStyle())
+        }
+        .sobreCard(.paperDim)
     }
 
     // MARK: Menu del tavolo
@@ -159,9 +233,9 @@ struct TavoloRoomView: View {
     private var tableMenu: some View {
         Menu {
             Button {
-                Task { inviteCode = await store.createInviteCode(for: tavolo) }
+                openInvite()
             } label: {
-                Label("stanza.invita", systemImage: "envelope")
+                Label("stanza.invita", systemImage: "person.badge.plus")
             }
             Button {
                 store.retakeWord(at: tavolo)
@@ -177,19 +251,67 @@ struct TavoloRoomView: View {
         } label: {
             Image(systemName: "ellipsis.circle")
                 .foregroundStyle(Color.brass)
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
         }
         .accessibilityLabel(Text("a11y.menu.tavolo"))
+    }
+
+    private func openInvite() {
+        showInvite = true
+        if inviteCode == nil {
+            Task { inviteCode = await store.createInviteCode(for: tavolo) }
+        }
+    }
+
+    // MARK: Lo sheet dell'invito (sempre visibile, mai fuori schermo)
+
+    private var inviteSheet: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("stanza.invita")
+                .font(AppFont.title(20, relativeTo: .title3))
+                .foregroundStyle(Color.paperDim)
+            Text("invito.spiega")
+                .font(AppFont.ui(14, relativeTo: .footnote))
+                .foregroundStyle(Color.brassSoft)
+                .fixedSize(horizontal: false, vertical: true)
+            if let code = inviteCode {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(verbatim: code)
+                        .font(AppFont.display(30, relativeTo: .title))
+                        .foregroundStyle(Color.ink)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity)
+                    ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle),
+                                           tavolo.name, code)) {
+                        Label("tavola.invito.condividi", systemImage: "square.and.arrow.up")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(PillButtonStyle())
+                }
+                .sobreCard(.paperDim)
+            } else {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 24)
+            }
+            Spacer()
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Color.ink)
+        .presentationDetents([.medium])
     }
 
     // MARK: Conversazione vuota
 
     private var emptyState: some View {
         VStack(spacing: 8) {
-            Image(systemName: "cup.and.saucer")
+            Image(systemName: "flame")
                 .font(.system(size: 30))
                 .foregroundStyle(Color.brassSoft)
                 .accessibilityHidden(true)
-            Text("stanza.vuota")
+            Text(soloAlTavolo ? "stanza.vuota.soli" : "stanza.vuota")
                 .font(AppFont.ui())
                 .foregroundStyle(Color.brassSoft)
                 .multilineTextAlignment(.center)
@@ -209,7 +331,7 @@ struct TavoloRoomView: View {
                 .lineLimit(1...4)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 9)
-                .background(Color.paper, in: RoundedRectangle(cornerRadius: 18))
+                .background(Color.paper, in: RoundedRectangle(cornerRadius: 14))
             Button {
                 send()
             } label: {
@@ -217,6 +339,8 @@ struct TavoloRoomView: View {
                     .font(.system(size: 30))
                     .foregroundStyle(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                                      ? Color.felt : Color.brass)
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
             }
             .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             .accessibilityLabel(Text("a11y.invia"))
@@ -278,6 +402,7 @@ private struct MessageBubble: View {
     let messaggio: Messaggio
 
     private var mio: Bool { messaggio.author?.isMe == true }
+    private var totaleNutre: Int { messaggio.nutreCount + (messaggio.nutritoDaMe ? 1 : 0) }
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
@@ -298,40 +423,68 @@ private struct MessageBubble: View {
                 HStack(spacing: 10) {
                     Text(messaggio.createdAt, format: .dateTime.hour().minute())
                         .font(AppFont.caption(11, relativeTo: .caption2))
-                        .foregroundStyle(mio ? Color.felt : Color.brassSoft.opacity(0.7))
-                    nutreButton
+                        .foregroundStyle(mio ? Color.felt : Color.brassSoft.opacity(0.85))
+                    if mio {
+                        // Sui miei: solo il conteggio (il piatto proprio non si nutre).
+                        if totaleNutre > 0 {
+                            HStack(spacing: 3) {
+                                Image(systemName: "leaf.fill")
+                                    .font(.system(size: 11))
+                                Text(verbatim: "\(totaleNutre)")
+                                    .font(AppFont.caption(11, relativeTo: .caption2))
+                            }
+                            .foregroundStyle(Color.successTone)
+                            .accessibilityLabel(Text("a11y.nutre.ricevuti"))
+                            .accessibilityValue(Text(verbatim: "\(totaleNutre)"))
+                        }
+                    } else {
+                        nutreButton
+                    }
                     Spacer(minLength: 0)
                 }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 9)
-            .background(mio ? Color.paperDim : Color.felt.opacity(0.55),
-                        in: RoundedRectangle(cornerRadius: 14))
+            .background(bubbleBackground)
             if !mio { Spacer(minLength: 40) }
         }
         .accessibilityElement(children: .combine)
+        .accessibilityAction(named: Text(messaggio.nutritoDaMe ? "a11y.nutre.on" : "a11y.nutre.off")) {
+            if !mio { store.toggleNutre(on: messaggio) }
+        }
     }
 
-    /// "Nutre": toggle con contatore, mai doppio conteggio.
+    @ViewBuilder
+    private var bubbleBackground: some View {
+        if mio {
+            RoundedRectangle(cornerRadius: 14).fill(Color.paperDim)
+        } else {
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color.felt)
+                .overlay(RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(Color.brassSoft.opacity(0.18)))
+        }
+    }
+
+    /// "Nutre": toggle con contatore, mai doppio conteggio, solo sui piatti altrui.
     private var nutreButton: some View {
         Button {
             store.toggleNutre(on: messaggio)
         } label: {
             HStack(spacing: 4) {
                 Image(systemName: messaggio.nutritoDaMe ? "leaf.fill" : "leaf")
-                    .font(.system(size: 12))
-                let totale = messaggio.nutreCount + (messaggio.nutritoDaMe ? 1 : 0)
-                if totale > 0 {
-                    Text(verbatim: "\(totale)")
+                    .font(.system(size: 13))
+                if totaleNutre > 0 {
+                    Text(verbatim: "\(totaleNutre)")
                         .font(AppFont.caption(11, relativeTo: .caption2))
                 }
             }
-            .foregroundStyle(messaggio.nutritoDaMe ? Color.successTone
-                             : (mio ? Color.felt : Color.brassSoft.opacity(0.8)))
-            .frame(minWidth: 34, minHeight: 30)
+            .foregroundStyle(messaggio.nutritoDaMe ? Color.successTone : Color.brassSoft.opacity(0.9))
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(messaggio.nutritoDaMe ? "a11y.nutre.on" : "a11y.nutre.off"))
-        .accessibilityValue(Text(verbatim: "\(messaggio.nutreCount + (messaggio.nutritoDaMe ? 1 : 0))"))
+        .accessibilityValue(Text(verbatim: "\(totaleNutre)"))
     }
 }

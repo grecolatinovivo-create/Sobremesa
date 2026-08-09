@@ -38,7 +38,7 @@ protocol DataService {
     // Tavoli
     func myMemberships() -> [Membership]
     func membership(of tavolo: Tavolo) -> Membership?
-    func createTable(name: String, theme: String, category: PostCategory) -> [AppNotice]
+    func createTable(name: String, theme: String, category: PostCategory, isOpen: Bool) -> [AppNotice]
     func joinTable(_ tavolo: Tavolo) -> Bool
     func leaveTable(_ tavolo: Tavolo)
     func retakeWord(at tavolo: Tavolo) -> [AppNotice]
@@ -55,6 +55,11 @@ protocol DataService {
     /// Solo DEBUG: sposta indietro le date di attività per testare la meccanica.
     func simulateSilence(days: Int) -> [AppNotice]
     #endif
+
+    /// Nutre totali ricevuti sui MIEI messaggi (per il toast di gratitudine).
+    func myReceivedNutre() -> Int
+    /// Segna letta la conversazione del tavolo (alimenta i "nuovi interventi").
+    func markRead(_ tavolo: Tavolo)
 
     // Backend
     /// Riversa il mondo del server nello store locale (v. SyncApply).
@@ -117,12 +122,11 @@ final class LocalDataService: DataService {
 
     // MARK: Tavoli
 
-    func createTable(name: String, theme: String, category: PostCategory) -> [AppNotice] {
+    func createTable(name: String, theme: String, category: PostCategory, isOpen: Bool) -> [AppNotice] {
         guard let me = me(),
               engine.canJoinCircle(currentCircleCount: myMemberships().count) else { return [] }
-        // Aperto: i tavoli fondati dagli utenti si trovano con la ricerca.
         let tavolo = Tavolo(name: name, theme: theme, category: category,
-                            isOpen: true, animatedByMe: true, memberCount: 1)
+                            isOpen: isOpen, animatedByMe: true, memberCount: 1)
         context.insert(tavolo)
         context.insert(Membership(person: me, tavolo: tavolo))
         save()
@@ -159,7 +163,8 @@ final class LocalDataService: DataService {
     func accept(_ request: JoinRequest) -> [AppNotice] {
         guard let person = request.person, let tavolo = request.tavolo else { return [] }
         context.delete(request)
-        guard tavolo.memberCount < engine.rules.maxFriends else { save(); return [] }
+        // La guardia vera (12 sedie) sta sul server: qui solo l'ottimismo,
+        // il sync successivo riallinea in ogni caso.
         context.insert(Membership(person: person, tavolo: tavolo))
         tavolo.memberCount += 1
         save()
@@ -185,8 +190,20 @@ final class LocalDataService: DataService {
     }
 
     func toggleNutre(on messaggio: Messaggio) {
+        // Il proprio piatto non si nutre da soli.
+        guard messaggio.author?.isMe != true else { return }
         // Toggle senza doppio conteggio: il mio Nutre è un flag, non un incremento cieco.
         messaggio.nutritoDaMe.toggle()
+        save()
+    }
+
+    func myReceivedNutre() -> Int {
+        let all = (try? context.fetch(FetchDescriptor<Messaggio>())) ?? []
+        return all.filter { $0.author?.isMe == true }.reduce(0) { $0 + $1.nutreCount }
+    }
+
+    func markRead(_ tavolo: Tavolo) {
+        membership(of: tavolo)?.lastReadAt = .now
         save()
     }
 

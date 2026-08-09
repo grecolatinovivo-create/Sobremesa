@@ -33,6 +33,7 @@ struct RemoteTable: Codable {
     let member_count: Int
     let last_activity: String?
     let joined_at: String?
+    let penalty_applied: Bool?
 }
 
 struct RemoteSeat: Codable {
@@ -112,7 +113,11 @@ struct APIClient {
         request.httpMethod = "DELETE"
         request.timeoutInterval = 20
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        _ = try await URLSession.shared.data(for: request)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+        guard (200..<300).contains(status) else {
+            throw APIError.http(status, String(data: data, encoding: .utf8) ?? "")
+        }
     }
 
     /// Un invito nasce sempre A un tavolo.

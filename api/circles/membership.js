@@ -27,8 +27,14 @@ export default async function handler(req, res) {
                 VALUES (${circleId}, ${me.id}) ON CONFLICT DO NOTHING`;
       return res.status(200).json({ requested: true });
     }
-    await sql`INSERT INTO memberships (user_id, circle_id)
-              VALUES (${me.id}, ${circleId}) ON CONFLICT DO NOTHING`;
+    // INSERT guardato in un solo statement: due join simultanei non possono
+    // superare le 12 sedie (il COUNT è valutato nello stesso comando).
+    const { rowCount } = await sql`
+      INSERT INTO memberships (user_id, circle_id)
+      SELECT ${me.id}, ${circleId}
+      WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${circleId}) < ${RULES.maxFriends}
+      ON CONFLICT DO NOTHING`;
+    if (!rowCount) return res.status(409).json({ error: "il tavolo è al completo" });
     return res.status(200).json({ joined: true });
   }
 

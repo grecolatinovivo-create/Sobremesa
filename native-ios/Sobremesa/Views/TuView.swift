@@ -32,6 +32,7 @@ struct TuView: View {
 
                 manifestoCard
                 languageCard
+                ritualCard
                 creditsCard
                 resetButton
             }
@@ -124,6 +125,43 @@ struct TuView: View {
             .accessibilityValue(store.language == .system
                 ? Text("tu.lingua.sistema")
                 : Text(verbatim: store.language.endonym))
+        }
+        .sobreCard(.paperDim)
+    }
+
+    /// Il rituale della sera: UNA notifica al giorno, all'ora scelta.
+    /// Un campanile, non una slot machine — e si spegne con un tocco.
+    private var ritualCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Toggle(isOn: Binding(get: { store.ritualEnabled },
+                                 set: { store.ritualEnabled = $0 })) {
+                Text("tu.rituale.label")
+                    .font(AppFont.ui(15, relativeTo: .subheadline))
+                    .foregroundStyle(Color.ink)
+            }
+            .tint(.brass)
+            Text("tu.rituale.hint")
+                .font(AppFont.caption())
+                .foregroundStyle(Color.felt)
+                .fixedSize(horizontal: false, vertical: true)
+            if store.ritualEnabled {
+                DatePicker("tu.rituale.ora",
+                           selection: Binding(
+                               get: {
+                                   Calendar.current.date(
+                                       bySettingHour: store.ritualMinutes / 60,
+                                       minute: store.ritualMinutes % 60,
+                                       second: 0, of: .now) ?? .now
+                               },
+                               set: { date in
+                                   let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+                                   store.ritualMinutes = (parts.hour ?? 21) * 60 + (parts.minute ?? 30)
+                               }),
+                           displayedComponents: .hourAndMinute)
+                    .font(AppFont.ui(14, relativeTo: .footnote))
+                    .foregroundStyle(Color.ink)
+                    .tint(.brass)
+            }
         }
         .sobreCard(.paperDim)
     }

@@ -206,6 +206,47 @@
         }
       }
     },
+    "a11y.nutre.ricevuti": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erhaltene Nährungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourishes received"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre recibidos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourritures reçues"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre ricevuti"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre recebidos"
+          }
+        }
+      }
+    },
     "a11y.score": {
       "extractionState": "manual",
       "localizations": {
@@ -370,6 +411,47 @@
         }
       }
     },
+    "a11y.tavolo.chiuso": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geschlossener Tisch: Eintritt auf Anfrage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Closed table: entry by request"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesa cerrada: se entra a petición"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Table fermée : entrée sur demande"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tavolo chiuso: si entra su richiesta"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesa fechada: entra-se a pedido"
+          }
+        }
+      }
+    },
     "a11y.toast.chiudi": {
       "extractionState": "manual",
       "localizations": {
@@ -418,6 +500,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Das Wort wieder ergreifen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retake the floor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retoma la palabra"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprends la parole"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprendi la parola"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retome a palavra"
+          }
+        }
+      }
+    },
+    "azione.riprendi.breve": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wort ergreifen"
           }
         },
         "en": {
@@ -756,6 +879,119 @@
           "stringUnit": {
             "state": "translated",
             "value": "As brasas estão vivas"
+          }
+        }
+      }
+    },
+    "brace.viva.giorni": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Lebendig — seit 1 Tag an diesem Tisch"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Lebendig — seit %lld Tagen an diesem Tisch"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Alive — at this table for 1 day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Alive — at this table for %lld days"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Viva — en esta mesa desde hace 1 día"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Viva — en esta mesa desde hace %lld días"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vivante — à cette table depuis 1 jour"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Vivante — à cette table depuis %lld jours"
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Viva — a questo tavolo da 1 giorno"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Viva — a questo tavolo da %lld giorni"
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Viva — nesta mesa há 1 dia"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Viva — nesta mesa há %lld dias"
+                }
+              }
+            }
           }
         }
       }
@@ -1334,6 +1570,129 @@
         }
       }
     },
+    "fonda.aperto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offener Tisch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open table"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesa abierta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Table ouverte"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tavolo aperto"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mesa aberta"
+          }
+        }
+      }
+    },
+    "fonda.aperto.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wer ihn im Katalog findet, kann sich ohne zu fragen setzen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whoever finds it in the catalog can sit without asking."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quien la encuentre en el catálogo puede sentarse sin pedir."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui la trouve au catalogue peut s'asseoir sans demander."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chi lo trova nel catalogo può sedersi senza chiedere."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quem a encontrar no catálogo pode sentar-se sem pedir."
+          }
+        }
+      }
+    },
+    "fonda.chiuso.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eintritt nur auf Anfrage: Du entscheidest, wer sitzt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entry by request only: you'll decide who sits."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se entra solo a petición: tú decidirás quién se sienta."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrée sur demande uniquement : tu décideras qui s'assoit."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si entra solo su richiesta: deciderai tu chi si siede."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entra-se apenas a pedido: você decidirá quem se senta."
+          }
+        }
+      }
+    },
     "fonda.conferma": {
       "extractionState": "manual",
       "localizations": {
@@ -1586,37 +1945,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hast du einen Code bekommen?"
+            "value": "Der Code, z. B. Q7WXK2MP"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Did you get a code?"
+            "value": "The code, e.g. Q7WXK2MP"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿Has recibido un código?"
+            "value": "El código, p. ej. Q7WXK2MP"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu as reçu un code ?"
+            "value": "Le code, ex. Q7WXK2MP"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hai ricevuto un codice?"
+            "value": "Il codice, es. Q7WXK2MP"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você recebeu um código?"
+            "value": "O código, ex. Q7WXK2MP"
           }
         }
       }
@@ -1658,6 +2017,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sente-se comigo em \"%1$@\" no Sobremesa. O código da mesa é: %2$@"
+          }
+        }
+      }
+    },
+    "invito.spiega": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Code, ein Stuhl: Wer ihn einlöst, sitzt an DIESEM Tisch. Die Stühle sind, was sie sind."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One code, one chair: whoever redeems it sits at THIS table. The chairs are what they are."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un código, una silla: quien lo canjea se sienta en ESTA mesa. Las sillas son las que son."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un code, une chaise : qui l'utilise s'assoit à CETTE table. Les chaises sont ce qu'elles sont."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un codice, una sedia: chi lo riscatta si siede a QUESTO tavolo. Le sedie sono quelle che sono."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um código, uma cadeira: quem o resgata senta-se NESTA mesa. As cadeiras são as que são."
           }
         }
       }
@@ -1709,37 +2109,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seit %1$lld Tagen schweigst du in „%2$@“. Ergreife wieder das Wort, bevor dein Platz frei wird."
+            "value": "Seit %1$lld Tagen schweigt „%2$@“. Ergreife das Wort — oder decke für eine neue Stimme."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You've been silent in “%2$@” for %1$lld days. Take the floor again before your seat frees up."
+            "value": "Silence at \"%2$@\" for %1$lld days. Retake the floor — or set a place for a new voice."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Llevas %1$lld días en silencio en «%2$@». Retoma la palabra antes de que tu lugar quede libre."
+            "value": "Desde hace %1$lld días se calla en «%2$@». Retoma la palabra — o pon un sitio para una voz nueva."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cela fait %1$lld jours que tu te tais dans « %2$@ ». Reprends la parole avant que ta place ne se libère."
+            "value": "Silence à « %2$@ » depuis %1$lld jours. Reprends la parole — ou dresse un couvert pour une voix nouvelle."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Da %1$lld giorni taci in «%2$@». Riprendi la parola prima che il posto si liberi."
+            "value": "Da %1$lld giorni si tace a «%2$@». Riprendi la parola — o apparecchia per una voce nuova."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Há %1$lld dias você está em silêncio em “%2$@”. Retome a palavra antes que seu lugar seja liberado."
+            "value": "Há %1$lld dias há silêncio em \"%2$@\". Retome a palavra — ou ponha um lugar para uma voz nova."
           }
         }
       }
@@ -1863,6 +2263,88 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seu lugar foi liberado"
+          }
+        }
+      }
+    },
+    "notif.rituale.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Tische warten. Der Luxus, sitzen zu bleiben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your tables await. The luxury of lingering."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus mesas te esperan. El lujo de quedarse sentado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes tables t'attendent. Le luxe de rester assis."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi tavoli ti aspettano. Il lusso di restare seduti."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suas mesas o esperam. O luxo de ficar sentado."
+          }
+        }
+      }
+    },
+    "notif.rituale.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es ist Zeit für die Sobremesa"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It's sobremesa time"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es la hora de la sobremesa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C'est l'heure de la sobremesa"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "È l'ora della sobremesa"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "É hora da sobremesa"
           }
         }
       }
@@ -2201,37 +2683,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Das Kultur-Netzwerk, in dem Knappheit das Prinzip ist."
+            "value": "Die Zeit am Tisch, wenn das Essen vorbei ist und niemand aufstehen mag."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The culture social where scarcity is the feature."
+            "value": "The time you linger at the table when the meal is over and nobody wants to get up."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La red social de la cultura donde la escasez es la esencia."
+            "value": "El tiempo que se queda en la mesa cuando la comida terminó y nadie quiere levantarse."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le réseau social de la culture où la rareté est l'essence."
+            "value": "Le temps qu'on reste à table quand le repas est fini et que personne ne veut se lever."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il social della cultura dove la scarsità è la feature."
+            "value": "Il tempo che resta a tavola quando il pasto è finito e nessuno ha voglia di alzarsi."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "A rede social da cultura onde a escassez é a essência."
+            "value": "O tempo que se fica à mesa quando a refeição acabou e ninguém quer se levantar."
           }
         }
       }
@@ -2314,6 +2796,119 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suas mesas"
+          }
+        }
+      }
+    },
+    "salotto.nuovi.interventi": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 neuer Beitrag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld neue Beiträge"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 new remark"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld new remarks"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 intervención nueva"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld intervenciones nuevas"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nouvelle intervention"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nouvelles interventions"
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 intervento nuovo"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld interventi nuovi"
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 intervenção nova"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld intervenções novas"
+                }
+              }
+            }
           }
         }
       }
@@ -2728,6 +3323,88 @@
         }
       }
     },
+    "stanza.chiusa": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Tisch hat geschlossen: Der Animator ist aufgestanden, das Gespräch ist zu Ende."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This table has closed: the animator stood up and the conversation ended."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta mesa se ha cerrado: el animador se levantó y la conversación terminó."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette table a fermé : l'animateur s'est levé et la conversation s'est achevée."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Questo tavolo si è chiuso: l'animatore si è alzato e la conversazione è finita."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta mesa fechou: o animador se levantou e a conversa terminou."
+          }
+        }
+      }
+    },
+    "stanza.chiusa.torna": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück in den Salon"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to the parlor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vuelve al salón"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour au salon"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna al salotto"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volte ao salão"
+          }
+        }
+      }
+    },
     "stanza.invita": {
       "extractionState": "manual",
       "localizations": {
@@ -2810,6 +3487,88 @@
         }
       }
     },
+    "stanza.soli.testo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Glut entzündet sich, wenn sich jemand zu dir setzt. Schick den Code, wem du an deiner Seite willst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The ember will light when someone sits with you. Send the code to whoever you want beside you."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La brasa se encenderá cuando alguien se siente contigo. Envía el código a quien quieras a tu lado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La braise s'allumera quand quelqu'un s'assiéra avec toi. Envoie le code à qui tu veux à tes côtés."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La brace si accenderà quando qualcuno si siederà con te. Manda il codice a chi vuoi accanto."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A brasa se acenderá quando alguém se sentar com você. Envie o código a quem quiser ao seu lado."
+          }
+        }
+      }
+    },
+    "stanza.soli.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Am Tisch spricht man mindestens zu zweit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A table needs at least two voices"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En la mesa se habla al menos entre dos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À table, on parle au moins à deux"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tavola si parla almeno in due"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À mesa se fala pelo menos em dois"
+          }
+        }
+      }
+    },
     "stanza.tavolo.section": {
       "extractionState": "manual",
       "localizations": {
@@ -2888,6 +3647,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "A mesa está posta e a brasa pronta. Abra você a conversa."
+          }
+        }
+      }
+    },
+    "stanza.vuota.soli": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Tisch ist gedeckt. Während du auf Gesellschaft wartest, kannst du den ersten Gedanken dalassen: Wer sich setzt, findet ihn vor."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The table is set. While you wait for company, you can leave the first thought: whoever sits down will find it waiting."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mesa está puesta. Mientras esperas compañía, puedes dejar el primer pensamiento: quien se siente lo encontrará esperando."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La table est dressée. En attendant la compagnie, tu peux laisser la première pensée : qui s'assiéra la trouvera."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tavolo è apparecchiato. Mentre aspetti compagnia, puoi lasciare il primo pensiero: chi si siederà lo troverà ad accoglierlo."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A mesa está posta. Enquanto espera companhia, pode deixar o primeiro pensamento: quem se sentar o encontrará à espera."
           }
         }
       }
@@ -3907,6 +4707,119 @@
         }
       }
     },
+    "toast.nutre.ricevuti": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Deine Worte haben einen Menschen genährt."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Deine Worte haben %lld Menschen genährt."
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Your words nourished one person."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Your words nourished %lld people."
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tus palabras han nutrido a una persona."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tus palabras han nutrido a %lld personas."
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tes mots ont nourri une personne."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tes mots ont nourri %lld personnes."
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Le tue parole hanno nutrito una persona."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Le tue parole hanno nutrito %lld persone."
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Suas palavras nutriram uma pessoa."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Suas palavras nutriram %lld pessoas."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "toast.offline": {
       "extractionState": "manual",
       "localizations": {
@@ -4026,6 +4939,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pedido enviado ao animador da mesa."
+          }
+        }
+      }
+    },
+    "toast.rifiutato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Tisch konnte die letzte Aktion nicht aufnehmen: Der Stand wurde abgeglichen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The table couldn't accommodate that last action: things have been realigned."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mesa no pudo acoger la última acción: la situación se ha realineado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La table n'a pas pu accueillir la dernière action : la situation a été réalignée."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tavolo non ha potuto accogliere l'ultima azione: la situazione è stata riallineata."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A mesa não pôde acolher a última ação: a situação foi realinhada."
           }
         }
       }
@@ -4559,6 +5513,129 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reconhecimentos"
+          }
+        }
+      }
+    },
+    "tu.rituale.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein einziger Ruf am Tag, zur Zeit deiner Wahl: der Moment, am Tisch zu bleiben. Kein weiteres Drängen, nie."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One single call a day, at the time you choose: the moment to linger at the table. No other nagging, ever."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una sola llamada al día, a la hora que elijas: el momento de quedarse en la mesa. Ninguna otra insistencia, nunca."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un seul rappel par jour, à l'heure que tu choisis : le moment de rester à table. Aucune autre insistance, jamais."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un solo richiamo al giorno, all'ora che scegli tu: il momento di restare a tavola. Nessun'altra insistenza, mai."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um único chamado por dia, na hora que você escolher: o momento de ficar à mesa. Nenhuma outra insistência, nunca."
+          }
+        }
+      }
+    },
+    "tu.rituale.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Moment"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your moment"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu momento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton moment"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo momento"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu momento"
+          }
+        }
+      }
+    },
+    "tu.rituale.ora": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Uhrzeit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The hour"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La hora"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'heure"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'ora"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A hora"
           }
         }
       }

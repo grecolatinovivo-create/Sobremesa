@@ -228,7 +228,7 @@ struct ToastView: View {
                 Image(systemName: "xmark")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color.brassSoft)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text("a11y.toast.chiudi"))
         }

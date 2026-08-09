@@ -124,15 +124,26 @@ final class AppStore {
     private func performSync() async {
         guard SessionStore.token != nil else { return }
         do {
+            let nutrePrima = data.myReceivedNutre()
             let payload = try await api.sync(catalogQuery: catalogQuery)
             data.applySync(payload)
             refreshEmberReminders()
+            // Il gesto più caldo dell'app non deve restare invisibile:
+            // se le mie parole hanno nutrito qualcuno, lo dico (aggregato).
+            let nutreDopo = data.myReceivedNutre()
+            if nutreDopo > nutrePrima {
+                show(message: String.localizedStringWithFormat(
+                    String(localized: "toast.nutre.ricevuti", bundle: L10n.bundle),
+                    nutreDopo - nutrePrima))
+            }
         } catch {
             // Offline: si resta sulla fotografia locale, senza drammi.
         }
     }
 
     /// Mutazione remota: prova, riallinea; se la rete manca, lo dice.
+    /// Se il server RIFIUTA (409 e simili), l'effetto ottimistico locale
+    /// va fatto rientrare: si risincronizza comunque.
     private func remote(_ operation: @escaping () async throws -> Void) {
         Task {
             do {
@@ -140,6 +151,9 @@ final class AppStore {
                 await performSync()
             } catch APIError.notAuthenticated {
                 // Nessuna sessione: si resta in locale.
+            } catch APIError.http {
+                show(message: String(localized: "toast.rifiutato", bundle: L10n.bundle))
+                await performSync()
             } catch {
                 show(message: String(localized: "toast.offline", bundle: L10n.bundle))
             }
@@ -156,13 +170,15 @@ final class AppStore {
 
     /// Riallinea i richiami locali della brace alle date reali.
     private func refreshEmberReminders() {
-        let memberships = data.myMemberships().compactMap { membership -> (String, Date, Bool)? in
+        let memberships = data.myMemberships().compactMap { membership -> (String, Date, Bool, Bool)? in
             guard let tavolo = membership.tavolo else { return nil }
             return (tavolo.name,
                     membership.lastActivity,
-                    tavolo.memberCount < rules.emberMinimumMembers)
+                    tavolo.memberCount < rules.emberMinimumMembers,
+                    tavolo.animatedByMe)
         }
         notifications.reschedule(memberships: memberships)
+        refreshRitual()
     }
 
     // MARK: Derivati
@@ -175,12 +191,12 @@ final class AppStore {
     // MARK: Tavoli
 
     /// Fonda un nuovo tavolo: chi lo fonda ne è l'animatore.
-    func createTable(name: String, theme: String, category: PostCategory) {
-        show(notices: data.createTable(name: name, theme: theme, category: category))
+    func createTable(name: String, theme: String, category: PostCategory, isOpen: Bool = true) {
+        show(notices: data.createTable(name: name, theme: theme, category: category, isOpen: isOpen))
         notifications.requestAuthorizationIfNeeded()
         refreshEmberReminders()
         remote { try await self.api.createTable(name: name, theme: theme,
-                                                category: category.rawValue, isOpen: true) }
+                                                category: category.rawValue, isOpen: isOpen) }
     }
 
     /// Siediti a un tavolo aperto (dal catalogo).
@@ -254,6 +270,39 @@ final class AppStore {
         if let id = messaggio.serverID {
             remote { try await self.api.toggleNutre(messageID: id) }
         }
+    }
+
+    /// La stanza è stata letta fino ad adesso (alimenta i "nuovi interventi").
+    func markRead(_ tavolo: Tavolo) {
+        data.markRead(tavolo)
+    }
+
+    // MARK: Il rituale della sera (notifica locale opt-in, Tu → Il tuo momento)
+
+    var ritualEnabled: Bool {
+        get { UserDefaults.standard.bool(forKey: "sobremesa.rituale.on") }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "sobremesa.rituale.on")
+            if newValue { notifications.requestAuthorizationIfNeeded() }
+            refreshRitual()
+        }
+    }
+
+    /// Minuti dalla mezzanotte (default 21:30): un campanile, non una slot.
+    var ritualMinutes: Int {
+        get {
+            let saved = UserDefaults.standard.integer(forKey: "sobremesa.rituale.minuti")
+            return saved == 0 ? 21 * 60 + 30 : saved
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "sobremesa.rituale.minuti")
+            refreshRitual()
+        }
+    }
+
+    private func refreshRitual() {
+        notifications.scheduleRitual(enabled: ritualEnabled && !myMemberships.isEmpty,
+                                     minutesFromMidnight: ritualMinutes)
     }
 
     // MARK: Inviti al tavolo

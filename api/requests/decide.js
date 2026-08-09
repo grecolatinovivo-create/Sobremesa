@@ -22,11 +22,12 @@ export default async function handler(req, res) {
       await sql`DELETE FROM join_requests WHERE id = ${requestId}`;
       return res.status(409).json({ error: "il richiedente non ha tavoli liberi" });
     }
-    if ((await seatCount(request.circle_id)) >= RULES.maxFriends) {
-      return res.status(409).json({ error: "il tavolo è al completo" });
-    }
-    await sql`INSERT INTO memberships (user_id, circle_id)
-              VALUES (${request.user_id}, ${request.circle_id}) ON CONFLICT DO NOTHING`;
+    const { rowCount } = await sql`
+      INSERT INTO memberships (user_id, circle_id)
+      SELECT ${request.user_id}, ${request.circle_id}
+      WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${request.circle_id}) < ${RULES.maxFriends}
+      ON CONFLICT DO NOTHING`;
+    if (!rowCount) return res.status(409).json({ error: "il tavolo è al completo" });
   }
   await sql`DELETE FROM join_requests WHERE id = ${requestId}`;
   res.status(200).json({ ok: true, accepted: !!accept });

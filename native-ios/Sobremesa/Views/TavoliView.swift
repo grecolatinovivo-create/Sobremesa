@@ -18,11 +18,16 @@ struct TavoliView: View {
     @State private var redeemCode = ""
     @State private var showCreate = false
 
-    /// Il catalogo: i tavoli dove NON siedo già.
+    /// Il catalogo: i tavoli dove NON siedo già, filtrati LIVE dalla ricerca
+    /// (il server filtra a sua volta al submit, ma il campo risponde subito).
     private var catalogo: [Tavolo] {
         let miei = Set(store.myMemberships.compactMap { $0.tavolo?.persistentModelID })
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         return allTables
             .filter { !miei.contains($0.persistentModelID) }
+            .filter { query.isEmpty
+                || $0.name.localizedStandardContains(query)
+                || $0.theme.localizedStandardContains(query) }
             .sorted { $0.name < $1.name }
     }
 
@@ -43,9 +48,9 @@ struct TavoliView: View {
                     .italic()
                     .foregroundStyle(Color.brassSoft)
 
-                fondaCard
                 invitoCard
                 catalogoSection
+                fondaCard
             }
             .padding(16)
         }
@@ -121,10 +126,14 @@ struct TavoliView: View {
                     .foregroundStyle(Color.ink)
                     .submitLabel(.search)
                     .onSubmit { store.syncNow(query: searchText) }
+                    .onChange(of: searchText) { _, newValue in
+                        // Campo svuotato: il filtro server non deve restare appiccicato.
+                        if newValue.isEmpty { store.syncNow(query: "") }
+                    }
             }
             .padding(.horizontal, 12)
             .frame(minHeight: 44)
-            .background(Color.paperDim, in: RoundedRectangle(cornerRadius: 12))
+            .background(Color.paperDim, in: RoundedRectangle(cornerRadius: 14))
 
             if catalogo.isEmpty {
                 Text("tavoli.catalogo.vuoto")
@@ -144,15 +153,23 @@ struct TavoliView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: tavolo.category.symbolName)
-                    .font(.system(size: 16))
-                    .foregroundStyle(Color.brass)
+                    .font(AppFont.ui(15, relativeTo: .callout))
+                    .foregroundStyle(Color.brassSoft)
                     .frame(width: 32, height: 32)
-                    .background(Color.felt.opacity(0.15), in: SwiftUI.Circle())
+                    .background(Color.felt, in: SwiftUI.Circle())
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(verbatim: tavolo.name)
-                        .font(AppFont.ui(15, relativeTo: .subheadline))
-                        .foregroundStyle(Color.ink)
+                    HStack(spacing: 5) {
+                        Text(verbatim: tavolo.name)
+                            .font(AppFont.ui(15, relativeTo: .subheadline))
+                            .foregroundStyle(Color.ink)
+                        if !tavolo.isOpen {
+                            Image(systemName: "lock")
+                                .font(AppFont.caption(11, relativeTo: .caption2))
+                                .foregroundStyle(Color.felt)
+                                .accessibilityLabel(Text("a11y.tavolo.chiuso"))
+                        }
+                    }
                     if !tavolo.theme.isEmpty {
                         Text(verbatim: tavolo.theme)
                             .font(AppFont.caption())
@@ -197,6 +214,7 @@ private struct CreateTableSheet: View {
     @State private var name = ""
     @State private var theme = ""
     @State private var category: PostCategory = .libro
+    @State private var isOpen = true
     @State private var showEmptyError = false
 
     var body: some View {
@@ -231,7 +249,7 @@ private struct CreateTableSheet: View {
                                 Button {
                                     category = cat
                                 } label: {
-                                    CategoryChip(category: cat, isSelected: cat == category)
+                                    CategoryChip(category: cat, isSelected: cat == category, onDark: true)
                                         .frame(minHeight: 44)
                                 }
                                 .buttonStyle(.plain)
@@ -240,6 +258,20 @@ private struct CreateTableSheet: View {
                             }
                         }
                     }
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Toggle(isOn: $isOpen) {
+                            Text("fonda.aperto")
+                                .font(AppFont.ui(14, relativeTo: .footnote))
+                                .foregroundStyle(Color.ink)
+                        }
+                        .tint(.brass)
+                        Text(isOpen ? "fonda.aperto.hint" : "fonda.chiuso.hint")
+                            .font(AppFont.caption())
+                            .foregroundStyle(Color.felt)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .sobreCard(.paperDim)
 
                     Button("fonda.conferma") { create() }
                         .buttonStyle(PillButtonStyle())
@@ -267,7 +299,8 @@ private struct CreateTableSheet: View {
         }
         store.createTable(name: cleanName,
                           theme: theme.trimmingCharacters(in: .whitespacesAndNewlines),
-                          category: category)
+                          category: category,
+                          isOpen: isOpen)
         dismiss()
     }
 }

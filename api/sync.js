@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   // I miei tavoli (in SQL: `circles`), con la mia sedia (last_activity).
   const { rows: myTables } = await sql`
     SELECT c.id, c.name, c.theme, c.category, c.is_open, c.animator,
-           m.last_activity, m.joined_at,
+           m.last_activity, m.joined_at, m.penalty_applied,
            (SELECT COUNT(*)::int FROM memberships mm WHERE mm.circle_id = c.id) AS member_count
     FROM memberships m JOIN circles c ON c.id = m.circle_id
     WHERE m.user_id = ${me.id}
@@ -35,8 +35,7 @@ export default async function handler(req, res) {
     `SELECT c.id, c.name, c.theme, c.category, c.is_open, c.animator,
             (SELECT COUNT(*)::int FROM memberships mm WHERE mm.circle_id = c.id) AS member_count
      FROM circles c
-     WHERE c.is_open = true
-       AND c.id NOT IN (SELECT circle_id FROM memberships WHERE user_id = $1)
+     WHERE c.id NOT IN (SELECT circle_id FROM memberships WHERE user_id = $1)
        AND ($2 = '' OR c.name ILIKE '%' || $2 || '%' OR c.theme ILIKE '%' || $2 || '%')
      ORDER BY c.created_at DESC LIMIT 50`, [me.id, q]);
 

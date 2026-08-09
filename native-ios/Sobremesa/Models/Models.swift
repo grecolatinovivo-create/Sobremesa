@@ -114,6 +114,9 @@ final class Membership {
     var lastActivity: Date
     /// La penalità per il periodo di silenzio corrente è già stata applicata?
     var silencePenaltyApplied: Bool
+    /// Fin dove ho letto la conversazione (solo per le MIE sedie):
+    /// alimenta i "nuovi interventi" del Salotto. Mai sovrascritto dal sync.
+    var lastReadAt: Date
 
     init(person: Person, tavolo: Tavolo, joinedAt: Date = .now, lastActivity: Date = .now) {
         self.person = person
@@ -121,6 +124,7 @@ final class Membership {
         self.joinedAt = joinedAt
         self.lastActivity = lastActivity
         self.silencePenaltyApplied = false
+        self.lastReadAt = .distantPast
     }
 }
 

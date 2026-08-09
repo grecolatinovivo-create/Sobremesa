@@ -92,6 +92,9 @@ struct TableRingView: View {
 /// Riga di stato della brace (pallino + testo), condivisa da Salotto e stanza.
 struct EmberLine: View {
     let state: EmberState
+    /// Giorni al tavolo: se la brace è viva, l'anzianità rende visibile
+    /// cosa si perderebbe (endowment effect, sobrio).
+    var sinceDays: Int? = nil
 
     var body: some View {
         HStack(spacing: 6) {
@@ -115,6 +118,10 @@ struct EmberLine: View {
     private var label: String {
         switch state {
         case .viva:
+            if let sinceDays {
+                return String.localizedStringWithFormat(
+                    String(localized: "brace.viva.giorni", bundle: L10n.bundle), sinceDays)
+            }
             return String(localized: "brace.viva", bundle: L10n.bundle)
         case .affievolita(let giorni):
             return String.localizedStringWithFormat(String(localized: "brace.affievolita", bundle: L10n.bundle), giorni)
