@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   const tableIds = myTables.map((t) => t.id);
   const seats = tableIds.length
     ? (await sql.query(
-        `SELECT m.circle_id, u.id AS user_id, u.name, u.score
+        `SELECT m.circle_id, m.joined_at, u.id AS user_id, u.name, u.score
          FROM memberships m JOIN users u ON u.id = m.user_id
          WHERE m.circle_id = ANY($1)
          ORDER BY m.joined_at`, [tableIds])).rows

@@ -186,4 +186,35 @@ final class SobremesaEngineTests: XCTestCase {
         // …ma non chi già abita il massimo dei circoli.
         XCTAssertFalse(engine.canAcceptJoinRequest(requesterCircleCount: rules.maxCircles))
     }
+
+    // MARK: - Calore collettivo del tavolo (v3)
+
+    func testTableWarmth() {
+        let now = Date(timeIntervalSince1970: 1_000_000)
+        let hour: TimeInterval = 3_600
+        // Da soli: in attesa, qualunque cosa sia stata detta.
+        XCTAssertEqual(engine.tableWarmth(memberCount: rules.emberMinimumMembers - 1,
+                                          lastMessageAt: now, now: now), .inAttesa)
+        // In compagnia ma senza interventi: si affievolisce (invita a parlare).
+        XCTAssertEqual(engine.tableWarmth(memberCount: rules.emberMinimumMembers,
+                                          lastMessageAt: nil, now: now), .siAffievolisce)
+        // Qualcuno ha parlato da poco: viva.
+        let recent = now.addingTimeInterval(-Double(rules.tableWarmthAliveHours - 1) * hour)
+        XCTAssertEqual(engine.tableWarmth(memberCount: 3, lastMessageAt: recent, now: now), .viva)
+        // Oltre la soglia: si affievolisce.
+        let old = now.addingTimeInterval(-Double(rules.tableWarmthAliveHours + 1) * hour)
+        XCTAssertEqual(engine.tableWarmth(memberCount: 3, lastMessageAt: old, now: now), .siAffievolisce)
+    }
+
+    func testPersonalSilenceNotice() {
+        let now = Date(timeIntervalSince1970: 1_000_000)
+        let day: TimeInterval = 86_400
+        let quiet = now.addingTimeInterval(-Double(rules.emberWarningAfterDays) * day)
+        let fresh = now.addingTimeInterval(-Double(rules.emberWarningAfterDays - 1) * day)
+        XCTAssertEqual(engine.personalSilenceNotice(lastActivity: quiet, now: now, isAnimator: false),
+                       rules.emberWarningAfterDays)
+        XCTAssertNil(engine.personalSilenceNotice(lastActivity: fresh, now: now, isAnimator: false))
+        // L'animatore non viene mai espulso: niente avviso.
+        XCTAssertNil(engine.personalSilenceNotice(lastActivity: quiet, now: now, isAnimator: true))
+    }
 }

@@ -25,7 +25,8 @@ export default async function handler(req, res) {
   }
 
   // Riscatto: la sedia è a quel tavolo, se c'è posto per tutti e due i vincoli.
-  const code = ((req.body || {}).code || "").trim().toUpperCase();
+  // Il codice si mostra "Q7M4-K2LP": trattini e spazi non contano.
+  const code = ((req.body || {}).code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   const { rows } = await sql`SELECT * FROM invites WHERE code = ${code}`;
   const invite = rows[0];
   if (!invite || invite.status !== "open" || !invite.circle_id) {
@@ -51,5 +52,5 @@ export default async function handler(req, res) {
     WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${invite.circle_id}) < ${RULES.maxFriends}
     ON CONFLICT DO NOTHING`;
   if (!seated) return res.status(409).json({ error: "il tavolo è al completo" });
-  res.status(200).json({ seated: true });
+  res.status(200).json({ seated: true, tableId: invite.circle_id });
 }
