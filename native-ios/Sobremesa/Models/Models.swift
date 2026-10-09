@@ -83,6 +83,8 @@ final class Tavolo {
     var memberCount: Int
     /// Id lato server.
     var serverID: String?
+    /// Id server dell'animatore (chi ha fondato il tavolo).
+    var animatorServerID: String?
 
     init(name: String,
          theme: String,
