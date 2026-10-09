@@ -2,10 +2,10 @@
 //  SalottoView.swift
 //  Sobremesa
 //
-//  Il salotto: il colpo d'occhio della giornata. Le tue conversazioni
-//  (i tavoli a cui siedi, con l'ultimo intervento e lo stato della brace),
-//  e le richieste che aspettano una tua parola. Come la home di una chat,
-//  ma con l'anima di Sobremesa.
+//  Il salotto (v3 "Ultima luce"): i tuoi tavoli, oggi. Niente card per
+//  ogni conversazione — righe ariose separate da filetti, ognuna col
+//  suo piccolo tavolo (TableGlyph 44) e la sua brace. Sopra, solo se
+//  serve, "Da decidere". Da vuoto, una strada, non un deserto.
 //
 
 import SwiftUI
@@ -19,68 +19,56 @@ struct SalottoView: View {
     // aggiornare il Salotto da sola (Observation non traccia le fetch).
     @Query(filter: #Predicate<Membership> { $0.person?.isMe == true },
            sort: \Membership.joinedAt) private var mieSedie: [Membership]
+    @Query(sort: \Membership.joinedAt) private var tutteLeSedie: [Membership]
 
     var body: some View {
-        NavigationStack {
+        @Bindable var store = store
+        NavigationStack(path: $store.salottoPath) {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 14) {
-                    Text("salotto.title")
-                        .font(AppFont.display())
-                        .foregroundStyle(Color.paperDim)
-                        .accessibilityAddTraits(.isHeader)
+                VStack(alignment: .leading, spacing: Space.xl) {
+                    ScreenTitle(titleKey: "salotto.title", subtitleKey: "salotto.sottotitolo")
 
                     if !joinRequests.isEmpty {
                         daDecidere
                     }
 
                     if mieSedie.isEmpty {
-                        heroVuoto
+                        vuoto
                     } else {
-                        conversazioni
+                        tavoli
                     }
                 }
-                .padding(16)
+                .padding(.horizontal, Space.gutter)
+                .padding(.top, Space.l)
+                .padding(.bottom, Space.xxl)
             }
-            .background(Color.ink)
+            .screenBackground()
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: Tavolo.self) { tavolo in
                 TavoloRoomView(tavolo: tavolo)
             }
+            .animation(.easeInOut(duration: 0.25), value: mieSedie.count)
+            .animation(.easeInOut(duration: 0.25), value: joinRequests.count)
         }
     }
 
-    // MARK: Da zero: una strada, non un deserto
+    // MARK: I tuoi tavoli
 
-    private var heroVuoto: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Image(systemName: "flame")
-                .font(.system(size: 28))
-                .foregroundStyle(Color.brass)
-                .accessibilityHidden(true)
-            Text("salotto.vuoto.title")
-                .font(AppFont.title(19, relativeTo: .title3))
-                .foregroundStyle(Color.ink)
-            Text("salotto.vuoto.testo")
-                .font(AppFont.ui(14, relativeTo: .footnote))
-                .foregroundStyle(Color.felt)
-                .fixedSize(horizontal: false, vertical: true)
-            Button("salotto.vuoto.cta") { store.stanzaCorrente = .tavoli }
-                .buttonStyle(PillButtonStyle())
-        }
-        .sobreCard(.paperDim)
-    }
-
-    // MARK: Le conversazioni (una riga per tavolo, come una chat colta)
-
-    private var conversazioni: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionTitle(textKey: "salotto.conversazioni.section")
-            ForEach(mieSedie, id: \.persistentModelID) { membership in
+    private var tavoli: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(mieSedie.enumerated()), id: \.element.persistentModelID) { index, membership in
                 if let tavolo = membership.tavolo {
                     NavigationLink(value: tavolo) {
-                        rigaTavolo(tavolo: tavolo, membership: membership)
+                        TableRow(tavolo: tavolo,
+                                 membership: membership,
+                                 ultimo: ultimoMessaggio(di: tavolo),
+                                 nuovi: nuoviInterventi(tavolo: tavolo, membership: membership),
+                                 mySeat: mySeatIndex(tavolo: tavolo))
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(RowPressStyle())
+                    if index < mieSedie.count - 1 {
+                        Hairline(inset: 44 + Space.l)
+                    }
                 }
             }
         }
@@ -97,128 +85,187 @@ struct SalottoView: View {
         }.count
     }
 
-    private func rigaTavolo(tavolo: Tavolo, membership: Membership) -> some View {
-        let nuovi = nuoviInterventi(tavolo: tavolo, membership: membership)
-        return HStack(spacing: 12) {
-            Image(systemName: tavolo.category.symbolName)
-                .font(AppFont.ui(16, relativeTo: .callout))
-                .foregroundStyle(Color.brassSoft)
-                .frame(width: 36, height: 36)
-                .background(Color.felt, in: SwiftUI.Circle())
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 6) {
-                    Text(verbatim: tavolo.name)
-                        .font(AppFont.ui(15, relativeTo: .subheadline))
-                        .fontWeight(nuovi > 0 ? .semibold : .regular)
-                        .foregroundStyle(Color.ink)
-                        .lineLimit(1)
-                    Text(verbatim: "\(tavolo.memberCount)/\(store.rules.maxFriends)")
-                        .font(AppFont.caption(11, relativeTo: .caption2))
-                        .foregroundStyle(Color.felt.opacity(0.8))
-                    braceDot(membership: membership, tavolo: tavolo)
-                }
-                if nuovi > 0 {
-                    // La ricompensa alla riapertura: cosa è successo da ieri.
-                    Text(verbatim: String.localizedStringWithFormat(
-                        String(localized: "salotto.nuovi.interventi", bundle: L10n.bundle), nuovi))
-                        .font(AppFont.caption())
-                        .foregroundStyle(Color.brassDeep)
-                } else if let ultimo = ultimoMessaggio(di: tavolo) {
-                    Text(verbatim: "\(ultimo.author?.isMe == true ? String(localized: "salotto.tu", bundle: L10n.bundle) : (ultimo.author?.name ?? "—")): \(ultimo.text)")
-                        .font(AppFont.caption())
-                        .foregroundStyle(Color.felt)
-                        .lineLimit(2)
-                } else {
-                    Text("salotto.tavolo.silenzioso")
-                        .font(AppFont.caption())
-                        .italic()
-                        .foregroundStyle(Color.felt.opacity(0.8))
-                }
-            }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 4) {
-                if let ultimo = ultimoMessaggio(di: tavolo) {
-                    Text(ultimo.createdAt, format: .relative(presentation: .named))
-                        .font(AppFont.caption(11, relativeTo: .caption2))
-                        .foregroundStyle(Color.felt.opacity(0.8))
-                }
-                if nuovi > 0 {
-                    SwiftUI.Circle().fill(Color.brass).frame(width: 9, height: 9)
-                        .accessibilityHidden(true)
-                }
-            }
-        }
-        .sobreCard()
-        .accessibilityElement(children: .combine)
-        .accessibilityHint(Text("a11y.tavolo.apri"))
-    }
-
-    private func braceDot(membership: Membership, tavolo: Tavolo) -> some View {
-        SwiftUI.Circle()
-            .fill(braceColor(membership: membership, tavolo: tavolo))
-            .frame(width: 10, height: 10)
-            .accessibilityLabel(Text(verbatim: braceLabel(membership: membership, tavolo: tavolo)))
-    }
-
-    private func braceColor(membership: Membership, tavolo: Tavolo) -> Color {
-        // Su carta chiara: colori a contrasto vero (BrassDeep, non BrassSoft).
-        guard tavolo.memberCount >= store.rules.emberMinimumMembers else {
-            return .felt.opacity(0.45)
-        }
-        switch store.engine.emberState(lastActivity: membership.lastActivity, now: .now) {
-        case .viva: return .successTone
-        case .affievolita: return .brassDeep
-        case .avviso, .espulsione: return .errorTone
-        }
-    }
-
-    private func braceLabel(membership: Membership, tavolo: Tavolo) -> String {
-        guard tavolo.memberCount >= store.rules.emberMinimumMembers else {
-            return String(localized: "brace.attesa", bundle: L10n.bundle)
-        }
-        switch store.engine.emberState(lastActivity: membership.lastActivity, now: .now) {
-        case .viva:
-            return String(localized: "brace.viva", bundle: L10n.bundle)
-        case .affievolita(let giorni):
-            return String.localizedStringWithFormat(String(localized: "brace.affievolita", bundle: L10n.bundle), giorni)
-        case .avviso(let giorni), .espulsione(let giorni):
-            return String.localizedStringWithFormat(String(localized: "brace.avviso", bundle: L10n.bundle), giorni)
-        }
+    /// Il mio posto nell'ordine d'arrivo al tavolo.
+    private func mySeatIndex(tavolo: Tavolo) -> Int? {
+        tutteLeSedie.filter { $0.tavolo === tavolo }.firstIndex { $0.person?.isMe == true }
     }
 
     // MARK: Da decidere (richieste ai tavoli che animo)
 
     private var daDecidere: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionTitle(textKey: "decidere.section")
+        VStack(alignment: .leading, spacing: Space.m) {
+            Text("decidere.section")
+                .font(AppFont.title(20, relativeTo: .title3))
+                .foregroundStyle(Color.textPrimary)
+                .accessibilityAddTraits(.isHeader)
             ForEach(joinRequests, id: \.persistentModelID) { request in
                 if let person = request.person, let tavolo = request.tavolo {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 10) {
-                            AvatarView(initials: person.initials)
+                    VStack(alignment: .leading, spacing: Space.m) {
+                        HStack(alignment: .top, spacing: Space.m) {
+                            AvatarView(initials: person.initials, size: 40)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(verbatim: String(format: String(localized: "richiesta.riga", bundle: L10n.bundle),
                                                       person.name, tavolo.name))
-                                    .font(AppFont.ui(14, relativeTo: .footnote))
-                                    .foregroundStyle(Color.ink)
+                                    .font(AppFont.ui(15))
+                                    .foregroundStyle(Color.textPrimary)
                                     .fixedSize(horizontal: false, vertical: true)
-                                ScoreBadge(score: person.score, band: store.engine.band(for: person.score))
+                                BandLabel(band: store.engine.band(for: person.score))
                             }
-                            Spacer()
                         }
-                        HStack(spacing: 8) {
+                        HStack(spacing: Space.s) {
                             Button("sedia.accetta") { store.accept(request) }
-                                .buttonStyle(PillButtonStyle())
+                                .buttonStyle(PrimaryButtonStyle())
                             Button("sedia.declina") { store.decline(request) }
-                                .buttonStyle(QuietPillButtonStyle(tint: .felt))
-                            Spacer()
+                                .buttonStyle(SecondaryButtonStyle())
                         }
                     }
-                    .sobreCard()
+                    .panel()
+                    .transition(.opacity)
                 }
             }
         }
+    }
+
+    // MARK: Da zero
+
+    private var vuoto: some View {
+        VStack(spacing: Space.l) {
+            TableGlyph(occupied: 0, maxSeats: store.rules.maxFriends,
+                       warmth: .viva, size: 168, breathing: true)
+                .padding(.top, Space.l)
+            Text("salotto.vuoto.title")
+                .font(AppFont.title(24, relativeTo: .title2))
+                .foregroundStyle(Color.textPrimary)
+                .multilineTextAlignment(.center)
+            Text("salotto.vuoto.testo")
+                .font(AppFont.bodySerif(16, relativeTo: .callout))
+                .foregroundStyle(Color.textSecondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            VStack(spacing: Space.s) {
+                Button {
+                    store.stanzaCorrente = .tavoli
+                } label: {
+                    Label("salotto.vuoto.cta", systemImage: "magnifyingglass")
+                }
+                .buttonStyle(PrimaryButtonStyle(fullWidth: true))
+                Button {
+                    store.stanzaCorrente = .tavoli
+                } label: {
+                    Label("salotto.vuoto.codice", systemImage: "ticket")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(SecondaryButtonStyle())
+            }
+            .padding(.top, Space.s)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - La riga di un tavolo
+
+private struct TableRow: View {
+    @Environment(AppStore.self) private var store
+    let tavolo: Tavolo
+    let membership: Membership
+    let ultimo: Messaggio?
+    let nuovi: Int
+    let mySeat: Int?
+
+    private var warmth: TableWarmth {
+        store.warmth(of: tavolo, lastMessageAt: ultimo?.createdAt)
+    }
+
+    private var silenzioPersonale: Int? {
+        store.engine.personalSilenceNotice(lastActivity: membership.lastActivity,
+                                           now: .now, isAnimator: tavolo.animatedByMe)
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: Space.l) {
+            TableGlyph(occupied: tavolo.memberCount, maxSeats: store.rules.maxFriends,
+                       warmth: warmth, mySeat: mySeat, size: 44)
+                .padding(.top, 2)
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(verbatim: tavolo.name)
+                        .font(AppFont.title(20, relativeTo: .title3))
+                        .foregroundStyle(Color.textPrimary)
+                        .lineLimit(2)
+                    Spacer(minLength: Space.s)
+                    if let ultimo {
+                        Text(ultimo.createdAt, format: .relative(presentation: .named))
+                            .font(AppFont.caption(12, relativeTo: .caption2))
+                            .foregroundStyle(nuovi > 0 ? Color.brass : Color.textMuted)
+                            .lineLimit(1)
+                    }
+                }
+
+                HStack(spacing: 6) {
+                    Image(systemName: "person")
+                        .imageScale(.small)
+                        .foregroundStyle(Color.textMuted)
+                        .accessibilityHidden(true)
+                    Text(verbatim: "\(tavolo.memberCount)/\(store.rules.maxFriends)")
+                        .font(AppFont.caption(13).monospacedDigit())
+                        .foregroundStyle(Color.textMuted)
+                    Text(verbatim: "·").foregroundStyle(Color.textMuted)
+                    WarmthLabel(warmth: warmth)
+                }
+
+                preview
+            }
+        }
+        .padding(.vertical, Space.l)
+        .frame(minHeight: 88)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityHint(Text("a11y.tavolo.apri"))
+    }
+
+    @ViewBuilder
+    private var preview: some View {
+        if let giorni = silenzioPersonale {
+            // Avviso personale con tatto: un invito, non una sirena.
+            Text(verbatim: String.localizedStringWithFormat(
+                String(localized: "sedia.ti.aspetta", bundle: L10n.bundle), giorni))
+                .font(AppFont.caption(14, relativeTo: .footnote))
+                .foregroundStyle(Color.warning)
+        } else if nuovi > 0 {
+            Text(verbatim: String.localizedStringWithFormat(
+                String(localized: "salotto.nuovi.interventi", bundle: L10n.bundle), nuovi))
+                .font(AppFont.caption(14, relativeTo: .footnote).weight(.semibold))
+                .foregroundStyle(Color.textPrimary)
+        } else if let ultimo {
+            Text(verbatim: "\(ultimo.author?.isMe == true ? String(localized: "salotto.tu", bundle: L10n.bundle) : (ultimo.author?.name ?? "—")): \(ultimo.text)")
+                .font(AppFont.caption(14, relativeTo: .footnote))
+                .foregroundStyle(Color.textSecondary)
+                .lineLimit(2)
+        } else if warmth == .inAttesa {
+            Text("salotto.tavolo.attesa")
+                .font(AppFont.caption(14, relativeTo: .footnote))
+                .italic()
+                .foregroundStyle(Color.textMuted)
+        } else {
+            Text("salotto.tavolo.silenzioso")
+                .font(AppFont.caption(14, relativeTo: .footnote))
+                .italic()
+                .foregroundStyle(Color.textMuted)
+        }
+    }
+}
+
+/// Pressione di una riga: un velo appena percettibile, niente card.
+struct RowPressStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color.surface.opacity(configuration.isPressed ? 1 : 0))
+                    .padding(.horizontal, -Space.s)
+            )
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
