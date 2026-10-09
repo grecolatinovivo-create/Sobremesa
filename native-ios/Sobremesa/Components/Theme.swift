@@ -2,9 +2,16 @@
 //  Theme.swift
 //  Sobremesa
 //
-//  Design system: "la sala lettura di una biblioteca la sera".
-//  UNICO punto del codice che nomina colori (per nome asset, mai literal)
-//  e famiglie di font (con fallback dichiarato sui font di sistema).
+//  Design system "ULTIMA LUCE" (v3, brainstorming Claude × Astra):
+//  il pasto è finito, le luci sono basse, sul tavolo resta un punto di
+//  calore e le persone continuano a parlare.
+//
+//  Regole del sistema:
+//  - il fondo È l'interfaccia: le card sono eccezioni, non contenitori;
+//  - l'OTTONE indica ciò che posso fare, la BRACE ciò che vive il tavolo:
+//    non si confondono mai;
+//  - gerarchia affidata a spazio, tipografia e pochi accenti.
+//  UNICO punto del codice che nomina colori (per nome asset) e font.
 //
 
 import SwiftUI
@@ -13,30 +20,53 @@ import UIKit
 // MARK: - Colori (dagli Asset, mai literal)
 
 extension Color {
-    static let ink        = Color("Ink")         // sfondo dell'app
-    static let felt       = Color("Felt")        // superfici scure
-    static let paper      = Color("Paper")       // card avorio
-    static let paperDim   = Color("PaperDim")    // avorio smorzato
-    static let brass      = Color("Brass")       // accento / CTA
-    static let brassSoft  = Color("BrassSoft")   // dettagli ottone su scuro
-    static let errorTone  = Color("ErrorTone")   // errori, avviso brace
-    static let successTone = Color("SuccessTone")// conferme, brace viva
-    static let brassDeep  = Color("BrassDeep")   // testi ottone su carta (AA 4,6:1)
-    static let errorSoft  = Color("ErrorSoft")   // testi d'errore su fondo notte (AA)
+    // Superfici
+    static let background    = Color("Background")    // #101C19 verde quasi nero
+    static let surface       = Color("Surface")       // #1C2B25 verde feltro
+    static let elevated      = Color("Elevated")      // #293B32 superfici secondarie
+    // Testi
+    static let textPrimary   = Color("TextPrimary")   // #F5EFE3 avorio caldo (15,3:1)
+    static let textSecondary = Color("TextSecondary") // #CDD2C4 (11,3:1)
+    static let textMuted     = Color("TextMuted")     // #A6B2A5 (7,9:1)
+    // Linee
+    static let divider       = Color("Divider")       // #405349 decorativo
+    static let outline       = Color("Outline")       // #708574 contorni funzionali (≥3:1)
+    // Azione
+    static let brass         = Color("Brass")         // #E7BC6C azione primaria
+    static let brassInk      = Color("BrassInk")      // #2B210F testo sull'ottone (8,9:1)
+    // Brace (vita del tavolo — MAI usata per le azioni)
+    static let emberAlive    = Color("EmberAlive")    // #FFAF68
+    static let emberFading   = Color("EmberFading")   // #DFA27D
+    static let emberWaiting  = Color("EmberWaiting")  // #ADB9AC
+    // Avvisi personali (con tatto: mai rosso pieno)
+    static let warning       = Color("Warning")       // #F0A69A
 }
 
-// MARK: - Tipografia (con fallback dichiarato)
+// MARK: - Spaziature (scala unica)
 
-/// Young Serif per i titoli e i numeri, Source Serif 4 per il corpo dei post,
-/// Inter per la UI. Se il bundling di un font fallisse, il fallback è
-/// dichiarato: .serif / .default di sistema. Tutto è Dynamic Type (relativeTo:).
+enum Space {
+    static let xs: CGFloat = 4
+    static let s: CGFloat = 8
+    static let m: CGFloat = 12
+    static let l: CGFloat = 16
+    static let xl: CGFloat = 24
+    static let xxl: CGFloat = 32
+    /// Margine laterale delle schermate.
+    static let gutter: CGFloat = 20
+}
+
+// MARK: - Tipografia (ruoli distinti, con fallback dichiarato)
+
+/// Young Serif: titoli e numeri identitari (mai i messaggi).
+/// Source Serif 4: la lettura — messaggi e testi narrativi.
+/// Inter: interfaccia, metadati, etichette.
+/// Tutto è Dynamic Type (relativeTo:); fallback dichiarato sui font di sistema.
 enum AppFont {
 
     private static let youngSerif = "Young Serif"
     private static let sourceSerif = "Source Serif 4"
     private static let inter = "Inter"
 
-    /// Il font di famiglia `family` è realmente disponibile a runtime?
     private static func available(_ family: String) -> Bool {
         UIFont.familyNames.contains(family)
     }
@@ -48,83 +78,110 @@ enum AppFont {
         if available(family) {
             return .custom(family, size: size, relativeTo: style)
         }
-        // Fallback dichiarato: serif/sans di sistema, sempre Dynamic Type.
         return .system(style, design: design)
     }
 
-    /// Titoli grandi e numeri (Young Serif).
-    static func display(_ size: CGFloat = 34, relativeTo style: Font.TextStyle = .largeTitle) -> Font {
+    /// Titolo di schermata (32).
+    static func display(_ size: CGFloat = 32, relativeTo style: Font.TextStyle = .largeTitle) -> Font {
         custom(youngSerif, size: size, relativeTo: style, fallback: .serif)
     }
 
-    /// Titoli di card e sezioni (Young Serif).
-    static func title(_ size: CGFloat = 24, relativeTo style: Font.TextStyle = .title2) -> Font {
+    /// Titoli di tavolo e di sezione (27 / 20).
+    static func title(_ size: CGFloat = 27, relativeTo style: Font.TextStyle = .title2) -> Font {
         custom(youngSerif, size: size, relativeTo: style, fallback: .serif)
     }
 
-    /// Corpo dei post e dei commenti (Source Serif 4).
+    /// Lettura: messaggi (18) e testi narrativi (17).
     static func bodySerif(_ size: CGFloat = 17, relativeTo style: Font.TextStyle = .body) -> Font {
         custom(sourceSerif, size: size, relativeTo: style, fallback: .serif)
     }
 
-    /// Testo di interfaccia (Inter).
+    /// Interfaccia e pulsanti (15).
     static func ui(_ size: CGFloat = 15, relativeTo style: Font.TextStyle = .subheadline) -> Font {
         custom(inter, size: size, relativeTo: style, fallback: .default)
     }
 
-    /// Didascalie e metadati (Inter).
+    /// Metadati (13).
     static func caption(_ size: CGFloat = 13, relativeTo style: Font.TextStyle = .caption) -> Font {
+        custom(inter, size: size, relativeTo: style, fallback: .default)
+    }
+
+    /// Microetichette maiuscole spaziate (12), es. "DA DECIDERE".
+    static func label(_ size: CGFloat = 12, relativeTo style: Font.TextStyle = .caption2) -> Font {
         custom(inter, size: size, relativeTo: style, fallback: .default)
     }
 }
 
-// MARK: - Card avorio
+// MARK: - Pannello (l'eccezione, non la regola)
 
-struct SobreCard: ViewModifier {
-    var background: Color = .paper
+/// Superficie per i pochi elementi che lo meritano (composer, codice d'invito,
+/// richieste da decidere). Raggio 12, nessuna ombra.
+struct Panel: ViewModifier {
+    var fill: Color = .surface
+    var padding: CGFloat = Space.l
     func body(content: Content) -> some View {
         content
-            .padding(16)
-            .background(background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .padding(padding)
+            .background(fill, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 
 extension View {
-    /// Card avorio del design system (angoli 14pt).
-    func sobreCard(_ background: Color = .paper) -> some View {
-        modifier(SobreCard(background: background))
+    func panel(_ fill: Color = .surface, padding: CGFloat = Space.l) -> some View {
+        modifier(Panel(fill: fill, padding: padding))
+    }
+
+    /// Sfondo standard di ogni schermata.
+    func screenBackground() -> some View {
+        background(Color.background.ignoresSafeArea())
     }
 }
 
 // MARK: - Bottoni
 
-/// CTA a pillola: fondo ottone, testo notte. Tap target ≥ 44pt.
-/// Lo stato disabilitato si vede da sé: gli stili leggono isEnabled.
-struct PillButtonStyle: ButtonStyle {
+/// Azione primaria: pillola ottone, altezza 48.
+struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
+    var fullWidth = false
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(AppFont.ui(15, relativeTo: .subheadline))
-            .padding(.horizontal, 18)
-            .frame(minHeight: 44)
+            .font(AppFont.ui(16, relativeTo: .body).weight(.semibold))
+            .padding(.horizontal, 22)
+            .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 48)
             .background(Capsule().fill(Color.brass))
-            .foregroundStyle(Color.ink)
-            .opacity(configuration.isPressed ? 0.75 : (isEnabled ? 1 : 0.45))
+            .foregroundStyle(Color.brassInk)
+            .opacity(configuration.isPressed ? 0.8 : (isEnabled ? 1 : 0.4))
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
-/// Variante silenziosa: bordo ottone su fondo trasparente.
-struct QuietPillButtonStyle: ButtonStyle {
+/// Azione secondaria: contorno, su fondo trasparente. Altezza 44.
+struct SecondaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
-    var tint: Color = .brassSoft
+    var tint: Color = .textSecondary
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(AppFont.ui(15, relativeTo: .subheadline))
+            .font(AppFont.ui(15, relativeTo: .subheadline).weight(.medium))
             .padding(.horizontal, 18)
             .frame(minHeight: 44)
-            .overlay(Capsule().strokeBorder(tint, lineWidth: 1))
+            .overlay(Capsule().strokeBorder(Color.outline, lineWidth: 1))
             .foregroundStyle(tint)
-            .opacity(configuration.isPressed ? 0.6 : (isEnabled ? 1 : 0.45))
+            .contentShape(Capsule())
+            .opacity(configuration.isPressed ? 0.6 : (isEnabled ? 1 : 0.4))
+    }
+}
+
+/// Azione testuale (link d'interfaccia): ottone, nessun contenitore.
+struct TextActionStyle: ButtonStyle {
+    var tint: Color = .brass
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(AppFont.ui(15, relativeTo: .subheadline).weight(.semibold))
+            .foregroundStyle(tint)
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
+            .opacity(configuration.isPressed ? 0.6 : 1)
     }
 }
 
@@ -132,60 +189,42 @@ struct QuietPillButtonStyle: ButtonStyle {
 
 struct AvatarView: View {
     let initials: String
-    var size: CGFloat = 40
+    var size: CGFloat = 32
+    var highlighted = false
 
     var body: some View {
         SwiftUI.Circle()
-            .fill(Color.felt)
+            .fill(Color.elevated)
             .overlay(
                 Text(verbatim: initials)
-                    .font(AppFont.ui(size * 0.38, relativeTo: .caption))
-                    .foregroundStyle(Color.brassSoft)
+                    .font(AppFont.ui(size * 0.38, relativeTo: .caption).weight(.medium))
+                    .foregroundStyle(Color.textSecondary)
             )
-            .overlay(SwiftUI.Circle().strokeBorder(Color.brassSoft.opacity(0.4), lineWidth: 1))
+            .overlay(SwiftUI.Circle().strokeBorder(highlighted ? Color.brass : Color.divider, lineWidth: 1))
             .frame(width: size, height: size)
-            .accessibilityHidden(true) // decorativo: il nome è già nel testo accanto
+            .accessibilityHidden(true)
     }
 }
 
-// MARK: - Badge del punteggio
+// MARK: - Fascia di presenza (parola, mai classifica)
 
-/// Badge "63 · Presenza discreta", colorato per fascia.
-/// Mai solo colore: il nome della fascia è sempre scritto.
-struct ScoreBadge: View {
-    let score: Int
+struct BandLabel: View {
     let band: ScoreBand
 
-    private var bandColor: Color {
-        switch band {
-        case .voceViva:         return .successTone
-        case .presenzaDiscreta: return .brassDeep   // Brass puro su carta è 2,3:1: sotto AA
-        case .ombraAlTavolo:    return .errorTone
-        }
+    var body: some View {
+        Text(verbatim: band.localizedName)
+            .font(AppFont.caption(12, relativeTo: .caption2))
+            .foregroundStyle(Color.textMuted)
     }
+}
 
-    private var bandLabel: String {
-        switch band {
+extension ScoreBand {
+    var localizedName: String {
+        switch self {
         case .voceViva:         return String(localized: "band.voceViva", bundle: L10n.bundle)
         case .presenzaDiscreta: return String(localized: "band.presenzaDiscreta", bundle: L10n.bundle)
         case .ombraAlTavolo:    return String(localized: "band.ombraAlTavolo", bundle: L10n.bundle)
         }
-    }
-
-    var body: some View {
-        HStack(spacing: 5) {
-            Text(verbatim: "\(score)")
-                .font(AppFont.title(14, relativeTo: .caption))
-            Text(verbatim: bandLabel)
-                .font(AppFont.caption(11, relativeTo: .caption2))
-        }
-        .padding(.horizontal, 9)
-        .padding(.vertical, 4)
-        .background(Capsule().fill(bandColor.opacity(0.16)))
-        .overlay(Capsule().strokeBorder(bandColor.opacity(0.7), lineWidth: 1))
-        .foregroundStyle(bandColor)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(String(format: String(localized: "a11y.score", bundle: L10n.bundle), score, bandLabel)))
     }
 }
 
@@ -194,20 +233,19 @@ struct ScoreBadge: View {
 struct CategoryChip: View {
     let category: PostCategory
     var isSelected: Bool = false
-    var onDark: Bool = false
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 6) {
             Image(systemName: category.symbolName)
-                .font(.system(size: 11))
+                .imageScale(.small)
             Text(verbatim: category.labelKey.loc)
-                .font(AppFont.caption(12, relativeTo: .caption2))
+                .font(AppFont.caption(13, relativeTo: .footnote).weight(.medium))
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
-        .background(Capsule().fill(isSelected ? Color.brass : .clear))
-        .overlay(Capsule().strokeBorder(isSelected ? Color.brass : (onDark ? Color.brassSoft.opacity(0.6) : Color.felt.opacity(0.35)), lineWidth: 1))
-        .foregroundStyle(isSelected ? Color.ink : (onDark ? Color.brassSoft : Color.felt))
+        .padding(.horizontal, 12)
+        .frame(minHeight: 36)
+        .background(Capsule().fill(isSelected ? Color.brass : Color.clear))
+        .overlay(Capsule().strokeBorder(isSelected ? Color.brass : Color.outline, lineWidth: 1))
+        .foregroundStyle(isSelected ? Color.brassInk : Color.textSecondary)
     }
 }
 
@@ -218,41 +256,79 @@ struct ToastView: View {
     var onDismiss: () -> Void = {}
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .center, spacing: Space.s) {
             Text(verbatim: notice.message)
                 .font(AppFont.ui(14, relativeTo: .footnote))
-                .foregroundStyle(Color.paper)
+                .foregroundStyle(Color.textPrimary)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.brassSoft)
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.textMuted)
                     .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
             .accessibilityLabel(Text("a11y.toast.chiudi"))
         }
-        .padding(.leading, 18)
-        .padding(.trailing, 8)
-        .padding(.vertical, 10)
+        .padding(.leading, Space.l)
+        .padding(.trailing, Space.xs)
+        .padding(.vertical, Space.xs)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.felt)
-                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .strokeBorder(Color.brassSoft.opacity(0.6), lineWidth: 1))
+                .fill(Color.elevated)
+                .shadow(color: .black.opacity(0.35), radius: 16, y: 6)
         )
-        .padding(.horizontal, 24)
+        .padding(.horizontal, Space.gutter)
     }
 }
 
-// MARK: - Titolo di sezione
+// MARK: - Etichetta di sezione (maiuscoletto spaziato)
 
-struct SectionTitle: View {
+struct SectionLabel: View {
     let textKey: LocalizedStringKey
     var body: some View {
         Text(textKey)
-            .font(AppFont.title(20, relativeTo: .title3))
-            .foregroundStyle(Color.paperDim)
+            .font(AppFont.label().weight(.semibold))
+            .textCase(.uppercase)
+            .kerning(1.2)
+            .foregroundStyle(Color.textMuted)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
+
+/// Filetto sottile decorativo.
+struct Hairline: View {
+    var inset: CGFloat = 0
+    var body: some View {
+        Rectangle()
+            .fill(Color.divider)
+            .frame(height: 0.5)
+            .padding(.leading, inset)
+            .accessibilityHidden(true)
+    }
+}
+
+/// Titolo di schermata (Young Serif 32) con sottotitolo opzionale.
+struct ScreenTitle: View {
+    let titleKey: LocalizedStringKey
+    var subtitleKey: LocalizedStringKey? = nil
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Space.xs) {
+            Text(titleKey)
+                .font(AppFont.display())
+                .foregroundStyle(Color.textPrimary)
+                .accessibilityAddTraits(.isHeader)
+            if let subtitleKey {
+                Text(subtitleKey)
+                    .font(AppFont.bodySerif(16, relativeTo: .callout))
+                    .italic()
+                    .foregroundStyle(Color.textMuted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
