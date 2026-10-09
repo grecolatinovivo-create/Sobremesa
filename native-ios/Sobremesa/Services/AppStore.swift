@@ -58,6 +58,14 @@ final class AppStore {
     /// Le tre stanze; serve a saltare di stanza dai richiami del Salotto.
     enum Stanza: Hashable { case salotto, tavoli, tu }
     var stanzaCorrente: Stanza = .salotto
+    /// Il percorso di navigazione del Salotto (le stanze aperte).
+    var salottoPath: [Tavolo] = []
+
+    /// Apre la stanza di un tavolo dal Salotto (dopo fondazione o ingresso).
+    func open(_ tavolo: Tavolo) {
+        stanzaCorrente = .salotto
+        salottoPath = [tavolo]
+    }
 
     private var toastTask: Task<Void, Never>?
 
@@ -195,6 +203,8 @@ final class AppStore {
         show(notices: data.createTable(name: name, theme: theme, category: category, isOpen: isOpen))
         notifications.requestAuthorizationIfNeeded()
         refreshEmberReminders()
+        // Appena apparecchiato, ci si siede: la stanza nuova si apre da sola.
+        if let nuovo = data.myMemberships().last?.tavolo { open(nuovo) }
         remote { try await self.api.createTable(name: name, theme: theme,
                                                 category: category.rawValue, isOpen: isOpen) }
     }
@@ -206,6 +216,8 @@ final class AppStore {
         if joined {
             notifications.requestAuthorizationIfNeeded()
             refreshEmberReminders()
+            show(message: String(format: String(localized: "toast.seduto", bundle: L10n.bundle), tavolo.name))
+            open(tavolo)
             if let id = tavolo.serverID {
                 remote { try await self.api.tableAction("join", tableID: id) }
             }
@@ -315,13 +327,19 @@ final class AppStore {
 
     /// Riscatta un codice ricevuto: ci si siede a quel tavolo.
     func redeemInvite(code: String) {
-        let clean = code.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Il codice si mostra "Q7M4-K2LP": trattini e spazi non contano.
+        let clean = code.uppercased().filter { $0.isLetter || $0.isNumber }
         guard !clean.isEmpty else { return }
         Task {
             do {
-                try await api.redeemInvite(code: clean)
+                let tableID = try await api.redeemInvite(code: clean)
                 show(message: String(localized: "toast.invito.seduti", bundle: L10n.bundle))
                 await performSync()
+                // Seduti: la stanza si apre da sola.
+                if let tableID,
+                   let tavolo = data.myMemberships().compactMap(\.tavolo).first(where: { $0.serverID == tableID }) {
+                    open(tavolo)
+                }
             } catch {
                 show(message: String(localized: "toast.invito.errore", bundle: L10n.bundle))
             }

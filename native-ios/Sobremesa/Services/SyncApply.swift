@@ -60,6 +60,7 @@ extension LocalDataService {
                 existing.isOpen = remote.is_open
                 existing.animatedByMe = remote.animator == payload.me.id
                 existing.memberCount = remote.member_count
+                existing.animatorServerID = remote.animator
                 return existing
             }
             // Adozione dell'ottimistico: stesso nome, ancora senza id server.
@@ -70,6 +71,7 @@ extension LocalDataService {
                 pending.isOpen = remote.is_open
                 pending.animatedByMe = remote.animator == payload.me.id
                 pending.memberCount = remote.member_count
+                pending.animatorServerID = remote.animator
                 tables[remote.id] = pending
                 return pending
             }
@@ -80,6 +82,7 @@ extension LocalDataService {
                                  animatedByMe: remote.animator == payload.me.id,
                                  memberCount: remote.member_count)
             created.serverID = remote.id
+            created.animatorServerID = remote.animator
             context.insert(created)
             tables[remote.id] = created
             return created
@@ -112,7 +115,8 @@ extension LocalDataService {
         for seat in payload.seats {
             guard let row = tables[seat.circle_id], seat.user_id != payload.me.id else { continue }
             let member = person(id: seat.user_id, name: seat.name, score: seat.score)
-            context.insert(Membership(person: member, tavolo: row))
+            context.insert(Membership(person: member, tavolo: row,
+                                      joinedAt: seat.joined_at?.serverDate ?? .now))
         }
 
         // 6. Le mie sedie che il server non conosce più (espulso/alzato altrove).

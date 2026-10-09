@@ -41,6 +41,8 @@ struct RemoteSeat: Codable {
     let user_id: String
     let name: String
     let score: Int
+    /// Ordine d'arrivo al tavolo (v3: i posti si occupano in ordine d'arrivo).
+    let joined_at: String?
 }
 
 struct RemoteRequest: Codable {
@@ -127,8 +129,11 @@ struct APIClient {
         return response.code
     }
 
-    func redeemInvite(code: String) async throws {
-        let _: OKResponse = try await send("invites?accept=1", method: "POST", body: ["code": code])
+    /// Riscatta un codice: restituisce l'id del tavolo a cui ci si è seduti.
+    func redeemInvite(code: String) async throws -> String? {
+        struct Seated: Codable { let seated: Bool?; let tableId: String? }
+        let response: Seated = try await send("invites?accept=1", method: "POST", body: ["code": code])
+        return response.tableId
     }
 
     func createTable(name: String, theme: String, category: String, isOpen: Bool) async throws {
