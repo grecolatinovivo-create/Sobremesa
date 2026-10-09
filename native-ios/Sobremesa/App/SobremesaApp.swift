@@ -16,6 +16,7 @@ struct SobremesaApp: App {
     @State private var store: AppStore
 
     init() {
+        SystemAppearance.configure()
         container = Self.makeContainer()
         let service = LocalDataService(context: container.mainContext)
         _store = State(initialValue: AppStore(data: service))
@@ -74,10 +75,13 @@ struct AppRootView: View {
         Group {
             if store.needsOnboarding {
                 OnboardingView()
+                    .transition(.opacity)
             } else {
                 RootTabView()
+                    .transition(.opacity)
             }
         }
+        .animation(.easeInOut(duration: 0.4), value: store.needsOnboarding)
         // Il multilingua interno: le Text si localizzano dal locale
         // d'ambiente, che qui segue la scelta fatta in Tu -> Lingua.
         .environment(\.locale, store.appLocale)
