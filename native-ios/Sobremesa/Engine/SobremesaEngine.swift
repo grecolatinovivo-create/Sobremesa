@@ -40,6 +40,17 @@ enum EmberState: Equatable, Sendable {
     case espulsione(giorniDiSilenzio: Int)    // ≥ emberExpulsionAfterDays
 }
 
+/// Il calore COLLETTIVO di un tavolo (il glifo): dipende da quando
+/// QUALCUNO ha parlato, non dal silenzio del singolo.
+enum TableWarmth: Equatable, Sendable {
+    /// Meno di `emberMinimumMembers` persone: si aspetta una seconda voce.
+    case inAttesa
+    /// Qualcuno ha parlato entro `tableWarmthAliveHours`.
+    case viva
+    /// Il tavolo tace da più tempo (o non ha ancora parlato).
+    case siAffievolisce
+}
+
 /// Esito della valutazione periodica della brace per una membership.
 struct EmberEvaluation: Equatable, Sendable {
     let state: EmberState
@@ -163,6 +174,23 @@ struct SobremesaEngine: Sendable {
     }
 
     /// Fascia di un punteggio.
+    /// Calore collettivo del tavolo (v3): in attesa sotto il minimo di
+    /// persone; vivo se l'ultimo intervento di chiunque è recente.
+    func tableWarmth(memberCount: Int, lastMessageAt: Date?, now: Date) -> TableWarmth {
+        guard memberCount >= rules.emberMinimumMembers else { return .inAttesa }
+        guard let lastMessageAt else { return .siAffievolisce }
+        let hours = now.timeIntervalSince(lastMessageAt) / 3_600
+        return hours < Double(rules.tableWarmthAliveHours) ? .viva : .siAffievolisce
+    }
+
+    /// Avviso PERSONALE (con tatto): da quanti giorni taccio, se ho
+    /// raggiunto la soglia d'avviso; altrimenti nil. Mai per l'animatore.
+    func personalSilenceNotice(lastActivity: Date, now: Date, isAnimator: Bool) -> Int? {
+        guard !isAnimator else { return nil }
+        let days = daysOfSilence(since: lastActivity, now: now)
+        return days >= rules.emberWarningAfterDays ? days : nil
+    }
+
     func band(for score: Int) -> ScoreBand {
         if score >= rules.bandVoceVivaThreshold { return .voceViva }
         if score >= rules.bandPresenzaDiscretaThreshold { return .presenzaDiscreta }
