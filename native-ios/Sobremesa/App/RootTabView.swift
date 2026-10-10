@@ -3,6 +3,8 @@
 //  Sobremesa
 //
 //  Le 3 stanze dell'app (v3 "Ultima luce"): Salotto · Tavoli · Tu.
+//  La barra in basso è solo tipografica: tre parole, niente icone
+//  (feedback di Giampiero: le icone sembravano emoticon).
 //  Qui vivono anche la rivalutazione al ritorno in foreground e i toast.
 //
 
@@ -17,13 +19,13 @@ struct RootTabView: View {
         @Bindable var store = store
         TabView(selection: $store.stanzaCorrente) {
             SalottoView()
-                .tabItem { Label("tab.salotto", systemImage: "sofa") }
+                .tabItem { Text("tab.salotto") }
                 .tag(AppStore.Stanza.salotto)
             TavoliView()
-                .tabItem { Label("tab.tavoli", systemImage: "table.furniture") }
+                .tabItem { Text("tab.tavoli") }
                 .tag(AppStore.Stanza.tavoli)
             TuView()
-                .tabItem { Label("tab.tu", systemImage: "person") }
+                .tabItem { Text("tab.tu") }
                 .tag(AppStore.Stanza.tu)
         }
         .tint(.brass)
@@ -67,10 +69,13 @@ enum SystemAppearance {
         tab.backgroundColor = UIColor(named: "FeltEdge") ?? background
         tab.shadowColor = divider
         let item = UITabBarItemAppearance()
-        item.normal.iconColor = muted
-        item.normal.titleTextAttributes = [.foregroundColor: muted]
-        item.selected.iconColor = brass
-        item.selected.titleTextAttributes = [.foregroundColor: brass]
+        // Solo parole, in Young Serif, centrate nella barra (senza icona il
+        // titolo starebbe schiacciato in basso: lo si alza di 12 punti).
+        let tabFont = UIFont(name: "YoungSerif-Regular", size: 17) ?? .systemFont(ofSize: 16, weight: .medium)
+        item.normal.titleTextAttributes = [.foregroundColor: muted, .font: tabFont]
+        item.selected.titleTextAttributes = [.foregroundColor: brass, .font: tabFont]
+        item.normal.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -12)
+        item.selected.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -12)
         tab.stackedLayoutAppearance = item
         tab.inlineLayoutAppearance = item
         tab.compactInlineLayoutAppearance = item
