@@ -435,6 +435,11 @@ struct TavoloRoomView: View {
             } label: {
                 Label("azione.riprendi", systemImage: "flame")
             }
+            // Promemoria della brace, scelti tavolo per tavolo.
+            Toggle(isOn: Binding(get: { store.remindersOn(for: tavolo) },
+                                 set: { store.setReminders($0, for: tavolo) })) {
+                Label("stanza.promemoria", systemImage: "bell")
+            }
             Divider()
             Button(role: .destructive) {
                 confirmLeave = true

@@ -186,10 +186,32 @@ final class AppStore {
         syncNow()
     }
 
+    // MARK: Promemoria per tavolo
+
+    /// Tavoli con i promemoria spenti (scelta per tavolo, sul dispositivo).
+    var quietTables: Set<String> = Set(UserDefaults.standard.stringArray(forKey: "sobremesa.tavoli.silenziosi") ?? [])
+
+    private func reminderKey(_ tavolo: Tavolo) -> String {
+        tavolo.serverID ?? "nome:\(tavolo.name)"
+    }
+
+    func remindersOn(for tavolo: Tavolo) -> Bool {
+        !quietTables.contains(reminderKey(tavolo))
+    }
+
+    func setReminders(_ on: Bool, for tavolo: Tavolo) {
+        let key = reminderKey(tavolo)
+        if on { quietTables.remove(key) } else { quietTables.insert(key) }
+        UserDefaults.standard.set(Array(quietTables), forKey: "sobremesa.tavoli.silenziosi")
+        if on { notifications.requestAuthorizationIfNeeded() }
+        refreshEmberReminders()
+    }
+
     /// Riallinea i richiami locali della brace alle date reali.
+    /// Solo per i tavoli con i promemoria accesi.
     private func refreshEmberReminders() {
         let memberships = data.myMemberships().compactMap { membership -> (String, Date, Bool, Bool)? in
-            guard let tavolo = membership.tavolo else { return nil }
+            guard let tavolo = membership.tavolo, remindersOn(for: tavolo) else { return nil }
             return (tavolo.name,
                     membership.lastActivity,
                     tavolo.memberCount < rules.emberMinimumMembers,
