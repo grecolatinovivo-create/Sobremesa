@@ -90,5 +90,7 @@ struct AppRootView: View {
             didBootstrap = true
             store.bootstrap()
         }
+        // Link d'invito: si apre il tavolo senza copiare e incollare codici.
+        .onOpenURL { url in store.handle(url: url) }
     }
 }

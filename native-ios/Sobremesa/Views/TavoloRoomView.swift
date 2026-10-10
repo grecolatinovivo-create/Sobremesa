@@ -836,7 +836,8 @@ private struct InviteSheet: View {
                 if let code {
                     VStack(spacing: Space.s) {
                         ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle),
-                                               tavolo.name, spaced(code))) {
+                                               tavolo.name, spaced(code),
+                                               AppStore.inviteLink(for: code).absoluteString)) {
                             Text("tavola.invito.condividi")
                                 .frame(maxWidth: .infinity)
                         }

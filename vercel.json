@@ -29,5 +29,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/i/:code",
+      "destination": "/api/invites?page=:code"
+    }
   ]
 }

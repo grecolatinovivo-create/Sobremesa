@@ -2590,37 +2590,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Setz dich zu mir an „%1$@“ auf Sobremesa. Der Tisch-Code lautet: %2$@"
+            "value": "Setz dich zu mir an „%1$@“ auf Sobremesa: %3$@\n(Code %2$@)"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sit with me at \"%1$@\" on Sobremesa. The table code is: %2$@"
+            "value": "Sit with me at \"%1$@\" on Sobremesa: %3$@\n(code %2$@)"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Siéntate conmigo en «%1$@» en Sobremesa. El código de la mesa es: %2$@"
+            "value": "Siéntate conmigo en «%1$@» en Sobremesa: %3$@\n(código %2$@)"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Assieds-toi avec moi à « %1$@ » sur Sobremesa. Le code de la table est : %2$@"
+            "value": "Assieds-toi avec moi à « %1$@ » sur Sobremesa : %3$@\n(code %2$@)"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Siediti con me a «%1$@» su Sobremesa. Il codice del tavolo è: %2$@"
+            "value": "Siediti con me a «%1$@» su Sobremesa: %3$@\n(codice %2$@)"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sente-se comigo em \"%1$@\" no Sobremesa. O código da mesa é: %2$@"
+            "value": "Sente-se comigo em \"%1$@\" no Sobremesa: %3$@\n(código %2$@)"
           }
         }
       }
