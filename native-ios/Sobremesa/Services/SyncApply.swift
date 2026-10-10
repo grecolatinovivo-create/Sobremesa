@@ -127,10 +127,21 @@ extension LocalDataService {
 
         // 7. I tavoli spariti dal server (chiusi): via, con tutto il loro mondo.
         let currentMessages = (try? context.fetch(FetchDescriptor<Messaggio>())) ?? []
-        for tavolo in localTables {
-            guard let id = tavolo.serverID, !serverTableIDs.contains(id) else { continue }
-            for messaggio in currentMessages where messaggio.tavolo === tavolo {
+        let currentMemberships = (try? context.fetch(FetchDescriptor<Membership>())) ?? []
+        for tavolo in localTables where !tavolo.isDeleted {
+            if let id = tavolo.serverID {
+                guard !serverTableIDs.contains(id) else { continue }
+            } else {
+                // Ottimistico mai adottato e senza fondazione in volo: è un
+                // fantasma (il server non l'ha mai creato). Via, con tutto ciò
+                // che gli è appeso — altrimenti resta "In attesa" per sempre.
+                guard !pendingTableNames.contains(tavolo.name) else { continue }
+            }
+            for messaggio in currentMessages where messaggio.tavolo === tavolo && !messaggio.isDeleted {
                 context.delete(messaggio)
+            }
+            for membership in currentMemberships where membership.tavolo === tavolo && !membership.isDeleted {
+                context.delete(membership)
             }
             context.delete(tavolo)
         }

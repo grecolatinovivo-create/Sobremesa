@@ -815,6 +815,7 @@ private struct InviteSheet: View {
     let tavolo: Tavolo
     @State private var code: String?
     @State private var failed = false
+    @State private var failureDetail: String?
     @State private var copied = false
 
     var body: some View {
@@ -893,6 +894,15 @@ private struct InviteSheet: View {
                         .font(AppFont.ui(15))
                         .foregroundStyle(Color.textSecondary)
                         .multilineTextAlignment(.center)
+                    if let failureDetail {
+                        // Diagnostica minuta: dice dove si è rotto, senza gergo in primo piano.
+                        Text(verbatim: failureDetail)
+                            .font(AppFont.ui(11))
+                            .foregroundStyle(Color.textSecondary.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                            .lineLimit(3)
+                            .textSelection(.enabled)
+                    }
                     Button("invito.riprova") { Task { await load() } }
                         .buttonStyle(TextActionStyle())
                 }
@@ -911,9 +921,12 @@ private struct InviteSheet: View {
 
     private func load() async {
         failed = false
-        if let fresh = await store.createInviteCode(for: tavolo) {
+        failureDetail = nil
+        let result = await store.inviteCode(for: tavolo)
+        if let fresh = result.code {
             code = fresh
         } else {
+            failureDetail = result.detail
             failed = true
         }
     }

@@ -129,12 +129,17 @@ final class AppStore {
         Task { await performSync() }
     }
 
+    /// L'ultimo errore di sincronizzazione (nil = l'ultimo sync è andato bene).
+    var lastSyncError: String?
+
     private func performSync() async {
         guard SessionStore.token != nil else { return }
         do {
             let nutrePrima = data.myReceivedNutre()
             let payload = try await api.sync(catalogQuery: catalogQuery)
             data.applySync(payload)
+            // Una stanza aperta su un tavolo che il sync ha tolto (fantasma) si chiude.
+            salottoPath.removeAll { $0.modelContext == nil || $0.isDeleted }
             if let fromServer = payload.blocked { blocked = fromServer }
             refreshEmberReminders()
             // Il gesto più caldo dell'app non deve restare invisibile:
@@ -145,8 +150,11 @@ final class AppStore {
                     String(localized: "toast.nutre.ricevuti", bundle: L10n.bundle),
                     nutreDopo - nutrePrima))
             }
+            lastSyncError = nil
         } catch {
-            // Offline: si resta sulla fotografia locale, senza drammi.
+            // Offline: si resta sulla fotografia locale, senza drammi —
+            // ma l'errore resta annotato per la diagnostica.
+            lastSyncError = String(describing: error).prefix(160).description
         }
     }
 
@@ -205,9 +213,32 @@ final class AppStore {
         notifications.requestAuthorizationIfNeeded()
         refreshEmberReminders()
         // Appena apparecchiato, ci si siede: la stanza nuova si apre da sola.
-        if let nuovo = data.myMemberships().last?.tavolo { open(nuovo) }
-        remote { try await self.api.createTable(name: name, theme: theme,
-                                                category: category.rawValue, isOpen: isOpen) }
+        let nuovo = data.myMemberships().last?.tavolo
+        if let nuovo { open(nuovo) }
+        // Se il server rifiuta la fondazione, il tavolo locale NON deve restare
+        // come fantasma (prima restava per sempre, e l'invito non poteva funzionare).
+        Task {
+            do {
+                try await api.createTable(name: name, theme: theme,
+                                          category: category.rawValue, isOpen: isOpen)
+                data.tableCreationFinished(name: name)
+                await performSync()
+            } catch APIError.notAuthenticated {
+                data.tableCreationFinished(name: name)
+            } catch {
+                data.tableCreationFinished(name: name)
+                let refused: Bool
+                if let apiError = error as? APIError, case .http = apiError { refused = true } else { refused = false }
+                show(message: refused
+                     ? String(localized: "toast.rifiutato", bundle: L10n.bundle)
+                     : String(localized: "toast.offline", bundle: L10n.bundle))
+                if let nuovo, nuovo.serverID == nil {
+                    salottoPath.removeAll { $0 === nuovo }
+                    data.discardUnsyncedTable(nuovo)
+                }
+                await performSync()
+            }
+        }
     }
 
     /// Siediti a un tavolo aperto (dal catalogo).
@@ -365,16 +396,38 @@ final class AppStore {
     /// ancora registrata. Si risincronizza e si riprova qualche volta,
     /// invece di arrendersi al primo colpo (era il bug della rotellina).
     func createInviteCode(for tavolo: Tavolo) async -> String? {
+        await inviteCode(for: tavolo).code
+    }
+
+    /// Come sopra, ma dice anche PERCHÉ non è arrivato (il foglio lo mostra
+    /// in piccolo: serve a capire subito dove si rompe, senza indovinare).
+    func inviteCode(for tavolo: Tavolo) async -> (code: String?, detail: String?) {
+        guard SessionStore.token != nil else { return (nil, "sessione assente: l'app non ha ancora un accesso al server") }
+        var detail: String?
         for attempt in 0..<4 {
             if tavolo.serverID == nil { await performSync() }
-            if let id = tavolo.serverID,
-               let code = try? await api.createInvite(tableID: id) {
-                return code
+            if tavolo.modelContext == nil || tavolo.isDeleted {
+                return (nil, "il tavolo non esiste sul server: rifondalo")
+            }
+            if let id = tavolo.serverID {
+                do {
+                    return (try await api.createInvite(tableID: id), nil)
+                } catch APIError.http(let status, let body) {
+                    detail = "HTTP \(status) · \(body.prefix(120))"
+                    // 4xx: il server ha risposto e ha detto no; riprovare non serve.
+                    if (400..<500).contains(status) { return (nil, detail) }
+                } catch APIError.notAuthenticated {
+                    return (nil, "sessione assente")
+                } catch {
+                    detail = "rete · \(error.localizedDescription)"
+                }
+            } else {
+                detail = lastSyncError.map { "sync · \($0)" } ?? "tavolo non ancora sul server"
             }
             try? await Task.sleep(for: .seconds(attempt == 0 ? 1 : 2))
             await performSync()
         }
-        return nil
+        return (nil, detail)
     }
 
     /// Riscatta un codice ricevuto: ci si siede a quel tavolo.

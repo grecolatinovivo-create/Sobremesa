@@ -51,6 +51,10 @@ protocol DataService {
 
     // Sicurezza (v3): effetto locale immediato di segnalazioni e blocchi.
     func removeMessage(_ messaggio: Messaggio)
+    /// Un tavolo fondato in locale che il server non ha accettato.
+    func discardUnsyncedTable(_ tavolo: Tavolo)
+    /// La fondazione remota di quel nome si è chiusa (bene o male).
+    func tableCreationFinished(name: String)
     func removeMessages(fromAuthorServerID authorID: String)
 
     /// Rivaluta la brace di tutti i tavoli abitati (avvio, foreground, debug).
@@ -77,6 +81,9 @@ final class LocalDataService: DataService {
 
     let engine: SobremesaEngine
     let context: ModelContext  // interno: usato anche da SyncApply
+    /// Nomi dei tavoli fondati in locale la cui creazione remota è in volo:
+    /// finché sono qui, il sync non li tratta come fantasmi.
+    var pendingTableNames: Set<String> = []
     private let seedFlagKey = "sobremesa.didSeed"
 
     init(context: ModelContext, engine: SobremesaEngine = SobremesaEngine()) {
@@ -131,6 +138,7 @@ final class LocalDataService: DataService {
               engine.canJoinCircle(currentCircleCount: myMemberships().count) else { return [] }
         let tavolo = Tavolo(name: name, theme: theme, category: category,
                             isOpen: isOpen, animatedByMe: true, memberCount: 1)
+        pendingTableNames.insert(name)
         context.insert(tavolo)
         context.insert(Membership(person: me, tavolo: tavolo))
         save()
@@ -198,6 +206,20 @@ final class LocalDataService: DataService {
         guard messaggio.author?.isMe != true else { return }
         // Toggle senza doppio conteggio: il mio Nutre è un flag, non un incremento cieco.
         messaggio.nutritoDaMe.toggle()
+        save()
+    }
+
+    func tableCreationFinished(name: String) {
+        pendingTableNames.remove(name)
+    }
+
+    func discardUnsyncedTable(_ tavolo: Tavolo) {
+        guard tavolo.serverID == nil else { return }
+        let memberships = (try? context.fetch(FetchDescriptor<Membership>())) ?? []
+        for membership in memberships where membership.tavolo === tavolo { context.delete(membership) }
+        let messages = (try? context.fetch(FetchDescriptor<Messaggio>())) ?? []
+        for messaggio in messages where messaggio.tavolo === tavolo { context.delete(messaggio) }
+        context.delete(tavolo)
         save()
     }
 

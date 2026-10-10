@@ -57,6 +57,14 @@ BEGIN
     ALTER TABLE posts ADD COLUMN hidden BOOLEAN NOT NULL DEFAULT false;
   END IF;
 
+  -- v2 (autoriparante): l'invito porta a UN tavolo. Se la migrazione v2
+  -- non fosse mai stata lanciata in produzione, l'INSERT degli inviti
+  -- fallirebbe con 500 e il codice non arriverebbe mai.
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                 WHERE table_name = 'invites' AND column_name = 'circle_id') THEN
+    ALTER TABLE invites ADD COLUMN circle_id UUID REFERENCES circles(id) ON DELETE CASCADE;
+  END IF;
+
   CREATE TABLE IF NOT EXISTS reports (
     post_id UUID NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
     reporter UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

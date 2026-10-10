@@ -4,7 +4,7 @@
 // Il codice è MONOUSO ("Un codice, una sedia"): chi lo riscatta per primo
 // si siede, e il codice si spegne. Se la sedia non c'è più (tavolo al
 // completo, o troppi tavoli), il codice torna valido per qualcun altro.
-import { sql, seat } from "./_lib/db.js";
+import { sql, seat, schemaV3 } from "./_lib/db.js";
 import { requireAuth } from "./_lib/auth.js";
 import { randomBytes } from "node:crypto";
 
@@ -12,6 +12,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST" });
   const me = await requireAuth(req, res);
   if (!me) return;
+  await schemaV3(); // garantisce invites.circle_id (mai un'eccezione)
 
   if (!req.query.accept) {
     // Un invito nasce sempre A un tavolo, e lo crea chi ci siede.
@@ -23,7 +24,12 @@ export default async function handler(req, res) {
     // Codice leggibile, senza ambiguità (niente 0/O, 1/I).
     const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
     const code = Array.from(randomBytes(8)).map((b) => alphabet[b % alphabet.length]).join("");
-    await sql`INSERT INTO invites (code, inviter, circle_id) VALUES (${code}, ${me.id}, ${tableId})`;
+    try {
+      await sql`INSERT INTO invites (code, inviter, circle_id) VALUES (${code}, ${me.id}, ${tableId})`;
+    } catch (error) {
+      console.error("invito non creato:", error);
+      return res.status(500).json({ error: "invito non creato", detail: String(error.message || error).slice(0, 160) });
+    }
     return res.status(200).json({ code });
   }
 
