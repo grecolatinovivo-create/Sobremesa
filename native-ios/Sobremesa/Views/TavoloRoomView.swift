@@ -80,8 +80,11 @@ struct TavoloRoomView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Color.background, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        // Niente fascia in alto: la barra è trasparente finché si vede la
+        // testata (la texture scorre fino al bordo); compare, scura, solo
+        // quando si scorre e il nome del tavolo passa nella barra.
+        .toolbarBackground(Color.background.opacity(0.94), for: .navigationBar)
+        .toolbarBackground(headerVisible ? .hidden : .visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
     }
 
@@ -488,8 +491,12 @@ struct TavoloRoomView: View {
         .padding(.horizontal, Space.l)
         .padding(.top, Space.s)
         .padding(.bottom, Space.s)
-        .background(Color.background.opacity(0.98).ignoresSafeArea(edges: .bottom))
-        .overlay(alignment: .top) { Hairline() }
+        // Il composer sfuma nel fondo, senza una fascia netta sopra.
+        .background(
+            LinearGradient(colors: [Color.background.opacity(0), Color.background.opacity(0.92), Color.background],
+                           startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea(edges: .bottom)
+        )
     }
 
     private func send() {

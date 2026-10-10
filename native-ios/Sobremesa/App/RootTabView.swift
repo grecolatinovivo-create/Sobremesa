@@ -85,7 +85,12 @@ enum SystemAppearance {
         nav.titleTextAttributes = [.foregroundColor: primary, .font: titleFont]
         nav.largeTitleTextAttributes = [.foregroundColor: primary]
         UINavigationBar.appearance().standardAppearance = nav
-        UINavigationBar.appearance().scrollEdgeAppearance = nav
+        // In cima allo scorrimento la barra è trasparente: la texture arriva
+        // fino al bordo, senza la fascia piatta (feedback di Giampiero).
+        let edge = UINavigationBarAppearance()
+        edge.configureWithTransparentBackground()
+        edge.titleTextAttributes = nav.titleTextAttributes
+        UINavigationBar.appearance().scrollEdgeAppearance = edge
         UINavigationBar.appearance().compactAppearance = nav
         UINavigationBar.appearance().tintColor = brass
     }
