@@ -155,14 +155,25 @@ extension View {
         background(
             ZStack {
                 Color.background
-                RadialGradient(colors: [Color.feltLit.opacity(0.22), Color.clear],
-                               center: UnitPoint(x: 0.5, y: 0), startRadius: 0, endRadius: 520)
-                LinearGradient(colors: [Color.clear, Color.feltEdge.opacity(0.6)],
-                               startPoint: .center, endPoint: .bottom)
+                if ScreenTexture.available {
+                    // La texture dipinta da Astra: luce calda dall'alto, vignetta, grana.
+                    Image("bg_texture")
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    RadialGradient(colors: [Color.feltLit.opacity(0.22), Color.clear],
+                                   center: UnitPoint(x: 0.5, y: 0), startRadius: 0, endRadius: 520)
+                    LinearGradient(colors: [Color.clear, Color.feltEdge.opacity(0.6)],
+                                   startPoint: .center, endPoint: .bottom)
+                }
             }
             .ignoresSafeArea()
         )
     }
+}
+
+enum ScreenTexture {
+    static let available = UIImage(named: "bg_texture") != nil
 }
 
 // MARK: - Bottoni
@@ -223,22 +234,32 @@ struct TextActionStyle: ButtonStyle {
 // MARK: - Avatar con iniziali
 
 struct AvatarView: View {
+    static let leather = UIImage(named: "avatar_leather") != nil
     let initials: String
     var size: CGFloat = 32
     var highlighted = false
 
     var body: some View {
-        // Avatar caldi (senza foto): cuoio con un anello d'ottone.
-        SwiftUI.Circle()
-            .fill(RadialGradient(colors: [Color.chairLeather, Color.chairLeatherDeep],
-                                 center: UnitPoint(x: 0.4, y: 0.35), startRadius: 0, endRadius: size * 0.6))
+        // Avatar caldi (senza foto): il disco di cuoio con l'anello d'ottone
+        // dipinto da Astra; se l'asset mancasse, un cuoio disegnato.
+        Group {
+            if Self.leather {
+                Image("avatar_leather").resizable().interpolation(.high).scaledToFit()
+            } else {
+                SwiftUI.Circle()
+                    .fill(RadialGradient(colors: [Color.chairLeather, Color.chairLeatherDeep],
+                                         center: UnitPoint(x: 0.4, y: 0.35), startRadius: 0, endRadius: size * 0.6))
+            }
+        }
             .overlay(
                 Text(verbatim: initials)
                     .font(AppFont.title(size * 0.38, relativeTo: .caption))
                     .foregroundStyle(Color.flameGold)
             )
-            .overlay(SwiftUI.Circle().strokeBorder(Color.brass.opacity(highlighted ? 0.85 : 0.7),
-                                                   lineWidth: size > 60 ? 2 : 1))
+            // L'asset ha già il suo anello: in più solo la cornice del "mio" avatar.
+            .overlay(SwiftUI.Circle().strokeBorder(
+                Color.brass.opacity(Self.leather ? (highlighted ? 0.9 : 0) : 0.7),
+                lineWidth: size > 60 ? 2 : 1))
             .frame(width: size, height: size)
             .accessibilityHidden(true)
     }

@@ -1,0 +1,12 @@
+{
+  "images": [
+    {
+      "filename": "chair_free.png",
+      "idiom": "universal"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

@@ -56,12 +56,135 @@ struct TableGlyph: View {
         .accessibilityValue(Text(verbatim: warmth.label))
     }
 
+    @ViewBuilder
     private func canvas(time: Double) -> some View {
-        Canvas { context, canvasSize in
-            TableDrawing(occupied: occupied, maxSeats: maxSeats, warmth: warmth,
-                         mySeat: mySeat, startIndex: startIndex, time: time)
-                .draw(in: &context, size: canvasSize)
+        // Se ci sono gli asset dipinti da Astra (feltro, cuoio, ottone, candela)
+        // il tavolo si compone con quelli; altrimenti resta il disegno a codice.
+        if AssetTable.available {
+            AssetTable(occupied: occupied, maxSeats: maxSeats, warmth: warmth,
+                       mySeat: mySeat, startIndex: startIndex, size: size, time: time)
+        } else {
+            Canvas { context, canvasSize in
+                TableDrawing(occupied: occupied, maxSeats: maxSeats, warmth: warmth,
+                             mySeat: mySeat, startIndex: startIndex, time: time)
+                    .draw(in: &context, size: canvasSize)
+            }
         }
+    }
+}
+
+// MARK: - Il tavolo composto con gli asset illustrati (handoff di Astra, sezione F)
+
+struct AssetTable: View {
+    let occupied: Int
+    let maxSeats: Int
+    let warmth: TableWarmth
+    let mySeat: Int?
+    let startIndex: Int
+    let size: CGFloat
+    let time: Double
+
+    static let available = UIImage(named: "table_top") != nil
+        && UIImage(named: "chair_occupied") != nil
+        && UIImage(named: "chair_free") != nil
+        && UIImage(named: "candle_dish") != nil
+
+    /// Proporzioni (frazioni del lato), tarate sul dettaglio dei tre stati.
+    static let tableSide: CGFloat = 0.72
+    static let chairRing: CGFloat = 0.415
+    static let chairSide: CGFloat = 0.17
+    static let dishSide: CGFloat = 0.15
+
+    private func order(_ index: Int) -> Int { (index - startIndex + maxSeats) % maxSeats }
+
+    private var lit: Double {
+        switch warmth {
+        case .viva: return 1
+        case .siAffievolisce: return 0.45
+        case .inAttesa: return 0
+        }
+    }
+
+    var body: some View {
+        let ring = size * Self.chairRing
+        let pulse = 1 + 0.05 * sin(time * 2.1) + 0.02 * sin(time * 5.3)
+        ZStack {
+            // Le sedie, rivolte verso il tavolo (schienale verso l'esterno).
+            ForEach(0..<maxSeats, id: \.self) { index in
+                let angle = TableDrawing.angle(of: index, of: maxSeats)
+                let taken = order(index) < occupied
+                ZStack {
+                    Image(taken ? "chair_occupied" : "chair_free")
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .opacity(taken ? 1 : 0.85)
+                    if let mySeat, order(index) == mySeat {
+                        RoundedRectangle(cornerRadius: size * 0.03, style: .continuous)
+                            .strokeBorder(Color.brass, lineWidth: max(1, size * 0.008))
+                            .padding(-size * 0.008)
+                    }
+                }
+                .frame(width: size * Self.chairSide, height: size * Self.chairSide)
+                .rotationEffect(.radians(angle + .pi / 2))
+                .offset(x: ring * cos(angle), y: ring * sin(angle))
+            }
+
+            // Il piano in feltro.
+            Image("table_top")
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: size * Self.tableSide, height: size * Self.tableSide)
+
+            // La luce della candela sul feltro.
+            if lit > 0 {
+                SwiftUI.Circle()
+                    .fill(RadialGradient(
+                        colors: [Color.emberAlive.opacity(0.42 * lit), Color.emberAlive.opacity(0.12 * lit), .clear],
+                        center: .center, startRadius: 0, endRadius: size * 0.3 * pulse))
+                    .frame(width: size * 0.64, height: size * 0.64)
+                    .blendMode(.screen)
+                    .allowsHitTesting(false)
+            }
+
+            // Il piattino con la candela.
+            Image("candle_dish")
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: size * Self.dishSide, height: size * Self.dishSide)
+
+            if warmth != .inAttesa {
+                flame
+            }
+        }
+        .frame(width: size, height: size)
+    }
+
+    /// La fiamma: fotogrammi dipinti (flame_1…4) a ciclo, più un respiro lento.
+    @ViewBuilder
+    private var flame: some View {
+        let strength: CGFloat = warmth == .viva ? 1 : 0.6
+        let breath = 1 + 0.03 * sin(time * 1.4) + 0.02 * sin(time * 7.7)
+        let frame = Int((time * 8).rounded(.down)) % 4 + 1
+        let height = size * 0.13 * strength * breath
+        let name = UIImage(named: "flame_\(frame)") != nil ? "flame_\(frame)" : "flame_1"
+        ZStack {
+            SwiftUI.Circle()
+                .fill(RadialGradient(colors: [Color.emberAlive.opacity(warmth == .viva ? 0.6 : 0.35), .clear],
+                                     center: .center, startRadius: 0, endRadius: height * 0.9))
+                .frame(width: height * 1.8, height: height * 1.8)
+            if UIImage(named: name) != nil {
+                Image(name)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(height: height)
+                    .saturation(warmth == .viva ? 1 : 0.6)
+            }
+        }
+        .offset(y: -height * 0.42)
     }
 }
 
