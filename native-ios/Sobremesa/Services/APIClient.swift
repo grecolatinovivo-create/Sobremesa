@@ -65,6 +65,12 @@ struct RemoteMessage: Codable {
     let nutrito_da_me: Bool
 }
 
+/// Una persona che ho bloccato (Tu → Persone bloccate).
+struct RemoteBlocked: Codable, Identifiable, Hashable {
+    let id: String
+    let name: String
+}
+
 struct SyncPayload: Codable {
     let me: RemoteUser
     let myTables: [RemoteTable]
@@ -72,6 +78,18 @@ struct SyncPayload: Codable {
     let catalog: [RemoteTable]
     let requests: [RemoteRequest]
     let messages: [RemoteMessage]
+    /// v3 (sicurezza): interventi da togliere anche dalla memoria locale
+    /// (nascosti dalla moderazione, segnalati da me, di persone bloccate).
+    /// Opzionali: un server più vecchio non li manda.
+    let hidden: [String]?
+    let blocked: [RemoteBlocked]?
+}
+
+/// I motivi di una segnalazione (gli stessi del server).
+enum ReportReason: String, CaseIterable, Identifiable {
+    case offensivo, molesto, spam, altro
+    var id: String { rawValue }
+    var labelKey: String { "segnala.motivo.\(rawValue)" }
 }
 
 struct InviteCodeResponse: Codable { let code: String }
@@ -163,6 +181,23 @@ struct APIClient {
                                               body: ["postId": messageID, "action": "nutre"])
     }
 
+    // MARK: Sicurezza (Apple Guideline 1.2)
+
+    /// Segnala un intervento: sparisce subito per me, per tutti se lo
+    /// segnalano più persone, e finisce nella coda di moderazione.
+    func report(messageID: String, reason: ReportReason) async throws {
+        let _: OKResponse = try await send("safety", method: "POST",
+                                           body: ["action": "report", "postId": messageID,
+                                                  "reason": reason.rawValue])
+    }
+
+    /// Blocca (o sblocca) una persona.
+    func setBlocked(_ blocked: Bool, userID: String) async throws {
+        let _: OKResponse = try await send("safety", method: "POST",
+                                           body: ["action": blocked ? "block" : "unblock",
+                                                  "userId": userID])
+    }
+
     // MARK: Trasporto
 
     private struct OKResponse: Codable { let ok: Bool?; let closed: Bool?; let left: Bool?; let joined: Bool?; let requested: Bool?; let accepted: Bool?; let seated: Bool? }
@@ -243,4 +278,15 @@ extension String {
         let plain = ISO8601DateFormatter()
         return plain.date(from: self) ?? .now
     }
+}
+
+// MARK: - I link pubblici di Sobremesa
+
+/// Le pagine del sito vetrina che l'app apre (Apple 1.2 e 5.1.1: privacy,
+/// condizioni d'uso con tolleranza zero, contatto per le segnalazioni).
+enum SobremesaLinks {
+    static let site = URL(string: "https://sobremesa-psi.vercel.app")!
+    static let privacy = URL(string: "https://sobremesa-psi.vercel.app/privacy")!
+    static let terms = URL(string: "https://sobremesa-psi.vercel.app/termini")!
+    static let support = URL(string: "mailto:grecolatinovivo@gmail.com?subject=Sobremesa%20-%20assistenza%20e%20segnalazioni")!
 }

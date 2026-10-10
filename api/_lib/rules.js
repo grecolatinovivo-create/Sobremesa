@@ -9,6 +9,7 @@ export const RULES = {
   emberExpulsionAfterDays: 7,
   emberMinimumMembers: 2,
   tableWarmthAliveHours: 48, // v3: calore collettivo del tavolo (solo presentazione)
+  reportsToHide: 2, // v3: segnalazioni di persone diverse che nascondono un intervento
   pointsPost: 2,
   pointsComment: 1,
   pointsRetake: 1,

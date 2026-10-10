@@ -1,8 +1,11 @@
 // POST /api/invites            { tableId } → un codice per sedersi a QUEL tavolo
 // POST /api/invites?accept=1   { code }    → riscatta il codice e siediti
-import { sql, myTableIds, seatCount } from "./_lib/db.js";
+//
+// Il codice è MONOUSO ("Un codice, una sedia"): chi lo riscatta per primo
+// si siede, e il codice si spegne. Se la sedia non c'è più (tavolo al
+// completo, o troppi tavoli), il codice torna valido per qualcun altro.
+import { sql, seat } from "./_lib/db.js";
 import { requireAuth } from "./_lib/auth.js";
-import { RULES } from "./_lib/rules.js";
 import { randomBytes } from "node:crypto";
 
 export default async function handler(req, res) {
@@ -24,9 +27,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ code });
   }
 
-  // Riscatto: la sedia è a quel tavolo, se c'è posto per tutti e due i vincoli.
-  // Il codice si mostra "Q7M4-K2LP": trattini e spazi non contano.
+  // Riscatto. Il codice si mostra "Q7M4-K2LP": trattini e spazi non contano.
   const code = ((req.body || {}).code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (code.length !== 8) return res.status(404).json({ error: "codice non valido" });
   const { rows } = await sql`SELECT * FROM invites WHERE code = ${code}`;
   const invite = rows[0];
   if (!invite || invite.status !== "open" || !invite.circle_id) {
@@ -35,22 +38,18 @@ export default async function handler(req, res) {
   const { rows: already } = await sql`
     SELECT 1 FROM memberships WHERE user_id = ${me.id} AND circle_id = ${invite.circle_id}`;
   if (already.length) return res.status(409).json({ error: "siedi già a questo tavolo" });
-  if ((await myTableIds(me.id)).length >= RULES.maxCircles) {
-    return res.status(409).json({ error: "siedi già al massimo dei tavoli" });
-  }
-  if ((await seatCount(invite.circle_id)) >= RULES.maxFriends) {
-    return res.status(409).json({ error: "il tavolo è al completo" });
-  }
-  // Consumo atomico del codice: solo UN riscatto passa (status='open' nel WHERE).
+
+  // 1. Consumo atomico del codice: solo UN riscatto passa (status='open' nel WHERE).
   const { rowCount: consumed } = await sql`
     UPDATE invites SET status = 'used', used_by = ${me.id}
     WHERE code = ${code} AND status = 'open'`;
   if (!consumed) return res.status(404).json({ error: "codice non valido" });
-  const { rowCount: seated } = await sql`
-    INSERT INTO memberships (user_id, circle_id)
-    SELECT ${me.id}, ${invite.circle_id}
-    WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${invite.circle_id}) < ${RULES.maxFriends}
-    ON CONFLICT DO NOTHING`;
-  if (!seated) return res.status(409).json({ error: "il tavolo è al completo" });
+
+  // 2. La sedia, garantita dal database. Se non c'è, il codice si riaccende.
+  const result = await seat(me.id, invite.circle_id);
+  if (!result.ok) {
+    await sql`UPDATE invites SET status = 'open', used_by = NULL WHERE code = ${code}`;
+    return res.status(result.status).json({ error: result.error });
+  }
   res.status(200).json({ seated: true, tableId: invite.circle_id });
 }

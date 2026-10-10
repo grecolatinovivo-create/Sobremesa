@@ -130,8 +130,9 @@ struct SalottoView: View {
 
     private var vuoto: some View {
         VStack(spacing: Space.l) {
+            // Nessun tavolo: nessuna brace accesa (sarebbe uno stato falso).
             TableGlyph(occupied: 0, maxSeats: store.rules.maxFriends,
-                       warmth: .viva, size: 168, breathing: true)
+                       warmth: .inAttesa, size: 168)
                 .padding(.top, Space.l)
             Text("salotto.vuoto.title")
                 .font(AppFont.title(24, relativeTo: .title2))
@@ -179,7 +180,8 @@ private struct TableRow: View {
 
     private var silenzioPersonale: Int? {
         store.engine.personalSilenceNotice(lastActivity: membership.lastActivity,
-                                           now: .now, isAnimator: tavolo.animatedByMe)
+                                           now: .now, isAnimator: tavolo.animatedByMe,
+                                           memberCount: tavolo.memberCount)
     }
 
     var body: some View {
@@ -232,7 +234,7 @@ private struct TableRow: View {
             Text(verbatim: String.localizedStringWithFormat(
                 String(localized: "sedia.ti.aspetta", bundle: L10n.bundle), giorni))
                 .font(AppFont.caption(14, relativeTo: .footnote))
-                .foregroundStyle(Color.warning)
+                .foregroundStyle(store.engine.silenceIsUrgent(days: giorni) ? Color.warning : Color.textSecondary)
         } else if nuovi > 0 {
             Text(verbatim: String.localizedStringWithFormat(
                 String(localized: "salotto.nuovi.interventi", bundle: L10n.bundle), nuovi))

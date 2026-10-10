@@ -5,7 +5,9 @@
 //  Tu (v3 "Ultima luce"): la persona dietro le parole. In cima l'identità
 //  e la presenza (l'unico posto dove vive il numero 0–100, spiegato);
 //  sotto, un indice sobrio: come funziona Sobremesa, il tuo momento,
-//  la lingua, i crediti, e — in fondo, lontano dal pollice — ricominciare.
+//  la lingua, i crediti; poi sicurezza e privacy (persone bloccate,
+//  informativa, condizioni d'uso, assistenza); e — in fondo, lontano dal
+//  pollice — l'eliminazione dell'account, detta col suo nome.
 //
 
 import SwiftUI
@@ -28,10 +30,11 @@ struct TuView: View {
                         IdentityHeader(me: me)
                     }
                     indice
+                    sicurezza
                     Button(role: .destructive) {
                         confirmReset = true
                     } label: {
-                        Label("tu.reset", systemImage: "arrow.counterclockwise")
+                        Label("tu.reset", systemImage: "trash")
                             .font(AppFont.ui(15).weight(.medium))
                             .foregroundStyle(Color.warning)
                             .frame(maxWidth: .infinity, minHeight: 44)
@@ -91,6 +94,36 @@ struct TuView: View {
             }
         }
         .buttonStyle(RowPressStyle())
+    }
+
+    // MARK: Sicurezza e privacy
+
+    private var sicurezza: some View {
+        VStack(alignment: .leading, spacing: Space.s) {
+            SectionLabel(textKey: "tu.sicurezza.section")
+            VStack(spacing: 0) {
+                NavigationLink {
+                    BloccatiView()
+                } label: {
+                    IndexRow(icon: "hand.raised", titleKey: "tu.bloccati.title",
+                             value: store.blocked.isEmpty ? nil : "\(store.blocked.count)")
+                }
+                Hairline(inset: 40)
+                Link(destination: SobremesaLinks.privacy) {
+                    IndexRow(icon: "lock", titleKey: "tu.privacy.title", external: true)
+                }
+                Hairline(inset: 40)
+                Link(destination: SobremesaLinks.terms) {
+                    IndexRow(icon: "doc.text", titleKey: "tu.termini.title", external: true)
+                }
+                Hairline(inset: 40)
+                Link(destination: SobremesaLinks.support) {
+                    IndexRow(icon: "envelope", titleKey: "tu.assistenza.title",
+                             subtitleKey: "tu.assistenza.sub", external: true)
+                }
+            }
+            .buttonStyle(RowPressStyle())
+        }
     }
 
     private var ritualTime: String {
@@ -196,6 +229,8 @@ private struct IndexRow: View {
     var subtitle: String? = nil
     var subtitleKey: LocalizedStringKey? = nil
     var value: String? = nil
+    /// Apre fuori dall'app (sito, posta): freccia obliqua invece del chevron.
+    var external = false
 
     var body: some View {
         HStack(spacing: Space.l) {
@@ -224,7 +259,7 @@ private struct IndexRow: View {
                     .font(AppFont.caption(14))
                     .foregroundStyle(Color.textMuted)
             }
-            Image(systemName: "chevron.right")
+            Image(systemName: external ? "arrow.up.right" : "chevron.right")
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(Color.textMuted)
                 .accessibilityHidden(true)
@@ -415,6 +450,56 @@ struct LinguaView: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(store.language == lingua ? [.isSelected] : [])
+    }
+}
+
+// MARK: - Persone bloccate
+
+struct BloccatiView: View {
+    @Environment(AppStore.self) private var store
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: Space.l) {
+                Text("tu.bloccati.hint")
+                    .font(AppFont.bodySerif(16, relativeTo: .callout))
+                    .foregroundStyle(Color.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                if store.blocked.isEmpty {
+                    Text("tu.bloccati.vuoto")
+                        .font(AppFont.bodySerif(16, relativeTo: .callout))
+                        .italic()
+                        .foregroundStyle(Color.textMuted)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, Space.xl)
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(store.blocked) { person in
+                            HStack(spacing: Space.m) {
+                                AvatarView(initials: Self.initials(person.name), size: 36)
+                                Text(verbatim: person.name)
+                                    .font(AppFont.ui(16, relativeTo: .body).weight(.medium))
+                                    .foregroundStyle(Color.textPrimary)
+                                Spacer()
+                                Button("blocca.sblocca") { store.unblock(person) }
+                                    .buttonStyle(SecondaryButtonStyle())
+                            }
+                            .padding(.vertical, Space.s)
+                            if person.id != store.blocked.last?.id { Hairline(inset: 36 + Space.m) }
+                        }
+                    }
+                }
+            }
+            .padding(Space.gutter)
+            .animation(.easeInOut(duration: 0.2), value: store.blocked)
+        }
+        .screenBackground()
+        .navigationTitle(Text("tu.bloccati.title"))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private static func initials(_ name: String) -> String {
+        name.split(separator: " ").prefix(2).map { String($0.prefix(1)) }.joined()
     }
 }
 

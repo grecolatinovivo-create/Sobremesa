@@ -183,6 +183,19 @@ extension LocalDataService {
             byServerID[remote.id] = messaggio
         }
 
+        // 10. Sicurezza (v3): ciò che non devo più vedere sparisce anche
+        // dalla memoria locale — interventi nascosti o segnalati da me,
+        // e tutto ciò che ha scritto chi ho bloccato.
+        let hiddenIDs = Set(payload.hidden ?? [])
+        let blockedIDs = Set((payload.blocked ?? []).map(\.id))
+        if !hiddenIDs.isEmpty || !blockedIDs.isEmpty {
+            for messaggio in byServerID.values where !messaggio.isDeleted {
+                let hidden = messaggio.serverID.map { hiddenIDs.contains($0) } ?? false
+                let blocked = messaggio.author?.serverID.map { blockedIDs.contains($0) } ?? false
+                if hidden || blocked { context.delete(messaggio) }
+            }
+        }
+
         try? context.save()
     }
 }

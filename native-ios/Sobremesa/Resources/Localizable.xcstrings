@@ -42,6 +42,47 @@
         }
       }
     },
+    "a11y.commensale.azioni": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen für %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions for %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones para %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions pour %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azioni per %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ações para %@"
+          }
+        }
+      }
+    },
     "a11y.commensali": {
       "extractionState": "manual",
       "localizations": {
@@ -284,6 +325,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nutre recebidos"
+          }
+        }
+      }
+    },
+    "a11y.nutre.stato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hat dich genährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It nourished you"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te ha nutrido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cela t'a nourri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ti ha nutrito"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutriu você"
           }
         }
       }
@@ -653,6 +735,252 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voz viva"
+          }
+        }
+      }
+    },
+    "blocca.azione": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocca"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear"
+          }
+        }
+      }
+    },
+    "blocca.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du siehst ihre Beiträge nicht mehr, und sie kann nicht mehr an deinen Tischen um einen Platz bitten. Entsperren unter Du → Blockierte Personen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You won't see their remarks anymore, and they can't ask to sit at tables you host. You can unblock from You → Blocked people."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No verás más sus intervenciones y no podrá pedir sentarse a las mesas que animas. Puedes desbloquear desde Tú → Personas bloqueadas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu ne verras plus ses interventions et cette personne ne pourra plus demander à s'asseoir aux tables que tu animes. Débloque depuis Toi → Personnes bloquées."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non vedrai più i suoi interventi e non potrà chiedere di sedersi ai tavoli che animi. Puoi sbloccare da Tu → Persone bloccate."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não verá mais as intervenções dessa pessoa, e ela não poderá pedir para se sentar às mesas que você anima. Desbloqueie em Você → Pessoas bloqueadas."
+          }
+        }
+      }
+    },
+    "blocca.persona": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ blockieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear a %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquer %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocca %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear %@"
+          }
+        }
+      }
+    },
+    "blocca.sblocca": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entsperren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unblock"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sblocca"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear"
+          }
+        }
+      }
+    },
+    "blocca.stato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockiert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqué"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloccato"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado"
+          }
+        }
+      }
+    },
+    "blocca.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ blockieren?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block %@?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Bloquear a %@?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquer %@ ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloccare %@?"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear %@?"
           }
         }
       }
@@ -1319,37 +1647,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu entscheiden"
+            "value": "Anfragen an deine Tische"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Awaiting your word"
+            "value": "Requests to your tables"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Por decidir"
+            "value": "Solicitudes a tus mesas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "À décider"
+            "value": "Demandes à tes tables"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Da decidere"
+            "value": "Richieste ai tuoi tavoli"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Por decidir"
+            "value": "Pedidos às suas mesas"
           }
         }
       }
@@ -1442,37 +1770,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeder kann sich setzen, der ihn unter den offenen Tischen findet oder einen Code hat."
+            "value": "Alle können Platz nehmen, wenn sie ihn unter den Tischen zum Entdecken finden oder mit einem Code."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anyone can sit by finding it among the open tables or with a code."
+            "value": "Anyone can sit down by finding it among the tables to discover, or with a code."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cualquiera puede sentarse encontrándola entre las mesas abiertas o con un código."
+            "value": "Cualquiera puede sentarse encontrándola entre las mesas por descubrir o con un código."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "N'importe qui peut s'asseoir en la trouvant parmi les tables ouvertes ou avec un code."
+            "value": "N'importe qui peut s'asseoir en la trouvant parmi les tables à découvrir, ou avec un code."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chiunque può sedersi trovandolo tra i tavoli aperti o con un codice."
+            "value": "Chiunque può sedersi trovandolo tra i tavoli da scoprire o con un codice."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Qualquer pessoa pode se sentar encontrando-a entre as mesas abertas ou com um código."
+            "value": "Qualquer pessoa pode se sentar ao encontrá-la entre as mesas para descobrir ou com um código."
           }
         }
       }
@@ -2006,6 +2334,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hoje"
+          }
+        }
+      }
+    },
+    "intervento.copia": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar"
           }
         }
       }
@@ -2584,6 +2953,47 @@
         }
       }
     },
+    "nutre.ha.nutrito": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hat genährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It nourished"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ha nutrido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A nourri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ha nutrito"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutriu"
+          }
+        }
+      }
+    },
     "onboarding.error": {
       "extractionState": "manual",
       "localizations": {
@@ -2994,6 +3404,47 @@
         }
       }
     },
+    "onboarding.termini": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wenn du fortfährst, akzeptierst du die [Nutzungsbedingungen](https://sobremesa-psi.vercel.app/termini) und die [Datenschutzerklärung](https://sobremesa-psi.vercel.app/privacy). Am Tisch ist kein Platz für Beleidigungen und Belästigung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By continuing you accept the [Terms of use](https://sobremesa-psi.vercel.app/termini) and the [Privacy policy](https://sobremesa-psi.vercel.app/privacy). There's no room at the table for abuse or harassment."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al continuar aceptas las [Condiciones de uso](https://sobremesa-psi.vercel.app/termini) y la [Política de privacidad](https://sobremesa-psi.vercel.app/privacy). En la mesa no hay sitio para ofensas ni acoso."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En continuant, tu acceptes les [Conditions d'utilisation](https://sobremesa-psi.vercel.app/termini) et la [Politique de confidentialité](https://sobremesa-psi.vercel.app/privacy). À table, pas de place pour les insultes ni le harcèlement."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuando accetti le [Condizioni d'uso](https://sobremesa-psi.vercel.app/termini) e l'[Informativa privacy](https://sobremesa-psi.vercel.app/privacy). Ai tavoli non c'è posto per offese e molestie."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ao continuar, você aceita os [Termos de uso](https://sobremesa-psi.vercel.app/termini) e a [Política de privacidade](https://sobremesa-psi.vercel.app/privacy). À mesa não há lugar para ofensas nem assédio."
+          }
+        }
+      }
+    },
     "post.nutre": {
       "extractionState": "manual",
       "localizations": {
@@ -3123,37 +3574,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kein Like: eine stille Geste für „das hat mich genährt“. Es gibt keine Rangliste."
+            "value": "Kein Like: eine stille Geste für „das hat mich genährt“. Kein öffentlicher Zähler, keine Rangliste."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not a like: a quiet gesture to say \"this nourished me\". It makes no ranking."
+            "value": "Not a like: a quiet gesture to say \"this nourished me\". No public counter, no ranking."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No es un like: un gesto discreto para decir «esto me ha nutrido». No hace ranking."
+            "value": "No es un like: un gesto discreto para decir «esto me ha nutrido». Sin contador público, sin ranking."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas un like : un geste discret pour dire « cela m'a nourri ». Aucun classement."
+            "value": "Pas un like : un geste discret pour dire « cela m'a nourri ». Aucun compteur public, aucun classement."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non un like: un gesto discreto per dire «questo mi ha nutrito». Non fa classifica."
+            "value": "Non un like: un gesto discreto per dire «questo mi ha nutrito». Nessun contatore pubblico, nessuna classifica."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não é um like: um gesto discreto para dizer \"isto me nutriu\". Não faz ranking."
+            "value": "Não é um like: um gesto discreto para dizer \"isto me nutriu\". Sem contador público, sem ranking."
           }
         }
       }
@@ -3892,37 +4343,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Salon wartet: Entdecke die offenen Tische oder gib einen Code ein, um einem Gespräch beizutreten."
+            "value": "Der Salon wartet: Entdecke Tische oder gib einen Code ein, um einem Gespräch beizutreten."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The parlor is waiting: explore the open tables or enter a code to join a conversation."
+            "value": "The parlor is waiting: discover tables or enter a code to join a conversation."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El salón te espera: explora las mesas abiertas o introduce un código para unirte a una conversación."
+            "value": "El salón te espera: descubre mesas o introduce un código para unirte a una conversación."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le salon t'attend : explore les tables ouvertes ou saisis un code pour rejoindre une conversation."
+            "value": "Le salon t'attend : découvre les tables ou saisis un code pour rejoindre une conversation."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il Salotto ti aspetta: esplora i tavoli aperti o inserisci un codice per unirti a una conversazione."
+            "value": "Il Salotto ti aspetta: scopri i tavoli o inserisci un codice per unirti a una conversazione."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O salão espera por você: explore as mesas abertas ou digite um código para entrar numa conversa."
+            "value": "O salão espera por você: descubra mesas ou digite um código para entrar numa conversa."
           }
         }
       }
@@ -4159,6 +4610,293 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "segnala.intervento": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beitrag melden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report remark"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denunciar intervención"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaler l'intervention"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segnala intervento"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denunciar intervenção"
+          }
+        }
+      }
+    },
+    "segnala.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du siehst ihn nicht mehr. Meldet ihn noch jemand, verschwindet er für alle, bis wir ihn geprüft haben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You won't see it again. If someone else reports it too, it disappears for everyone pending our review."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No la verás más. Si otra persona también la denuncia, desaparece para todos a la espera de nuestra revisión."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu ne la verras plus. Si une autre personne la signale aussi, elle disparaît pour tous en attendant notre examen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non lo vedrai più. Se lo segnala anche un'altra persona sparisce per tutti, in attesa della nostra revisione."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não a verá mais. Se outra pessoa também denunciar, ela some para todos até a nossa revisão."
+          }
+        }
+      }
+    },
+    "segnala.motivo.altro": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etwas anderes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something else"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro motivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre chose"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outro motivo"
+          }
+        }
+      }
+    },
+    "segnala.motivo.molesto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belästigung oder Drohung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harassment or threat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acoso o amenaza"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harcèlement ou menace"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Molestia o minaccia"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assédio ou ameaça"
+          }
+        }
+      }
+    },
+    "segnala.motivo.offensivo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beleidigend oder hasserfüllt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offensive or hateful"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ofensivo o de odio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offensant ou haineux"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offensivo o d'odio"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ofensivo ou de ódio"
+          }
+        }
+      }
+    },
+    "segnala.motivo.spam": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam oder Betrug"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam or scam"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam o estafa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam ou arnaque"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam o truffa"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam ou golpe"
+          }
+        }
+      }
+    },
+    "segnala.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warum meldest du diesen Beitrag?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Why are you reporting this remark?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Por qué denuncias esta intervención?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourquoi signales-tu cette intervention ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perché segnali questo intervento?"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por que você denuncia esta intervenção?"
           }
         }
       }
@@ -4559,6 +5297,119 @@
           "stringUnit": {
             "state": "translated",
             "value": "Convide para a mesa"
+          }
+        }
+      }
+    },
+    "stanza.nuovi.sotto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 neuer Beitrag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld neue Beiträge"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 new remark"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld new remarks"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 intervención nueva"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld intervenciones nuevas"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nouvelle intervention"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nouvelles interventions"
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nuovo intervento"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nuovi interventi"
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nova intervenção"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld novas intervenções"
+                }
+              }
+            }
           }
         }
       }
@@ -5174,37 +6025,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Offene Tische"
+            "value": "Tische entdecken"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open tables"
+            "value": "Discover tables"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesas abiertas"
+            "value": "Descubre mesas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tables ouvertes"
+            "value": "Découvre les tables"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tavoli aperti"
+            "value": "Scopri i tavoli"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesas abertas"
+            "value": "Descubra mesas"
           }
         }
       }
@@ -5660,6 +6511,47 @@
         }
       }
     },
+    "toast.bloccato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast %@ blockiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You blocked %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Has bloqueado a %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as bloqué %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai bloccato %@."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você bloqueou %@."
+          }
+        }
+      }
+    },
     "toast.brace.viva": {
       "extractionState": "manual",
       "localizations": {
@@ -6101,6 +6993,47 @@
         }
       }
     },
+    "toast.sbloccato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast %@ entsperrt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You unblocked %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Has desbloqueado a %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as débloqué %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai sbloccato %@."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você desbloqueou %@."
+          }
+        }
+      }
+    },
     "toast.seduto": {
       "extractionState": "manual",
       "localizations": {
@@ -6142,6 +7075,47 @@
         }
       }
     },
+    "toast.segnalato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danke. Die Meldung ist angekommen, du siehst diesen Beitrag nicht mehr."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you. Your report arrived and you won't see this remark again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gracias. La denuncia ha llegado y no volverás a ver esta intervención."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci. Le signalement est arrivé et tu ne verras plus cette intervention."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grazie. La segnalazione è arrivata e non vedrai più questo intervento."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obrigado. A denúncia chegou e você não verá mais esta intervenção."
+          }
+        }
+      }
+    },
     "toast.tavolo.fondato": {
       "extractionState": "manual",
       "localizations": {
@@ -6179,6 +7153,211 @@
           "stringUnit": {
             "state": "translated",
             "value": "\"%@\" está posta. Convide alguém para se sentar."
+          }
+        }
+      }
+    },
+    "tu.assistenza.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreib uns: Wir lesen jede Meldung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write to us: we read every report."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escríbenos: leemos cada denuncia."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écris-nous : nous lisons chaque signalement."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivici: leggiamo ogni segnalazione."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escreva para nós: lemos cada denúncia."
+          }
+        }
+      }
+    },
+    "tu.assistenza.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hilfe und Meldungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support and reports"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asistencia y denuncias"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistance et signalements"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistenza e segnalazioni"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suporte e denúncias"
+          }
+        }
+      }
+    },
+    "tu.bloccati.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wen du blockierst, erscheint nicht mehr in deinen Gesprächen und kann nicht an deinen Tischen um einen Platz bitten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "People you block no longer appear in your conversations and can't ask to sit at tables you host."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quien bloqueas ya no aparece en tus conversaciones y no puede pedir sentarse a las mesas que animas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les personnes bloquées n'apparaissent plus dans tes conversations et ne peuvent plus demander à s'asseoir aux tables que tu animes."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chi blocchi non compare più nelle tue conversazioni e non può chiedere di sedersi ai tavoli che animi."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quem você bloqueia não aparece mais nas suas conversas e não pode pedir para se sentar às mesas que você anima."
+          }
+        }
+      }
+    },
+    "tu.bloccati.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockierte Personen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked people"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personas bloqueadas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnes bloquées"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persone bloccate"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pessoas bloqueadas"
+          }
+        }
+      }
+    },
+    "tu.bloccati.vuoto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niemand blockiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No blocked people."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ninguna persona bloqueada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune personne bloquée."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna persona bloccata."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma pessoa bloqueada."
           }
         }
       }
@@ -6593,43 +7772,84 @@
         }
       }
     },
+    "tu.privacy.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datenschutzerklärung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy policy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informativa sulla privacy"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidade"
+          }
+        }
+      }
+    },
     "tu.reset": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Von vorn beginnen"
+            "value": "Konto und Daten löschen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start over from zero"
+            "value": "Delete account and data"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Empezar de cero"
+            "value": "Eliminar cuenta y datos"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repartir de zéro"
+            "value": "Supprimer le compte et les données"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ricomincia da zero"
+            "value": "Elimina account e dati"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recomeçar do zero"
+            "value": "Excluir conta e dados"
           }
         }
       }
@@ -6640,37 +7860,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alles löschen"
+            "value": "Endgültig löschen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete everything"
+            "value": "Delete forever"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Borrar todo"
+            "value": "Eliminar para siempre"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tout supprimer"
+            "value": "Supprimer définitivement"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancella tutto"
+            "value": "Elimina per sempre"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apagar tudo"
+            "value": "Excluir para sempre"
           }
         }
       }
@@ -6681,37 +7901,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Löscht dein Profil und alle Inhalte. Du kehrst zur Anmeldung zurück."
+            "value": "Löscht dein Konto endgültig, vom Telefon und vom Server: Profil, Punktzahl, Beiträge, Nährt, Einladungen und die Tische, die du leitest, samt ihren Gesprächen. Das lässt sich nicht rückgängig machen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deletes your profile and all content. You'll return to sign-in."
+            "value": "Permanently deletes your account from this phone and from the server: profile, score, remarks, Nourish, invitations, and the tables you host along with their conversations. This can't be undone."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Borra el perfil y todo el contenido. Volverás al acceso."
+            "value": "Borra para siempre tu cuenta, del teléfono y del servidor: perfil, puntuación, intervenciones, Nutre, invitaciones y las mesas que animas, con sus conversaciones. No se puede deshacer."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprime le profil et tout le contenu. Tu reviendras à la connexion."
+            "value": "Supprime définitivement ton compte, du téléphone et du serveur : profil, score, interventions, Nourrit, invitations et les tables que tu animes, avec leurs conversations. C'est irréversible."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancella il profilo e tutti i contenuti. Tornerai all'accesso."
+            "value": "Cancella per sempre il tuo account, dal telefono e dal server: profilo, punteggio, interventi, Nutre, inviti e i tavoli che animi, con le loro conversazioni. Non si può annullare."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apaga o perfil e todo o conteúdo. Você voltará ao acesso."
+            "value": "Apaga para sempre a sua conta, do telefone e do servidor: perfil, pontuação, intervenções, Nutre, convites e as mesas que você anima, com as suas conversas. Não pode ser desfeito."
           }
         }
       }
@@ -6722,37 +7942,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Von vorn beginnen?"
+            "value": "Konto und Daten löschen?"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start over from zero?"
+            "value": "Delete your account and data?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿Empezar de cero?"
+            "value": "¿Eliminar la cuenta y los datos?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repartir de zéro ?"
+            "value": "Supprimer le compte et les données ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ricominciare da zero?"
+            "value": "Eliminare account e dati?"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recomeçar do zero?"
+            "value": "Excluir a conta e os dados?"
           }
         }
       }
@@ -7126,6 +8346,47 @@
         }
       }
     },
+    "tu.sicurezza.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sicherheit und Datenschutz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safety and privacy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguridad y privacidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sécurité et confidentialité"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sicurezza e privacy"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segurança e privacidade"
+          }
+        }
+      }
+    },
     "tu.sottotitolo": {
       "extractionState": "manual",
       "localizations": {
@@ -7163,6 +8424,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toque no nome para corrigi-lo"
+          }
+        }
+      }
+    },
+    "tu.termini.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutzungsbedingungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of use"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condiciones de uso"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d'utilisation"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condizioni d'uso"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termos de uso"
           }
         }
       }

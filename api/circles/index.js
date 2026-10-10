@@ -1,5 +1,5 @@
-// POST /api/circles — fonda un circolo (chi crea è l'animatore).
-import { sql, myTableIds } from "../_lib/db.js";
+// POST /api/circles — fonda un tavolo (chi lo fonda è l'animatore e ci siede).
+import { sql, myTableIds, seat } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
 import { RULES } from "../_lib/rules.js";
 
@@ -21,6 +21,11 @@ export default async function handler(req, res) {
     INSERT INTO circles (name, theme, category, is_open, animator)
     VALUES (${cleanName}, ${(theme || "").trim().slice(0, 120)}, ${cat}, ${!!isOpen}, ${me.id})
     RETURNING id`;
-  await sql`INSERT INTO memberships (user_id, circle_id) VALUES (${me.id}, ${rows[0].id})`;
+  const result = await seat(me.id, rows[0].id);
+  if (!result.ok) {
+    // Un tavolo senza il suo animatore non deve esistere.
+    await sql`DELETE FROM circles WHERE id = ${rows[0].id}`;
+    return res.status(result.status).json({ error: result.error });
+  }
   res.status(200).json({ id: rows[0].id });
 }

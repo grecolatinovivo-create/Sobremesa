@@ -216,5 +216,25 @@ final class SobremesaEngineTests: XCTestCase {
         XCTAssertNil(engine.personalSilenceNotice(lastActivity: fresh, now: now, isAnimator: false))
         // L'animatore non viene mai espulso: niente avviso.
         XCTAssertNil(engine.personalSilenceNotice(lastActivity: quiet, now: now, isAnimator: true))
+        // A un tavolo in attesa (sotto le 2 persone) le regole sono sospese: niente avviso.
+        XCTAssertNil(engine.personalSilenceNotice(lastActivity: quiet, now: now, isAnimator: false,
+                                                  memberCount: rules.emberMinimumMembers - 1))
+        XCTAssertNotNil(engine.personalSilenceNotice(lastActivity: quiet, now: now, isAnimator: false,
+                                                     memberCount: rules.emberMinimumMembers))
+        // Un minuto prima delle 96 ore: ancora nessun avviso.
+        let almost = now.addingTimeInterval(-Double(rules.emberWarningAfterDays) * day + 60)
+        XCTAssertNil(engine.personalSilenceNotice(lastActivity: almost, now: now, isAnimator: false))
+    }
+
+    func testSilenceUrgencyAndWarmthPrecedence() {
+        // L'avviso diventa Warning solo a un giorno dalla perdita della sedia.
+        XCTAssertFalse(engine.silenceIsUrgent(days: rules.emberWarningAfterDays))
+        XCTAssertTrue(engine.silenceIsUrgent(days: rules.emberExpulsionAfterDays - 1))
+        // "In attesa" ha la precedenza anche su un intervento appena scritto.
+        let now = Date(timeIntervalSince1970: 1_000_000)
+        XCTAssertEqual(engine.tableWarmth(memberCount: 1, lastMessageAt: now, now: now), .inAttesa)
+        // Esattamente 48 ore: si affievolisce (viva è "meno di 48 ore").
+        let edge = now.addingTimeInterval(-Double(rules.tableWarmthAliveHours) * 3_600)
+        XCTAssertEqual(engine.tableWarmth(memberCount: 3, lastMessageAt: edge, now: now), .siAffievolisce)
     }
 }

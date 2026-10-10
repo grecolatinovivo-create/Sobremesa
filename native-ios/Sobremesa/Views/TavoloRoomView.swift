@@ -30,7 +30,20 @@ struct TavoloRoomView: View {
     @State private var showMembers = false
     @State private var confirmLeave = false
     @State private var headerVisible = true
+    /// Il fondo della conversazione è in vista? (allora i nuovi interventi
+    /// si seguono da soli; altrimenti non si strappa chi sta leggendo).
+    @State private var nearBottom = true
+    /// Interventi arrivati mentre si leggeva più in alto.
+    @State private var unseenBelow = 0
+    /// Richiesta di saltare in fondo (dal bottone sopra il composer).
+    @State private var jumpToBottom = false
+    /// Segnalazione e blocco: chiedono sempre conferma.
+    @State private var reportTarget: Messaggio?
+    @State private var blockTarget: Person?
     @FocusState private var composerFocused: Bool
+
+    /// L'ancora in fondo alla conversazione.
+    private static let fondo = "sobremesa.fondo"
 
     /// Il tavolo esiste ancora? (l'animatore può averlo chiuso durante un sync)
     private var isAlive: Bool {
@@ -115,12 +128,25 @@ struct TavoloRoomView: View {
                                 DaySeparator(label: label)
                             }
                             ConversationEntry(messaggio: messaggio,
-                                              continued: isContinuation(messaggio, of: previous))
+                                              continued: isContinuation(messaggio, of: previous),
+                                              onReport: { reportTarget = messaggio },
+                                              onBlock: { blockTarget = messaggio.author })
                                 .id(messaggio.persistentModelID)
                                 .transition(reduceMotion ? .opacity
                                             : .opacity.combined(with: .offset(y: 8)))
                         }
                     }
+
+                    // Il fondo: quando è in vista, si seguono i nuovi interventi.
+                    Color.clear
+                        .frame(height: 1)
+                        .id(Self.fondo)
+                        .onAppear {
+                            nearBottom = true
+                            unseenBelow = 0
+                        }
+                        .onDisappear { nearBottom = false }
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, Space.gutter)
                 .padding(.top, Space.s)
@@ -130,19 +156,39 @@ struct TavoloRoomView: View {
             .screenBackground()
             .scrollDismissesKeyboard(.interactively)
             .defaultScrollAnchor(.bottom)
-            .onChange(of: messaggi.count) {
-                store.markRead(tavolo)
-                if let last = messaggi.last {
+            .onChange(of: messaggi.count) { oldCount, newCount in
+                guard newCount > oldCount else { return }
+                // Chi scrive segue sempre il proprio intervento; chi legge più
+                // in alto non viene strappato: gli si offre "Nuovi interventi ↓".
+                let mine = messaggi.last?.author?.isMe == true
+                if nearBottom || mine {
+                    store.markRead(tavolo)
+                    unseenBelow = 0
                     withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) {
-                        proxy.scrollTo(last.persistentModelID, anchor: .bottom)
+                        proxy.scrollTo(Self.fondo, anchor: .bottom)
                     }
+                } else {
+                    unseenBelow += newCount - oldCount
+                }
+            }
+            // "Nuovi interventi ↓" vive sopra il composer: qui si esegue il salto.
+            .onChange(of: jumpToBottom) {
+                withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) {
+                    proxy.scrollTo(Self.fondo, anchor: .bottom)
                 }
             }
         }
         .safeAreaInset(edge: .bottom) {
-            if membership != nil {
-                composer
+            VStack(spacing: 0) {
+                if unseenBelow > 0 {
+                    nuoviSotto
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                }
+                if membership != nil {
+                    composer
+                }
             }
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: unseenBelow > 0)
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -177,6 +223,58 @@ struct TavoloRoomView: View {
         } message: {
             Text(tavolo.animatedByMe ? "conferma.chiudi.message" : "conferma.alzati.message")
         }
+        // Segnalare: perché? (tre parole, nessun modulo da compilare)
+        .confirmationDialog(Text("segnala.title"),
+                            isPresented: Binding(get: { reportTarget != nil },
+                                                 set: { if !$0 { reportTarget = nil } }),
+                            titleVisibility: .visible,
+                            presenting: reportTarget) { messaggio in
+            ForEach(ReportReason.allCases) { reason in
+                Button(LocalizedStringKey(reason.labelKey), role: .destructive) {
+                    store.report(messaggio, reason: reason)
+                    reportTarget = nil
+                }
+            }
+            Button("confirm.cancel", role: .cancel) { reportTarget = nil }
+        } message: { _ in
+            Text("segnala.message")
+        }
+        // Bloccare: sempre con conferma, e spiegando cosa succede.
+        .confirmationDialog(Text(verbatim: String(format: String(localized: "blocca.title", bundle: L10n.bundle),
+                                                  blockTarget?.name ?? "")),
+                            isPresented: Binding(get: { blockTarget != nil },
+                                                 set: { if !$0 { blockTarget = nil } }),
+                            titleVisibility: .visible,
+                            presenting: blockTarget) { person in
+            Button("blocca.azione", role: .destructive) {
+                store.block(person)
+                blockTarget = nil
+            }
+            Button("confirm.cancel", role: .cancel) { blockTarget = nil }
+        } message: { _ in
+            Text("blocca.message")
+        }
+    }
+
+    /// Arrivano interventi mentre leggi più in alto: un invito, non uno strattone.
+    private var nuoviSotto: some View {
+        Button {
+            store.markRead(tavolo)
+            unseenBelow = 0
+            jumpToBottom.toggle()
+        } label: {
+            Label(String.localizedStringWithFormat(
+                String(localized: "stanza.nuovi.sotto", bundle: L10n.bundle), unseenBelow),
+                  systemImage: "arrow.down")
+                .font(AppFont.ui(14, relativeTo: .subheadline).weight(.semibold))
+                .foregroundStyle(Color.brassInk)
+                .padding(.horizontal, Space.l)
+                .frame(minHeight: 44)
+                .background(Capsule().fill(Color.brass))
+                .shadow(color: .black.opacity(0.3), radius: 8, y: 2)
+        }
+        .buttonStyle(.plain)
+        .padding(.bottom, Space.s)
     }
 
     // MARK: In cima: il tavolo
@@ -234,12 +332,15 @@ struct TavoloRoomView: View {
     private var personalLine: some View {
         if let membership {
             if let giorni = store.engine.personalSilenceNotice(lastActivity: membership.lastActivity,
-                                                                now: .now, isAnimator: tavolo.animatedByMe) {
+                                                                now: .now, isAnimator: tavolo.animatedByMe,
+                                                                memberCount: tavolo.memberCount) {
                 VStack(spacing: 2) {
                     Text(verbatim: String.localizedStringWithFormat(
                         String(localized: "sedia.ti.aspetta", bundle: L10n.bundle), giorni))
                         .font(AppFont.caption(13))
-                        .foregroundStyle(Color.warning)
+                        // Un invito al 4° giorno; Warning solo a un passo dalla sedia persa.
+                        .foregroundStyle(store.engine.silenceIsUrgent(days: giorni)
+                                         ? Color.warning : Color.textSecondary)
                     Button("azione.riprendi") { store.retakeWord(at: tavolo) }
                         .buttonStyle(TextActionStyle())
                 }
@@ -427,9 +528,22 @@ private struct ConversationEntry: View {
     let messaggio: Messaggio
     /// Prosegue l'intervento precedente dello stesso autore.
     var continued = false
+    /// Sicurezza: segnala l'intervento / blocca chi l'ha scritto (con conferma).
+    var onReport: () -> Void = {}
+    var onBlock: () -> Void = {}
 
     private var mio: Bool { messaggio.author?.isMe == true }
     private var totaleNutre: Int { messaggio.nutreCount + (messaggio.nutritoDaMe ? 1 : 0) }
+    private var autore: String {
+        mio ? String(localized: "salotto.tu", bundle: L10n.bundle) : (messaggio.author?.name ?? "—")
+    }
+
+    /// VoiceOver legge sempre CHI parla, anche negli interventi raggruppati
+    /// dove il nome a schermo non si ripete.
+    private var accessibilityText: String {
+        let ora = messaggio.createdAt.formatted(.dateTime.hour().minute())
+        return "\(autore), \(ora). \(messaggio.text)"
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: Space.m) {
@@ -445,8 +559,7 @@ private struct ConversationEntry: View {
             VStack(alignment: .leading, spacing: 4) {
                 if !continued {
                     HStack(alignment: .firstTextBaseline, spacing: Space.s) {
-                        Text(verbatim: mio ? String(localized: "salotto.tu", bundle: L10n.bundle)
-                                           : (messaggio.author?.name ?? "—"))
+                        Text(verbatim: autore)
                             .font(AppFont.ui(14, relativeTo: .subheadline).weight(.semibold))
                             .foregroundStyle(mio ? Color.brass : Color.textPrimary)
                         Text(messaggio.createdAt, format: .dateTime.hour().minute())
@@ -461,7 +574,6 @@ private struct ConversationEntry: View {
                     .foregroundStyle(Color.textPrimary)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
-                    .textSelection(.enabled)
                 if continued {
                     HStack { Spacer(minLength: 0); nutre }
                 }
@@ -475,27 +587,63 @@ private struct ConversationEntry: View {
                     .fill(Color.elevated)
             }
         }
+        .contentShape(Rectangle())
+        // Pressione lunga: copia, nutri, e — per gli interventi altrui —
+        // segnala o blocca (Apple Guideline 1.2).
+        .contextMenu {
+            Button {
+                UIPasteboard.general.string = messaggio.text
+            } label: {
+                Label("intervento.copia", systemImage: "doc.on.doc")
+            }
+            if !mio {
+                Button {
+                    store.toggleNutre(on: messaggio)
+                } label: {
+                    Label(messaggio.nutritoDaMe ? "a11y.nutre.on" : "post.nutre",
+                          systemImage: messaggio.nutritoDaMe ? "leaf.fill" : "leaf")
+                }
+                Divider()
+                Button(role: .destructive, action: onReport) {
+                    Label("segnala.intervento", systemImage: "flag")
+                }
+                Button(role: .destructive, action: onBlock) {
+                    Label(String(format: String(localized: "blocca.persona", bundle: L10n.bundle), autore),
+                          systemImage: "hand.raised")
+                }
+            }
+        }
         .padding(.top, continued ? 0 : Space.s)
-        .accessibilityElement(children: .combine)
-        .accessibilityAction(named: Text(messaggio.nutritoDaMe ? "a11y.nutre.on" : "a11y.nutre.off")) {
-            if !mio { store.toggleNutre(on: messaggio) }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(verbatim: accessibilityText))
+        .accessibilityValue(Text(mio ? (totaleNutre > 0 ? "nutre.ha.nutrito" : "")
+                                 : (messaggio.nutritoDaMe ? "a11y.nutre.stato" : "")))
+        .accessibilityActions {
+            if !mio {
+                Button(messaggio.nutritoDaMe ? "a11y.nutre.on" : "a11y.nutre.off") {
+                    store.toggleNutre(on: messaggio)
+                }
+                Button("segnala.intervento", action: onReport)
+                Button(String(format: String(localized: "blocca.persona", bundle: L10n.bundle), autore),
+                       action: onBlock)
+            }
         }
     }
 
-    /// "Nutre": gesto secondario. Sui miei solo il conteggio (il proprio piatto non si nutre).
+    /// "Nutre": gesto secondario, e MAI un numero pubblico (niente vanity
+    /// metrics). Sugli altrui: la foglia vuota o piena del mio gesto.
+    /// Sui miei: solo il segno che le mie parole hanno nutrito qualcuno.
     @ViewBuilder
     private var nutre: some View {
         if mio {
             if totaleNutre > 0 {
                 HStack(spacing: 4) {
                     Image(systemName: "leaf.fill").imageScale(.small)
-                    Text(verbatim: "\(totaleNutre)")
-                        .font(AppFont.caption(12, relativeTo: .caption2).monospacedDigit())
+                    Text("nutre.ha.nutrito")
+                        .font(AppFont.caption(12, relativeTo: .caption2))
                 }
                 .foregroundStyle(Color.emberAlive)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text("a11y.nutre.ricevuti"))
-                .accessibilityValue(Text(verbatim: "\(totaleNutre)"))
+                .accessibilityHidden(true)
             }
         } else {
             Button {
@@ -505,9 +653,7 @@ private struct ConversationEntry: View {
                     Image(systemName: messaggio.nutritoDaMe ? "leaf.fill" : "leaf")
                         .imageScale(.small)
                         .symbolEffect(.bounce, value: messaggio.nutritoDaMe)
-                    Text(verbatim: totaleNutre > 0
-                         ? "\(String(localized: "post.nutre", bundle: L10n.bundle)) \(totaleNutre)"
-                         : String(localized: "post.nutre", bundle: L10n.bundle))
+                    Text("post.nutre")
                         .font(AppFont.caption(12, relativeTo: .caption2).weight(.medium))
                 }
                 .foregroundStyle(messaggio.nutritoDaMe ? Color.emberAlive : Color.textMuted)
@@ -516,8 +662,7 @@ private struct ConversationEntry: View {
             }
             .buttonStyle(.plain)
             .sensoryFeedback(.selection, trigger: messaggio.nutritoDaMe)
-            .accessibilityLabel(Text(messaggio.nutritoDaMe ? "a11y.nutre.on" : "a11y.nutre.off"))
-            .accessibilityValue(Text(verbatim: "\(totaleNutre)"))
+            .accessibilityHidden(true)
         }
     }
 }
@@ -529,6 +674,7 @@ private struct CommensaliSheet: View {
     let tavolo: Tavolo
     let sedie: [Membership]
     let warmth: TableWarmth
+    @State private var blockTarget: Person?
 
     private func isAnimator(_ person: Person) -> Bool {
         if person.isMe { return tavolo.animatedByMe }
@@ -556,6 +702,7 @@ private struct CommensaliSheet: View {
                         ForEach(Array(sedie.enumerated()), id: \.element.persistentModelID) { index, sedia in
                             if let person = sedia.person {
                                 HStack(spacing: Space.m) {
+                                  HStack(spacing: Space.m) {
                                     Text(verbatim: "\(index + 1)")
                                         .font(AppFont.caption(12).monospacedDigit())
                                         .foregroundStyle(Color.textMuted)
@@ -565,7 +712,11 @@ private struct CommensaliSheet: View {
                                         Text(verbatim: person.name)
                                             .font(AppFont.ui(15).weight(.medium))
                                             .foregroundStyle(Color.textPrimary)
-                                        if person.isMe || isAnimator(person) {
+                                        if store.isBlocked(person) {
+                                            Text("blocca.stato")
+                                                .font(AppFont.caption(12, relativeTo: .caption2))
+                                                .foregroundStyle(Color.textMuted)
+                                        } else if person.isMe || isAnimator(person) {
                                             Text(person.isMe ? "stanza.tuo.posto" : "stanza.animatore")
                                                 .font(AppFont.caption(12, relativeTo: .caption2))
                                                 .foregroundStyle(person.isMe ? Color.brass : Color.textMuted)
@@ -573,6 +724,11 @@ private struct CommensaliSheet: View {
                                     }
                                     Spacer()
                                     BandLabel(band: store.engine.band(for: person.score))
+                                  }
+                                  .accessibilityElement(children: .combine)
+                                    if !person.isMe {
+                                        personMenu(person)
+                                    }
                                 }
                                 .padding(.vertical, Space.m)
                                 .padding(.horizontal, person.isMe ? Space.s : 0)
@@ -582,7 +738,6 @@ private struct CommensaliSheet: View {
                                             .strokeBorder(Color.brass.opacity(0.6), lineWidth: 1)
                                     }
                                 }
-                                .accessibilityElement(children: .combine)
                                 if index < sedie.count - 1 { Hairline(inset: 20 + 36 + Space.m * 2) }
                             }
                         }
@@ -594,9 +749,51 @@ private struct CommensaliSheet: View {
             .screenBackground()
             .navigationTitle(Text("stanza.tavolo.section"))
             .navigationBarTitleDisplayMode(.inline)
+            .confirmationDialog(Text(verbatim: String(format: String(localized: "blocca.title", bundle: L10n.bundle),
+                                                      blockTarget?.name ?? "")),
+                                isPresented: Binding(get: { blockTarget != nil },
+                                                     set: { if !$0 { blockTarget = nil } }),
+                                titleVisibility: .visible,
+                                presenting: blockTarget) { person in
+                Button("blocca.azione", role: .destructive) {
+                    store.block(person)
+                    blockTarget = nil
+                }
+                Button("confirm.cancel", role: .cancel) { blockTarget = nil }
+            } message: { _ in
+                Text("blocca.message")
+            }
         }
         .presentationDetents([.medium, .large])
         .presentationBackground(Color.background)
+    }
+
+    /// Le azioni su un commensale: bloccare (con conferma) o sbloccare.
+    private func personMenu(_ person: Person) -> some View {
+        Menu {
+            if let blocked = store.blocked.first(where: { $0.id == person.serverID }) {
+                Button {
+                    store.unblock(blocked)
+                } label: {
+                    Label("blocca.sblocca", systemImage: "hand.raised.slash")
+                }
+            } else {
+                Button(role: .destructive) {
+                    blockTarget = person
+                } label: {
+                    Label(String(format: String(localized: "blocca.persona", bundle: L10n.bundle), person.name),
+                          systemImage: "hand.raised")
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Color.textMuted)
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .accessibilityLabel(Text(verbatim: String(format: String(localized: "a11y.commensale.azioni", bundle: L10n.bundle),
+                                                  person.name)))
     }
 }
 

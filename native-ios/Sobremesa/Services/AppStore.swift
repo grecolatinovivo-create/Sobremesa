@@ -135,6 +135,7 @@ final class AppStore {
             let nutrePrima = data.myReceivedNutre()
             let payload = try await api.sync(catalogQuery: catalogQuery)
             data.applySync(payload)
+            if let fromServer = payload.blocked { blocked = fromServer }
             refreshEmberReminders()
             // Il gesto più caldo dell'app non deve restare invisibile:
             // se le mie parole hanno nutrito qualcuno, lo dico (aggregato).
@@ -284,6 +285,45 @@ final class AppStore {
         }
     }
 
+    // MARK: Sicurezza dei tavoli (Apple Guideline 1.2)
+
+    /// Le persone che ho bloccato (fotografia del server a ogni sync).
+    var blocked: [RemoteBlocked] = []
+
+    func isBlocked(_ person: Person) -> Bool {
+        guard let id = person.serverID else { return false }
+        return blocked.contains { $0.id == id }
+    }
+
+    /// Segnala un intervento: sparisce subito dalla mia stanza; il server
+    /// lo nasconde a tutti se lo segnalano più persone, e lo mette in coda
+    /// per la revisione.
+    func report(_ messaggio: Messaggio, reason: ReportReason) {
+        guard let id = messaggio.serverID, messaggio.author?.isMe != true else { return }
+        data.removeMessage(messaggio)
+        show(message: String(localized: "toast.segnalato", bundle: L10n.bundle))
+        remote { try await self.api.report(messageID: id, reason: reason) }
+    }
+
+    /// Blocca una persona: i suoi interventi spariscono subito, e non potrà
+    /// più chiedere di sedersi ai tavoli che animo.
+    func block(_ person: Person) {
+        guard let id = person.serverID, !person.isMe else { return }
+        if !blocked.contains(where: { $0.id == id }) {
+            blocked.append(RemoteBlocked(id: id, name: person.name))
+        }
+        data.removeMessages(fromAuthorServerID: id)
+        show(message: String(format: String(localized: "toast.bloccato", bundle: L10n.bundle), person.name))
+        remote { try await self.api.setBlocked(true, userID: id) }
+    }
+
+    /// Sblocca: i suoi interventi tornano col prossimo sync.
+    func unblock(_ person: RemoteBlocked) {
+        blocked.removeAll { $0.id == person.id }
+        show(message: String(format: String(localized: "toast.sbloccato", bundle: L10n.bundle), person.name))
+        remote { try await self.api.setBlocked(false, userID: person.id) }
+    }
+
     /// La stanza è stata letta fino ad adesso (alimenta i "nuovi interventi").
     func markRead(_ tavolo: Tavolo) {
         data.markRead(tavolo)
@@ -365,6 +405,7 @@ final class AppStore {
             Task.detached { try? await client.deleteAccount(token: token) }
         }
         SessionStore.clear()
+        blocked = []
         data.resetAllData()
         notifications.reschedule(memberships: [])
         toastTask?.cancel()

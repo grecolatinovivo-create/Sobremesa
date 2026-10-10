@@ -49,6 +49,10 @@ protocol DataService {
     func sendMessage(_ text: String, at tavolo: Tavolo) -> [AppNotice]
     func toggleNutre(on messaggio: Messaggio)
 
+    // Sicurezza (v3): effetto locale immediato di segnalazioni e blocchi.
+    func removeMessage(_ messaggio: Messaggio)
+    func removeMessages(fromAuthorServerID authorID: String)
+
     /// Rivaluta la brace di tutti i tavoli abitati (avvio, foreground, debug).
     func evaluateEmbers(now: Date) -> [AppNotice]
     #if DEBUG
@@ -194,6 +198,19 @@ final class LocalDataService: DataService {
         guard messaggio.author?.isMe != true else { return }
         // Toggle senza doppio conteggio: il mio Nutre è un flag, non un incremento cieco.
         messaggio.nutritoDaMe.toggle()
+        save()
+    }
+
+    func removeMessage(_ messaggio: Messaggio) {
+        context.delete(messaggio)
+        save()
+    }
+
+    func removeMessages(fromAuthorServerID authorID: String) {
+        let all = (try? context.fetch(FetchDescriptor<Messaggio>())) ?? []
+        for messaggio in all where messaggio.author?.serverID == authorID {
+            context.delete(messaggio)
+        }
         save()
     }
 

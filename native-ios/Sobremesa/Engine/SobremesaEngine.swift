@@ -173,9 +173,11 @@ struct SobremesaEngine: Sendable {
         }
     }
 
-    /// Fascia di un punteggio.
-    /// Calore collettivo del tavolo (v3): in attesa sotto il minimo di
-    /// persone; vivo se l'ultimo intervento di chiunque è recente.
+    /// Calore collettivo del tavolo (v3) — il contratto temporale:
+    /// • In attesa: meno di 2 persone sedute. Ha SEMPRE la precedenza
+    ///   (anche se l'unica persona ha appena scritto).
+    /// • Viva: almeno 2 persone e ultimo intervento di chiunque < 48 ore.
+    /// • Si affievolisce: almeno 2 persone e ultimo intervento ≥ 48 ore (o nessuno).
     func tableWarmth(memberCount: Int, lastMessageAt: Date?, now: Date) -> TableWarmth {
         guard memberCount >= rules.emberMinimumMembers else { return .inAttesa }
         guard let lastMessageAt else { return .siAffievolisce }
@@ -184,13 +186,25 @@ struct SobremesaEngine: Sendable {
     }
 
     /// Avviso PERSONALE (con tatto): da quanti giorni taccio, se ho
-    /// raggiunto la soglia d'avviso; altrimenti nil. Mai per l'animatore.
-    func personalSilenceNotice(lastActivity: Date, now: Date, isAnimator: Bool) -> Int? {
+    /// raggiunto la soglia d'avviso (96 ore); altrimenti nil.
+    /// Mai per l'animatore, e mai a un tavolo in attesa (sotto le 2
+    /// persone il server sospende penalità ed espulsione: niente allarmi).
+    func personalSilenceNotice(lastActivity: Date, now: Date, isAnimator: Bool,
+                               memberCount: Int? = nil) -> Int? {
         guard !isAnimator else { return nil }
+        if let memberCount, memberCount < rules.emberMinimumMembers { return nil }
         let days = daysOfSilence(since: lastActivity, now: now)
         return days >= rules.emberWarningAfterDays ? days : nil
     }
 
+    /// Il silenzio diventa serio solo a un giorno dalla perdita della sedia
+    /// (dal 6° giorno): solo allora l'avviso usa il colore Warning.
+    /// Prima è un invito, in TextSecondary.
+    func silenceIsUrgent(days: Int) -> Bool {
+        days >= rules.emberExpulsionAfterDays - 1
+    }
+
+    /// Fascia di un punteggio.
     func band(for score: Int) -> ScoreBand {
         if score >= rules.bandVoceVivaThreshold { return .voceViva }
         if score >= rules.bandPresenzaDiscretaThreshold { return .presenzaDiscreta }

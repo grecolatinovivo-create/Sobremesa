@@ -1,10 +1,60 @@
-// Migrazione dello schema (idempotente). Protetta da CRON_SECRET:
-// si lancia una volta dopo il deploy, e a ogni evoluzione dello schema.
-import { sql } from "../_lib/db.js";
+// Amministrazione, protetta da CRON_SECRET (header Authorization: Bearer …).
+//
+//   GET  /api/admin/migrate                 → migrazione dello schema (idempotente)
+//   GET  /api/admin/migrate?op=reports      → segnalazioni da rivedere
+//   POST /api/admin/migrate?op=moderate     { postId, decision: "remove" | "restore" }
+//                                           { userId, decision: "ban" }
+//
+// La moderazione vive qui (e non in un file nuovo) per restare entro il
+// limite di 12 funzioni serverless del piano Hobby di Vercel.
+import { sql, ensureSchema } from "../_lib/db.js";
 import { requireCronSecret } from "../_lib/auth.js";
+
+async function reports(res) {
+  await ensureSchema();
+  const { rows } = await sql`
+    SELECT p.id AS post_id, p.text, p.hidden, p.created_at AS posted_at,
+           a.id AS author_id, a.name AS author_name, c.name AS table_name,
+           COUNT(r.*)::int AS reports,
+           ARRAY_AGG(DISTINCT r.reason) AS reasons,
+           MAX(r.created_at) AS last_report_at
+    FROM reports r
+    JOIN posts p ON p.id = r.post_id
+    JOIN users a ON a.id = p.author
+    LEFT JOIN circles c ON c.id = p.circle_id
+    GROUP BY p.id, a.id, c.name
+    ORDER BY MAX(r.created_at) DESC
+    LIMIT 200`;
+  return res.status(200).json({ reports: rows });
+}
+
+async function moderate(req, res) {
+  await ensureSchema();
+  const { postId, userId, decision } = req.body || {};
+  if (decision === "remove" && postId) {
+    await sql`DELETE FROM posts WHERE id = ${postId}`;
+    return res.status(200).json({ ok: true, removed: postId });
+  }
+  if (decision === "restore" && postId) {
+    await sql`DELETE FROM reports WHERE post_id = ${postId}`;
+    await sql`UPDATE posts SET hidden = false WHERE id = ${postId}`;
+    return res.status(200).json({ ok: true, restored: postId });
+  }
+  if (decision === "ban" && userId) {
+    // Espulsione da Sobremesa: l'account e tutto ciò che ne dipende.
+    await sql`DELETE FROM users WHERE id = ${userId}`;
+    return res.status(200).json({ ok: true, banned: userId });
+  }
+  return res.status(400).json({ error: "decisione non valida" });
+}
 
 export default async function handler(req, res) {
   if (!requireCronSecret(req, res)) return;
+  if (req.query.op === "reports") return reports(res);
+  if (req.query.op === "moderate") {
+    if (req.method !== "POST") return res.status(405).json({ error: "POST" });
+    return moderate(req, res);
+  }
 
   await sql`CREATE EXTENSION IF NOT EXISTS pgcrypto`;
 
@@ -78,6 +128,8 @@ export default async function handler(req, res) {
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_circle ON posts (circle_id, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_posts_author ON posts (author, created_at DESC)`;
   await sql`CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships (user_id)`;
+  // v3: moderazione, blocchi e vincoli delle sedie nel database.
+  await ensureSchema();
 
   res.status(200).json({ ok: true, migrated: true });
 }

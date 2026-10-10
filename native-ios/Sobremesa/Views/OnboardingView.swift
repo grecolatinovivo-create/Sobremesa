@@ -107,8 +107,17 @@ struct OnboardingView: View {
                 .multilineTextAlignment(.center)
 
             Text("onboarding.privacy")
-                .font(AppFont.caption(11, relativeTo: .caption2))
-                .foregroundStyle(Color.textMuted.opacity(0.85))
+                .font(AppFont.caption(12, relativeTo: .caption2))
+                .foregroundStyle(Color.textMuted)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
+            // Apple 1.2: si entra accettando condizioni con tolleranza zero
+            // verso i contenuti offensivi. I link (markdown) aprono il sito.
+            Text("onboarding.termini")
+                .font(AppFont.caption(12, relativeTo: .caption2))
+                .foregroundStyle(Color.textMuted)
+                .tint(.brass)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
