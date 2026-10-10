@@ -12,11 +12,12 @@ App iOS **nativa SwiftUI** (iOS 17+). Niente wrapper WebView, niente dipendenze 
 
 ## Regole di codice
 
-- Tutti i numeri di business (12 sedie, 5 circoli, soglie brace 2/4/7, pesi punteggio, fasce) vivono SOLO in `Engine/ProductRules.swift`.
+- Tutti i numeri di business (12 sedie, 5 tavoli, soglie brace 2/4/7, calore 48 h, pesi punteggio, fasce) vivono SOLO in `Engine/ProductRules.swift`.
 - La logica di prodotto sta in `SobremesaEngine` (puro, Foundation-only, testabile). Le view non mutano mai i modelli direttamente: passano da `AppStore` → `DataService`.
 - Zero stringhe hardcoded nelle view: ogni testo è una chiave di `Resources/Localizable.xcstrings` (6 lingue: it sviluppo, en, es, fr, de, pt). I contenuti demo memorizzano chiavi (`isSeedContent`), risolte a runtime.
 - Zero colori literal: solo i Color Set degli Assets, via `Components/Theme.swift`.
-- Il modello dei circoli si chiama `Circolo` (mai `Circle`: collide con SwiftUI).
+- Il modello del tavolo si chiama `Tavolo` (in SQL la tabella resta `circles`); mai `Circle` come nome di tipo (collide con SwiftUI).
+- Colori solo dai 15 colorset "Ultima luce" (v. docs/UX_SPEC.md, Addendum v3).
 - Ogni nuova chiave di localizzazione va aggiunta in TUTTE e 6 le lingue (lo script di QA controlla la parità).
 
 ## Documentazione

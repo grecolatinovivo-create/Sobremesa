@@ -13,7 +13,7 @@
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
-		<string>Ink</string>
+		<string>Background</string>
 	</dict>
 	<!-- Niente crittografia proprietaria: evita la domanda a ogni upload su App Store Connect. -->
 	<key>ITSAppUsesNonExemptEncryption</key>

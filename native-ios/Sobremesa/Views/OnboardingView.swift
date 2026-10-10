@@ -2,8 +2,9 @@
 //  OnboardingView.swift
 //  Sobremesa
 //
-//  Il primo accesso: Sign in with Apple, il nome vero, la tavola vuota.
-//  Nessun dato finto: da qui in poi tutto quello che c'è l'hai messo tu.
+//  La soglia (v3 "Ultima luce"): il wordmark, la promessa in una riga,
+//  il tavolo vuoto con la brace che respira, l'accesso con Apple.
+//  Chi la vede deve capire in pochi secondi cos'è un tavolo.
 //
 
 import SwiftUI
@@ -19,32 +20,49 @@ struct OnboardingView: View {
     @State private var pendingIdentityToken: String?
     @State private var draftName = ""
     @State private var showNameError = false
+    @State private var appeared = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        VStack(spacing: 18) {
-            Spacer()
+        VStack(spacing: 0) {
+            Spacer(minLength: Space.xl)
 
-            Text("onboarding.tagline")
-                .font(AppFont.bodySerif(16, relativeTo: .subheadline))
-                .italic()
-                .foregroundStyle(Color.brassSoft)
-                .multilineTextAlignment(.center)
+            VStack(spacing: Space.s) {
+                Text(verbatim: "Sobremesa")
+                    .font(AppFont.display(44, relativeTo: .largeTitle))
+                    .foregroundStyle(Color.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+                Text("onboarding.tagline")
+                    .font(AppFont.bodySerif(18, relativeTo: .title3))
+                    .italic()
+                    .foregroundStyle(Color.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
 
-            Text(verbatim: "Sobremesa")
-                .font(AppFont.display(44, relativeTo: .largeTitle))
-                .foregroundStyle(Color.paper)
-                .accessibilityAddTraits(.isHeader)
+            Spacer(minLength: Space.xl)
 
-            // La tavola, ancora tutta da apparecchiare.
-            TableRingView(friends: [], maxChairs: store.rules.maxFriends, height: 230)
+            // Il tavolo apparecchiato (mockup di Astra): undici sedie e una
+            // libera in alto — c'è sempre una sedia per te — e la candela accesa.
+            TableGlyph(occupied: store.rules.maxFriends - 1,
+                       maxSeats: store.rules.maxFriends,
+                       warmth: .viva,
+                       size: 230,
+                       breathing: true,
+                       startIndex: 1)
+                .opacity(appeared ? 1 : 0)
+                .scaleEffect(appeared || reduceMotion ? 1 : 0.96)
 
+            Spacer(minLength: Space.xl)
+
+            // Una frase sola: cosa fa l'app.
             Text("onboarding.intro")
-                .font(AppFont.ui())
-                .foregroundStyle(Color.paperDim)
+                .font(AppFont.bodySerif(20, relativeTo: .title3))
+                .foregroundStyle(Color.textPrimary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, Space.s)
 
-            Spacer()
+            Spacer(minLength: Space.xl)
 
             if awaitingName {
                 nameStep
@@ -52,61 +70,84 @@ struct OnboardingView: View {
                 signInStep
             }
         }
-        .padding(24)
+        .padding(.horizontal, Space.gutter)
+        .padding(.bottom, Space.l)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.ink.ignoresSafeArea())
+        .screenBackground()
+        .onAppear {
+            withAnimation(reduceMotion ? .easeIn(duration: 0.2) : .easeOut(duration: 0.8)) {
+                appeared = true
+            }
+        }
     }
 
     // MARK: Passo 1 — Sign in with Apple
 
     @ViewBuilder
     private var signInStep: some View {
-        if showError || store.authError {
-            // Errore inline, mai alert — e mai per un annullamento volontario.
-            Text("onboarding.error")
-                .font(AppFont.caption())
-                .foregroundStyle(Color.errorSoft)
+        VStack(spacing: Space.m) {
+            if showError || store.authError {
+                // Errore inline, mai alert — e mai per un annullamento volontario.
+                Text("onboarding.error")
+                    .font(AppFont.caption())
+                    .foregroundStyle(Color.warning)
+                    .multilineTextAlignment(.center)
+            }
+
+            SignInWithAppleButton(.continue) { request in
+                // Solo il nome: niente email, niente tracciamento.
+                request.requestedScopes = [.fullName]
+            } onCompletion: { result in
+                handle(result)
+            }
+            .signInWithAppleButtonStyle(.white)
+            .frame(height: 52)
+            .clipShape(Capsule())
+
+            Text("onboarding.promesse")
+                .font(AppFont.caption(12, relativeTo: .caption2))
+                .foregroundStyle(Color.textMuted)
+                .multilineTextAlignment(.center)
+
+            Hairline()
+                .frame(width: 96)
+                .padding(.vertical, Space.xs)
+
+            // Apple 1.2: si entra accettando condizioni con tolleranza zero
+            // verso i contenuti offensivi. I link (markdown) aprono il sito.
+            Text("onboarding.termini")
+                .font(AppFont.caption(12, relativeTo: .caption2))
+                .foregroundStyle(Color.textMuted)
+                .tint(.brass)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-
-        SignInWithAppleButton(.signIn) { request in
-            // Solo il nome: niente email, niente tracciamento.
-            request.requestedScopes = [.fullName]
-        } onCompletion: { result in
-            handle(result)
-        }
-        .signInWithAppleButtonStyle(.white)
-        .frame(height: 50)
-
-        Text("onboarding.privacy")
-            .font(AppFont.caption(12, relativeTo: .caption2))
-            .foregroundStyle(Color.brassSoft)
-            .multilineTextAlignment(.center)
-
     }
 
     // MARK: Passo 2 — il nome, se Apple non l'ha condiviso
 
     @ViewBuilder
     private var nameStep: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Space.m) {
             Text("onboarding.nome.hint")
-                .font(AppFont.caption())
-                .foregroundStyle(Color.felt)
+                .font(AppFont.ui(15))
+                .foregroundStyle(Color.textSecondary)
             TextField("onboarding.nome.placeholder", text: $draftName)
-                .font(AppFont.bodySerif())
-                .foregroundStyle(Color.ink)
+                .font(AppFont.bodySerif(18))
+                .foregroundStyle(Color.textPrimary)
                 .submitLabel(.done)
                 .onSubmit { confirmName() }
+                .padding(.horizontal, Space.l)
+                .frame(minHeight: 52)
+                .background(Color.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             if showNameError {
                 Text("onboarding.nome.errore")
                     .font(AppFont.caption())
-                    .foregroundStyle(Color.errorTone)
+                    .foregroundStyle(Color.warning)
             }
+            Button("onboarding.nome.conferma") { confirmName() }
+                .buttonStyle(PrimaryButtonStyle(fullWidth: true))
         }
-        .sobreCard()
-
-        Button("onboarding.nome.conferma") { confirmName() }
-            .buttonStyle(PillButtonStyle())
     }
 
     // MARK: Logica

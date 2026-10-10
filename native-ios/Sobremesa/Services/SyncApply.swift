@@ -60,6 +60,7 @@ extension LocalDataService {
                 existing.isOpen = remote.is_open
                 existing.animatedByMe = remote.animator == payload.me.id
                 existing.memberCount = remote.member_count
+                existing.animatorServerID = remote.animator
                 return existing
             }
             // Adozione dell'ottimistico: stesso nome, ancora senza id server.
@@ -70,6 +71,7 @@ extension LocalDataService {
                 pending.isOpen = remote.is_open
                 pending.animatedByMe = remote.animator == payload.me.id
                 pending.memberCount = remote.member_count
+                pending.animatorServerID = remote.animator
                 tables[remote.id] = pending
                 return pending
             }
@@ -80,6 +82,7 @@ extension LocalDataService {
                                  animatedByMe: remote.animator == payload.me.id,
                                  memberCount: remote.member_count)
             created.serverID = remote.id
+            created.animatorServerID = remote.animator
             context.insert(created)
             tables[remote.id] = created
             return created
@@ -112,7 +115,8 @@ extension LocalDataService {
         for seat in payload.seats {
             guard let row = tables[seat.circle_id], seat.user_id != payload.me.id else { continue }
             let member = person(id: seat.user_id, name: seat.name, score: seat.score)
-            context.insert(Membership(person: member, tavolo: row))
+            context.insert(Membership(person: member, tavolo: row,
+                                      joinedAt: seat.joined_at?.serverDate ?? .now))
         }
 
         // 6. Le mie sedie che il server non conosce più (espulso/alzato altrove).
@@ -123,10 +127,21 @@ extension LocalDataService {
 
         // 7. I tavoli spariti dal server (chiusi): via, con tutto il loro mondo.
         let currentMessages = (try? context.fetch(FetchDescriptor<Messaggio>())) ?? []
-        for tavolo in localTables {
-            guard let id = tavolo.serverID, !serverTableIDs.contains(id) else { continue }
-            for messaggio in currentMessages where messaggio.tavolo === tavolo {
+        let currentMemberships = (try? context.fetch(FetchDescriptor<Membership>())) ?? []
+        for tavolo in localTables where !tavolo.isDeleted {
+            if let id = tavolo.serverID {
+                guard !serverTableIDs.contains(id) else { continue }
+            } else {
+                // Ottimistico mai adottato e senza fondazione in volo: è un
+                // fantasma (il server non l'ha mai creato). Via, con tutto ciò
+                // che gli è appeso — altrimenti resta "In attesa" per sempre.
+                guard !pendingTableNames.contains(tavolo.name) else { continue }
+            }
+            for messaggio in currentMessages where messaggio.tavolo === tavolo && !messaggio.isDeleted {
                 context.delete(messaggio)
+            }
+            for membership in currentMemberships where membership.tavolo === tavolo && !membership.isDeleted {
+                context.delete(membership)
             }
             context.delete(tavolo)
         }
@@ -177,6 +192,19 @@ extension LocalDataService {
             messaggio.serverID = remote.id
             context.insert(messaggio)
             byServerID[remote.id] = messaggio
+        }
+
+        // 10. Sicurezza (v3): ciò che non devo più vedere sparisce anche
+        // dalla memoria locale — interventi nascosti o segnalati da me,
+        // e tutto ciò che ha scritto chi ho bloccato.
+        let hiddenIDs = Set(payload.hidden ?? [])
+        let blockedIDs = Set((payload.blocked ?? []).map(\.id))
+        if !hiddenIDs.isEmpty || !blockedIDs.isEmpty {
+            for messaggio in byServerID.values where !messaggio.isDeleted {
+                let hidden = messaggio.serverID.map { hiddenIDs.contains($0) } ?? false
+                let blocked = messaggio.author?.serverID.map { blockedIDs.contains($0) } ?? false
+                if hidden || blocked { context.delete(messaggio) }
+            }
         }
 
         try? context.save()

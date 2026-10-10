@@ -97,3 +97,23 @@ Le regole numeriche vivono in **due specchi dichiarati**: `ProductRules.swift` (
 Modello dati client: `Tavolo`, `Membership` (una sedia), `Messaggio`, `JoinRequest`, `Person`, `ParticipationEvent` — spariscono `Friendship`, `Comment`, `SeatProposal` e i campi demo di `Person`. Le view: `SalottoView` (chat-list dei tavoli + richieste), `TavoliView` (catalogo/fondazione/codici), `TavoloRoomView` (conversazione in stile chat: `defaultScrollAnchor(.bottom)`, barra in `safeAreaInset`, bolle con Nutre), `TuView`, 3 tab. L'engine è INVARIATO (e con lui i 12 test): `maxFriends` ora significa "sedie di un tavolo", `maxCircles` "tavoli abitabili" — commentato in `ProductRules`/`rules.js`, i numeri non sono cambiati; ogni messaggio vale `pointsComment` (+1).
 
 Server: `sync` restituisce `{me, myTables, seats, catalog, requests, messages}`; `posts` richiede `tableId` (un messaggio al tavolo, +1, brace ravvivata); `posts/react` è solo Nutre; `invites` è legato al tavolo (`invites.circle_id`, riscatto = sedersi lì con guardie 12/5); `circles/membership` controlla anche le 12 sedie; droppate `friendships`, `friend_requests`, `comments`. La migrazione (`admin/migrate`) è idempotente e fa lei i DROP/ALTER del pivot.
+
+## v3 — "Ultima luce" e sicurezza (ottobre 2026)
+
+**Design system.** `Components/Theme.swift` espone i 15 colorset come `Color.*`, `Space`, `AppFont`, gli stili dei bottoni, `Panel`, `ScreenTitle`, `SectionLabel`, `Hairline`, `AvatarView`, `BandLabel`, `ToastView`. `Components/TableGlyph.swift` disegna il tavolo in `Canvas` (posti statici) con la brace su un layer separato (`EmberCore`), così il respiro non ridisegna i posti. `TableRingView.swift` è stato eliminato. L'aspetto di sistema (tab bar, navigation bar) si imposta una volta in `SystemAppearance.configure()`.
+
+**Engine.** `tableWarmth(memberCount:lastMessageAt:now:)` (collettivo), `personalSilenceNotice(lastActivity:now:isAnimator:memberCount:)` e `silenceIsUrgent(days:)` (personale). 15 test XCTest verdi (precedenza di In attesa, bordo delle 48 h, 96 h meno un minuto, tavolo in attesa senza avvisi).
+
+**Sicurezza (Apple 1.2).**
+- `POST /api/safety` — `{action:"report", postId, reason}` · `{action:"block"|"unblock", userId}`.
+- `GET /api/sync` ora esclude gli interventi nascosti, quelli che ho segnalato e quelli di chi ho bloccato, e aggiunge `hidden` (id da togliere anche dalla memoria locale) e `blocked` (persone bloccate). Campi opzionali: un client vecchio li ignora, un client nuovo funziona anche col server vecchio.
+- Moderazione (header `Authorization: Bearer $CRON_SECRET`):
+  - `GET  /api/admin/migrate?op=reports` — segnalazioni raggruppate per intervento;
+  - `POST /api/admin/migrate?op=moderate` con `{postId, decision:"remove"|"restore"}` o `{userId, decision:"ban"}`.
+  Vive dentro `admin/migrate.js` per restare nelle 12 funzioni del piano Hobby di Vercel.
+
+**Sedie atomiche.** `api/_lib/db.js → ensureSchema()` applica da solo (una volta per istanza, sotto `pg_advisory_xact_lock`, idempotente) la colonna `posts.hidden`, le tabelle `reports` e `blocks`, e il trigger `memberships_guard` che, con lock sulla riga del tavolo e poi della persona, garantisce 12 sedie e 5 tavoli. Tutte le vie d'ingresso (catalogo, invito, richiesta accettata, fondazione) passano da `seat()`. I codici d'invito sono monouso e si riaccendono se la sedia non c'è più.
+
+**Test del backend.** In locale con Postgres 16 e un finto `@vercel/postgres` su `pg`: 31 verifiche (15 ingressi simultanei → 12 sedie; 6 tavoli simultanei → 5; codici con trattino/minuscole; codice monouso e riacceso; segnalazioni 1 e 2; blocchi su messaggi, catalogo e richieste; coda di moderazione; cancellazione a cascata).
+
+**Sito.** `index.html` (landing Ultima luce, statica, zero JS, CSP `script-src 'none'`), `privacy.html` aggiornata, `termini.html` nuova (servita come `/termini` grazie a `cleanUrls`).

@@ -72,3 +72,34 @@ Composer con errore inline e destinazione (tavola/circolo) · feed cronologico f
 4. **Circoli abbandonati/espulsi non-aperti**: i tre circoli seed dell'utente sono privati (`isOpen = false`); dopo un'uscita o un'espulsione non ricompaiono nel catalogo. Coerente col prodotto (ci si rientra su invito), ma da decidere a livello di prodotto.
 5. **I membri di sfondo dei circoli non vengono mai espulsi**: la valutazione della brace riguarda solo l'utente (DECISIONI.md #8).
 6. **`Date` e DST**: i giorni di silenzio usano 86.400s fissi; ai cambi d'ora la soglia può slittare di ±1h su 4-7 giorni. Irrilevante in pratica, documentato.
+
+---
+
+## v3 "Ultima luce" + revisione di Astra (ottobre 2026)
+
+### Eseguito davvero
+- **Engine**: 15/15 test XCTest verdi (Linux, Swift 6.0.3, shim SPM), compresi i nuovi casi del contratto temporale (precedenza di In attesa, bordo esatto delle 48 h, 96 h meno un minuto, nessun avviso a tavolo in attesa, urgenza dal 6° giorno).
+- **Backend**: 31/31 verifiche d'integrazione contro Postgres 16 locale con le API vere (finto `@vercel/postgres` su `pg`): 15 ingressi simultanei → 12 sedie; 6 tavoli simultanei → 5; codice con trattino e minuscole; codice monouso; codice riacceso se il tavolo è pieno; segnalazione del proprio intervento rifiutata; segnalazione da fuori tavolo rifiutata; 1 segnalazione → sparisce solo per chi segnala; 2 → per tutti; blocco su interventi, catalogo e richieste; sblocco; coda di moderazione e ripristino; admin protetto; tetto dei 5 tavoli anche su richiesta accettata; cancellazione account a cascata. Più un test di **ripiego**: se la migrazione automatica fallisce, `sync` e le sedute funzionano in modalità v2.
+- **CI GitHub (macOS, Xcode)**: la v3 visiva compila e passa i test (run #19 verde); il round 4 è verificato dal run successivo sul branch `ultima-luce`.
+- **Localizzazione**: 197 chiavi, 6/6 lingue per ognuna, segnaposto coerenti fra le lingue, nessuna chiave usata nel codice mancante nel catalogo.
+- **Sito**: landing, privacy e termini renderizzati in Chromium a 1280 e 393 px, nessuno scroll orizzontale.
+
+### Corretto rispetto alla prima stesura v3
+- Avviso personale mostrato anche ai tavoli in attesa (dove il server sospende le regole) → tolto.
+- Warning già al 4° giorno → TextSecondary fino al 5°, Warning dal 6°.
+- Salotto vuoto con brace accesa (stato falso) → In attesa.
+- Autoscroll forzato a ogni nuovo intervento → solo se sei in fondo o hai scritto tu.
+- Interventi raggruppati muti per VoiceOver → ogni intervento legge "Nome, ora. Testo".
+- `join` su un tavolo chiuso a cui si siede già → creava una richiesta inutile; ora è un no-op.
+- Codice d'invito bruciato se la sedia non c'era più → ora si riaccende.
+- Due colori literal (`.black`) nelle ombre → token `Color.background`.
+
+### Aperto (dichiarato)
+- **Prova su iPhone reale** di Dynamic Type molto grande, VoiceOver, tastiera aperta e Reduce Motion: il codice è predisposto, la verifica tocca al primo build TestFlight.
+- **Moderazione**: gli strumenti ci sono (coda + rimuovi/ripristina/espelli), ma qualcuno deve guardare la coda: le Condizioni d'uso promettono una revisione "di norma entro 24 ore".
+- **Link pubblico TestFlight**: finché non c'è, il sito dice "Beta in preparazione".
+- **Screenshot reale della Stanza** sul sito: dopo la prova su dispositivo.
+- **Test con 5 persone** proposto da Astra (v. `BRAINSTORM_ASTRA.md`).
+
+### Via libera di Astra (round 5)
+"Via libera al TestFlight interno. Nessun blocco funzionale evidente." Da controllare solo: firma Release accettata da App Store Connect, nessun blocco di Export Compliance, tester interni abilitati e build assegnato al gruppo. "Ultima luce è congelata."

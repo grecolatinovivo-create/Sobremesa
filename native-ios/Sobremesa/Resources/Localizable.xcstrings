@@ -1,6 +1,88 @@
 {
   "sourceLanguage": "it",
   "strings": {
+    "a11y.cerca.cancella": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche löschen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear search"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar la búsqueda"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer la recherche"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancella la ricerca"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar a busca"
+          }
+        }
+      }
+    },
+    "a11y.commensale.azioni": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktionen für %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions for %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acciones para %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions pour %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azioni per %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ações para %@"
+          }
+        }
+      }
+    },
     "a11y.commensali": {
       "extractionState": "manual",
       "localizations": {
@@ -130,37 +212,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Diesen Beitrag nähren"
+            "value": "Nährt: Dieser Beitrag hat mich genährt"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nourish this post"
+            "value": "Nourish: this remark nourished me"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nutre este post"
+            "value": "Nutre: esta intervención me ha nutrido"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nourris ce post"
+            "value": "Nourrit : cette intervention m'a nourri"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nutri questo post"
+            "value": "Nutre: questo intervento mi ha nutrito"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nutrir este post"
+            "value": "Nutre: esta intervenção me nutriu"
           }
         }
       }
@@ -171,37 +253,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Diesen Beitrag nicht mehr nähren"
+            "value": "Nährt von diesem Beitrag entfernen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stop nourishing this post"
+            "value": "Remove Nourish from this remark"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deja de nutrir este post"
+            "value": "Quita el Nutre de esta intervención"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cesse de nourrir ce post"
+            "value": "Retirer Nourrit de cette intervention"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Smetti di nutrire questo post"
+            "value": "Togli il Nutre da questo intervento"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Parar de nutrir este post"
+            "value": "Remover o Nutre desta intervenção"
           }
         }
       }
@@ -247,43 +329,43 @@
         }
       }
     },
-    "a11y.score": {
+    "a11y.nutre.stato": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Beteiligungswert %1$lld, Stufe %2$@"
+            "value": "Hat dich genährt"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Participation score %1$lld, band %2$@"
+            "value": "It nourished you"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Puntuación de participación %1$lld, franja %2$@"
+            "value": "Te ha nutrido"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Score de participation %1$lld, niveau %2$@"
+            "value": "Cela t'a nourri"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Punteggio di partecipazione %1$lld, fascia %2$@"
+            "value": "Ti ha nutrito"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pontuação de participação %1$lld, faixa %2$@"
+            "value": "Nutriu você"
           }
         }
       }
@@ -347,7 +429,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesa: %1$lld sillas ocupadas de %2$lld, %3$lld libres."
+            "value": "Mesa: %1$lld de %2$lld sillas ocupadas, %3$lld libres."
           }
         },
         "fr": {
@@ -359,13 +441,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tavola: %1$lld sedie occupate su %2$lld, %3$lld libere."
+            "value": "Tavolo: %1$lld sedie occupate su %2$lld, %3$lld libere."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesa: %1$lld cadeiras ocupadas de %2$lld, %3$lld livres."
+            "value": "Mesa: %1$lld de %2$lld cadeiras ocupadas, %3$lld livres."
           }
         }
       }
@@ -534,464 +616,494 @@
         }
       }
     },
-    "azione.riprendi.breve": {
+    "band.ombraAlTavolo": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wort ergreifen"
+            "value": "Schatten am Tisch"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retake the floor"
+            "value": "Shadow at the table"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retoma la palabra"
+            "value": "Sombra en la mesa"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reprends la parole"
+            "value": "Ombre à table"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Riprendi la parola"
+            "value": "Ombra al tavolo"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Retome a palavra"
+            "value": "Sombra à mesa"
           }
         }
       }
     },
-    "brace.affievolita": {
+    "band.presenzaDiscreta": {
       "extractionState": "manual",
       "localizations": {
         "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Die Glut schwächt sich seit 1 Tag ab"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Die Glut schwächt sich seit %lld Tagen ab"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stille Präsenz"
           }
         },
         "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "The embers have been fading for 1 day"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "The embers have been fading for %lld days"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quiet presence"
           }
         },
         "es": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Las brasas se apagan desde hace 1 día"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Las brasas se apagan desde hace %lld días"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presencia discreta"
           }
         },
         "fr": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "La braise faiblit depuis 1 jour"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "La braise faiblit depuis %lld jours"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Présence discrète"
           }
         },
         "it": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "La brace si affievolisce da 1 giorno"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "La brace si affievolisce da %lld giorni"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presenza discreta"
           }
         },
         "pt": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "As brasas estão esmorecendo há 1 dia"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "As brasas estão esmorecendo há %lld dias"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presença discreta"
           }
         }
       }
     },
-    "brace.attesa": {
+    "band.voceViva": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Glut entzündet sich, wenn ihr mindestens zu zweit seid."
+            "value": "Lebendige Stimme"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The embers will light when there are at least two of you."
+            "value": "Living voice"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Las brasas se encenderán cuando seáis al menos dos."
+            "value": "Voz viva"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La braise s'allumera quand vous serez au moins deux."
+            "value": "Voix vive"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La brace si accenderà quando sarete almeno in due."
+            "value": "Voce viva"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "As brasas vão acender quando vocês forem pelo menos dois."
+            "value": "Voz viva"
           }
         }
       }
     },
-    "brace.avviso": {
+    "blocca.azione": {
       "extractionState": "manual",
       "localizations": {
         "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Warnung: 1 Tag Stille"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Warnung: %lld Tage Stille"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockieren"
           }
         },
         "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Warning: 1 day of silence"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Warning: %lld days of silence"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block"
           }
         },
         "es": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Aviso: 1 día de silencio"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Aviso: %lld días de silencio"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear"
           }
         },
         "fr": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Alerte : 1 jour de silence"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Alerte : %lld jours de silence"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquer"
           }
         },
         "it": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Avviso: silenzio da 1 giorno"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Avviso: silenzio da %lld giorni"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocca"
           }
         },
         "pt": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Aviso: 1 dia de silêncio"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Aviso: %lld dias de silêncio"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear"
           }
         }
       }
     },
-    "brace.viva": {
+    "blocca.message": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Glut ist wach"
+            "value": "Du siehst ihre Beiträge nicht mehr. Entsperren unter Du."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The embers are glowing"
+            "value": "You won't see their remarks anymore. You can unblock from You."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Las brasas están vivas"
+            "value": "No verás más sus intervenciones. Puedes desbloquear desde Tú."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La braise est vive"
+            "value": "Tu ne verras plus ses interventions. Débloque depuis Toi."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La brace è viva"
+            "value": "Non vedrai più i suoi interventi. Puoi sbloccare da Tu."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "As brasas estão vivas"
+            "value": "Você não verá mais as intervenções. Desbloqueie em Você."
           }
         }
       }
     },
-    "brace.viva.giorni": {
+    "blocca.persona": {
       "extractionState": "manual",
       "localizations": {
         "de": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Lebendig — seit 1 Tag an diesem Tisch"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Lebendig — seit %lld Tagen an diesem Tisch"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ blockieren"
           }
         },
         "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Alive — at this table for 1 day"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Alive — at this table for %lld days"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block %@"
           }
         },
         "es": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Viva — en esta mesa desde hace 1 día"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Viva — en esta mesa desde hace %lld días"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear a %@"
           }
         },
         "fr": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Vivante — à cette table depuis 1 jour"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Vivante — à cette table depuis %lld jours"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquer %@"
           }
         },
         "it": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Viva — a questo tavolo da 1 giorno"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Viva — a questo tavolo da %lld giorni"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocca %@"
           }
         },
         "pt": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Viva — nesta mesa há 1 dia"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "Viva — nesta mesa há %lld dias"
-                }
-              }
-            }
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear %@"
+          }
+        }
+      }
+    },
+    "blocca.sblocca": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entsperren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unblock"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sblocca"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear"
+          }
+        }
+      }
+    },
+    "blocca.stato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockiert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqué"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloccato"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado"
+          }
+        }
+      }
+    },
+    "blocca.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ blockieren?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Block %@?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Bloquear a %@?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquer %@ ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloccare %@?"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear %@?"
+          }
+        }
+      }
+    },
+    "calore.affievolisce": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verglimmt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fading"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se apaga"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S'affaiblit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si affievolisce"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esmorecendo"
+          }
+        }
+      }
+    },
+    "calore.attesa": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wartet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En espera"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In attesa"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À espera"
+          }
+        }
+      }
+    },
+    "calore.viva": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glut lebendig"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ember alive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brasa viva"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Braise vive"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brace viva"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brasa viva"
           }
         }
       }
@@ -1289,37 +1401,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Stuhl wird frei und das Gespräch geht ohne dich weiter. Keine Strafe."
+            "value": "Dein Stuhl wird frei. Keine Strafe."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your chair frees up and the conversation continues without you. No penalty."
+            "value": "Your chair frees up. No penalty."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu silla se libera y la conversación sigue sin ti. Sin penalización."
+            "value": "Tu silla se libera. Sin penalización."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ta chaise se libère et la conversation continue sans toi. Aucune pénalité."
+            "value": "Ta chaise se libère. Aucune pénalité."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La tua sedia si libera e la conversazione prosegue senza di te. Nessuna penalità."
+            "value": "La tua sedia si libera. Nessuna penalità."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sua cadeira se libera e a conversa continua sem você. Nenhuma penalidade."
+            "value": "Sua cadeira fica livre. Sem penalidade."
           }
         }
       }
@@ -1412,37 +1524,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du bist der Animator: Wenn du aufstehst, schließt der Tisch für alle und das Gespräch endet."
+            "value": "Du leitest den Tisch: Er schließt sich für alle."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You're the animator: if you stand up, the table closes for everyone and the conversation ends."
+            "value": "You're the host: the table closes for everyone."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eres el animador: si te levantas, la mesa se cierra para todos y la conversación termina."
+            "value": "Eres el anfitrión: la mesa se cierra para todos."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu es l'animateur : si tu te lèves, la table ferme pour tous et la conversation s'achève."
+            "value": "Tu es l'hôte : la table se ferme pour tous."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sei l'animatore: se ti alzi, il tavolo si chiude per tutti e la conversazione finisce."
+            "value": "Sei l'animatore: il tavolo si chiude per tutti."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você é o animador: se se levantar, a mesa fecha para todos e a conversa termina."
+            "value": "Você é o anfitrião: a mesa fecha para todos."
           }
         }
       }
@@ -1535,37 +1647,78 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu entscheiden"
+            "value": "Anfragen an deine Tische"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Awaiting your word"
+            "value": "Requests to your tables"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Por decidir"
+            "value": "Solicitudes a tus mesas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "À décider"
+            "value": "Demandes à tes tables"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Da decidere"
+            "value": "Richieste ai tuoi tavoli"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Por decidir"
+            "value": "Pedidos às suas mesas"
+          }
+        }
+      }
+    },
+    "fonda.accesso.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zugang zum Tisch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Table access"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acceso a la mesa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accès à la table"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accesso al tavolo"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acesso à mesa"
           }
         }
       }
@@ -1576,37 +1729,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Offener Tisch"
+            "value": "Offen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open table"
+            "value": "Open"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesa abierta"
+            "value": "Abierta"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Table ouverte"
+            "value": "Ouverte"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tavolo aperto"
+            "value": "Aperto"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesa aberta"
+            "value": "Aberta"
           }
         }
       }
@@ -1617,37 +1770,160 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wer ihn im Katalog findet, kann sich ohne zu fragen setzen."
+            "value": "Alle dürfen Platz nehmen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Whoever finds it in the catalog can sit without asking."
+            "value": "Anyone can sit down."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quien la encuentre en el catálogo puede sentarse sin pedir."
+            "value": "Cualquiera puede sentarse."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Qui la trouve au catalogue peut s'asseoir sans demander."
+            "value": "Tout le monde peut s'asseoir."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chi lo trova nel catalogo può sedersi senza chiedere."
+            "value": "Chiunque può sedersi."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quem a encontrar no catálogo pode sentar-se sem pedir."
+            "value": "Qualquer pessoa pode se sentar."
+          }
+        }
+      }
+    },
+    "fonda.categoria.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kategorie"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categoría"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catégorie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categoria"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categoria"
+          }
+        }
+      }
+    },
+    "fonda.chiosa": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeder Tisch ist eine Möglichkeit."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every table is a possibility."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada mesa es una posibilidad."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque table est une possibilité."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ogni tavolo è una possibilità."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada mesa é uma possibilidade."
+          }
+        }
+      }
+    },
+    "fonda.chiuso": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geschlossen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Closed"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermée"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chiuso"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechada"
           }
         }
       }
@@ -1699,37 +1975,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tisch gründen"
+            "value": "Tisch decken"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start the table"
+            "value": "Set the table"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Funda la mesa"
+            "value": "Pon la mesa"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fonde la table"
+            "value": "Dresse la table"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fonda il tavolo"
+            "value": "Apparecchia"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Funde a mesa"
+            "value": "Ponha a mesa"
           }
         }
       }
@@ -1740,37 +2016,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Name des Tisches"
+            "value": "Z. B. Ein Buch, das dich verändert hat"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The table's name"
+            "value": "E.g. A book that changed you"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El nombre de la mesa"
+            "value": "Ej. Un libro que te cambió"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le nom de la table"
+            "value": "Ex. Un livre qui t'a changé"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il nome del tavolo"
+            "value": "Es. Un libro che ti ha cambiato"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O nome da mesa"
+            "value": "Ex. Um livro que mudou você"
           }
         }
       }
@@ -1816,43 +2092,43 @@
         }
       }
     },
-    "fonda.spiega": {
+    "fonda.nome.label": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gib dem Tisch einen Namen und sag, worum es geht. Wer ihn gründet, ist sein Animator: Er hält die Glut am Leben und entscheidet, wer sitzt, falls er geschlossen ist."
+            "value": "Name des Tisches"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name the table and say what it's about. The founder is its animator: they keep the ember alive and decide who sits, if it's closed to strangers."
+            "value": "Table name"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dale un nombre a la mesa y di de qué se habla. Quien la funda es su animador: mantiene viva la brasa y decide quién se sienta, si está cerrada."
+            "value": "Nombre de la mesa"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Donne un nom à la table et dis de quoi on y parle. Le fondateur en est l'animateur : il garde la braise vivante et décide qui s'assoit, si elle est fermée."
+            "value": "Nom de la table"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dai un nome al tavolo e di' di cosa si parla. Chi lo fonda ne è l'animatore: tiene accesa la brace e decide chi si siede, se lo chiude agli estranei."
+            "value": "Nome del tavolo"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dê um nome à mesa e diga do que se fala. Quem a funda é seu animador: mantém a brasa viva e decide quem se senta, se estiver fechada."
+            "value": "Nome da mesa"
           }
         }
       }
@@ -1863,37 +2139,78 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Worum geht es? (optional)"
+            "value": "Eine einladende Zeile (optional)"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "What's it about? (optional)"
+            "value": "One inviting line (optional)"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿De qué se habla? (opcional)"
+            "value": "Una línea para invitar (opcional)"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De quoi parle-t-on ? (facultatif)"
+            "value": "Une ligne pour inviter (facultative)"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Di cosa si parla? (facoltativo)"
+            "value": "Una riga per invitare (facoltativa)"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Do que se fala? (opcional)"
+            "value": "Uma linha convidativa (opcional)"
+          }
+        }
+      }
+    },
+    "fonda.tema.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worum es geht"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What it's about"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De qué se habla"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De quoi on parle"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di cosa si parla"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do que se fala"
           }
         }
       }
@@ -1904,37 +2221,201 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein neuer Tisch"
+            "value": "Einen Tisch gründen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A new table"
+            "value": "Start a table"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Una mesa nueva"
+            "value": "Funda una mesa"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Une nouvelle table"
+            "value": "Fonde une table"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un tavolo nuovo"
+            "value": "Fonda un tavolo"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uma mesa nova"
+            "value": "Funde uma mesa"
+          }
+        }
+      }
+    },
+    "giorno.ieri": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayer"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ieri"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ontem"
+          }
+        }
+      }
+    },
+    "giorno.oggi": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aujourd'hui"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggi"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoje"
+          }
+        }
+      }
+    },
+    "intervento.copia": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar"
+          }
+        }
+      }
+    },
+    "invito.chiosa": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein gutes Gespräch beginnt mit einer Einladung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A good conversation starts with an invitation."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una buena conversación empieza con una invitación."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une bonne conversation commence par une invitation."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una buona conversazione inizia con un invito."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma boa conversa começa com um convite."
           }
         }
       }
@@ -1945,37 +2426,160 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Code, z. B. Q7WXK2MP"
+            "value": "Code eingeben"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The code, e.g. Q7WXK2MP"
+            "value": "Enter the code"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El código, p. ej. Q7WXK2MP"
+            "value": "Introduce el código"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le code, ex. Q7WXK2MP"
+            "value": "Saisis le code"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il codice, es. Q7WXK2MP"
+            "value": "Inserisci il codice"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O código, ex. Q7WXK2MP"
+            "value": "Digite o código"
+          }
+        }
+      }
+    },
+    "invito.copia": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy code"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar código"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier le code"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia codice"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar código"
+          }
+        }
+      }
+    },
+    "invito.copiato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kopiert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copié"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiato"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiado"
+          }
+        }
+      }
+    },
+    "invito.errore": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Code ist nicht angekommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The code didn't arrive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El código no ha llegado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le code n'est pas arrivé."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il codice non è arrivato."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O código não chegou."
           }
         }
       }
@@ -2021,43 +2625,125 @@
         }
       }
     },
+    "invito.riprova": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut versuchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reintentar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprova"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tentar de novo"
+          }
+        }
+      }
+    },
     "invito.spiega": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein Code, ein Stuhl: Wer ihn einlöst, sitzt an DIESEM Tisch. Die Stühle sind, was sie sind."
+            "value": "Teile diesen Code, um jemanden an diesen Tisch einzuladen. Er gilt für genau einen Platz."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One code, one chair: whoever redeems it sits at THIS table. The chairs are what they are."
+            "value": "Share this code to invite someone to this table. It's good for one seat only."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un código, una silla: quien lo canjea se sienta en ESTA mesa. Las sillas son las que son."
+            "value": "Comparte este código para invitar a alguien a esta mesa. Vale para un solo sitio."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un code, une chaise : qui l'utilise s'assoit à CETTE table. Les chaises sont ce qu'elles sont."
+            "value": "Partage ce code pour inviter quelqu'un à cette table. Il vaut pour une seule place."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un codice, una sedia: chi lo riscatta si siede a QUESTO tavolo. Le sedie sono quelle che sono."
+            "value": "Condividi questo codice per invitare qualcuno a questo tavolo. Vale per un solo posto."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um código, uma cadeira: quem o resgata senta-se NESTA mesa. As cadeiras são as que são."
+            "value": "Compartilhe este código para convidar alguém a esta mesa. Vale para um só lugar."
+          }
+        }
+      }
+    },
+    "invito.titoletto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Code, ein Stuhl."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One code, one chair."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un código, una silla."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un code, une chaise."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un codice, una sedia."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um código, uma cadeira."
           }
         }
       }
@@ -2068,37 +2754,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Code einlösen"
+            "value": "Beitreten"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Use the code"
+            "value": "Join"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usar el código"
+            "value": "Entrar"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Utiliser le code"
+            "value": "Entrer"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usa il codice"
+            "value": "Entra"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Usar o código"
+            "value": "Entrar"
           }
         }
       }
@@ -2349,6 +3035,47 @@
         }
       }
     },
+    "nutre.ha.nutrito": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hat genährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It nourished"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ha nutrido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A nourri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ha nutrito"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutriu"
+          }
+        }
+      }
+    },
     "onboarding.error": {
       "extractionState": "manual",
       "localizations": {
@@ -2437,37 +3164,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fünf Tische, je zwölf Stühle, eine Glut, die man am Leben hält. Tritt mit deinem Namen ein und setz dich — oder decke deinen ersten Tisch."
+            "value": "Setz dich an einen Tisch und sprich über Bücher, Filme und Ideen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Five tables, twelve chairs each, an ember to keep alive. Enter with your name and take a seat — or set your first table."
+            "value": "Take a seat at a table to talk about books, films and ideas."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cinco mesas, doce sillas cada una, una brasa que mantener viva. Entra con tu nombre y siéntate — o pon tu primera mesa."
+            "value": "Siéntate a una mesa para hablar de libros, películas e ideas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cinq tables, douze chaises chacune, une braise à garder vivante. Entre avec ton nom et assieds-toi — ou dresse ta première table."
+            "value": "Assieds-toi à une table pour parler de livres, de films et d'idées."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cinque tavoli, dodici sedie l'uno, una brace da tenere viva. Entra col tuo nome e siediti — o apparecchia il tuo primo tavolo."
+            "value": "Siediti a un tavolo per parlare di libri, film e idee."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cinco mesas, doze cadeiras cada, uma brasa para manter viva. Entre com seu nome e sente-se — ou ponha a sua primeira mesa."
+            "value": "Sente-se a uma mesa para falar de livros, filmes e ideias."
           }
         }
       }
@@ -2642,37 +3369,78 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Name und was du teilst leben auf deinem Gerät und auf Sobremesas Server, nur damit ihr am selben Tisch sitzen könnt. Keine Werbung, kein Tracking."
+            "value": "Dein Name und was du schreibst, liegen auf deinem Gerät und dem Sobremesa-Server – nur, damit du an Tischen sitzen kannst. Keine Werbung, kein Tracking."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your name and what you share live on your device and on Sobremesa's server, only so you can sit at the same table. No ads, no tracking."
+            "value": "Your name and what you write live on your device and on Sobremesa's server, only to seat you at tables. No ads, no tracking."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu nombre y lo que compartes viven en tu dispositivo y en el servidor de Sobremesa, solo para sentaros a la misma mesa. Sin publicidad, sin rastreo."
+            "value": "Tu nombre y lo que escribes viven en tu dispositivo y en el servidor de Sobremesa, solo para sentarte a las mesas. Sin publicidad, sin rastreo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ton nom et ce que tu partages vivent sur ton appareil et sur le serveur de Sobremesa, seulement pour vous asseoir à la même table. Pas de pub, pas de traçage."
+            "value": "Ton nom et ce que tu écris vivent sur ton appareil et sur le serveur de Sobremesa, uniquement pour t'asseoir aux tables. Pas de publicité, pas de pistage."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tuo nome e ciò che condividi vivono sul tuo dispositivo e sul server di Sobremesa, solo per sedervi alla stessa tavola. Niente pubblicità, niente tracciamento."
+            "value": "Il tuo nome e ciò che scrivi vivono sul tuo dispositivo e sul server di Sobremesa, solo per farti sedere ai tavoli. Niente pubblicità, niente tracciamento."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seu nome e o que você compartilha vivem no seu aparelho e no servidor do Sobremesa, só para sentarem à mesma mesa. Sem anúncios, sem rastreamento."
+            "value": "Seu nome e o que você escreve ficam no seu dispositivo e no servidor do Sobremesa, só para sentá-lo às mesas. Sem anúncios, sem rastreamento."
+          }
+        }
+      }
+    },
+    "onboarding.promesse": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 Sprachen · Kein Algorithmus · Nur Tische"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 languages · No algorithm · Only tables"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 idiomas · Ningún algoritmo · Solo mesas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 langues · Aucun algorithme · Que des tables"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 lingue · Nessun algoritmo · Solo tavoli"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 idiomas · Nenhum algoritmo · Só mesas"
           }
         }
       }
@@ -2683,37 +3451,570 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Zeit am Tisch, wenn das Essen vorbei ist und niemand aufstehen mag."
+            "value": "Die Zeit, die am Tisch bleibt."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The time you linger at the table when the meal is over and nobody wants to get up."
+            "value": "The time that lingers at the table."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El tiempo que se queda en la mesa cuando la comida terminó y nadie quiere levantarse."
+            "value": "El tiempo que queda en la mesa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le temps qu'on reste à table quand le repas est fini et que personne ne veut se lever."
+            "value": "Le temps qui reste à table."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tempo che resta a tavola quando il pasto è finito e nessuno ha voglia di alzarsi."
+            "value": "Il tempo che resta a tavola."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O tempo que se fica à mesa quando a refeição acabou e ninguém quer se levantar."
+            "value": "O tempo que fica à mesa."
+          }
+        }
+      }
+    },
+    "onboarding.termini": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit dem Fortfahren akzeptierst du [Nutzungsbedingungen](https://sobremesa-psi.vercel.app/termini) und [Datenschutzerklärung](https://sobremesa-psi.vercel.app/privacy)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By continuing you accept the [Terms of use](https://sobremesa-psi.vercel.app/termini) and [Privacy policy](https://sobremesa-psi.vercel.app/privacy)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al continuar aceptas las [Condiciones de uso](https://sobremesa-psi.vercel.app/termini) y la [Política de privacidad](https://sobremesa-psi.vercel.app/privacy)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En continuant, tu acceptes les [Conditions d'utilisation](https://sobremesa-psi.vercel.app/termini) et la [Politique de confidentialité](https://sobremesa-psi.vercel.app/privacy)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuando accetti [Condizioni d'uso](https://sobremesa-psi.vercel.app/termini) e [Informativa privacy](https://sobremesa-psi.vercel.app/privacy)."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ao continuar, você aceita os [Termos de uso](https://sobremesa-psi.vercel.app/termini) e a [Política de privacidade](https://sobremesa-psi.vercel.app/privacy)."
+          }
+        }
+      }
+    },
+    "post.nutre": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourish"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourrit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre"
+          }
+        }
+      }
+    },
+    "post.nutrito": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourished"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrito"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrido"
+          }
+        }
+      }
+    },
+    "regola.brace.testo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Kerze brennt, wenn in den letzten %lld Stunden jemand gesprochen hat."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The candle is lit if someone has spoken in the last %lld hours."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La vela está encendida si alguien habló en las últimas %lld horas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La bougie est allumée si quelqu'un a parlé dans les %lld dernières heures."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La candela è accesa se qualcuno ha parlato nelle ultime %lld ore."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A vela está acesa se alguém falou nas últimas %lld horas."
+          }
+        }
+      }
+    },
+    "regola.brace.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Glut"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The ember"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La brasa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La braise"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La brace"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A brasa"
+          }
+        }
+      }
+    },
+    "regola.nutre.testo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Like: Es sagt „das hat mich genährt“. Keine Zahlen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not a like: it says \"this nourished me\". No numbers."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No es un like: dice «esto me ha nutrido». Sin números."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas un like : il dit « cela m'a nourri ». Aucun chiffre."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non un like: dice «questo mi ha nutrito». Nessun numero."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não é um like: diz \"isto me nutriu\". Sem números."
+          }
+        }
+      }
+    },
+    "regola.nutre.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourish"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourrit"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutre"
+          }
+        }
+      }
+    },
+    "regola.presenza.testo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine Zahl von 0 bis 100, die nur du siehst. Die anderen sehen ein Wort: Lebendige Stimme ab %1$lld, Stille Präsenz ab %2$lld."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A number from 0 to 100 that only you see. Others see a word: Living voice from %1$lld, Quiet presence from %2$lld."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un número de 0 a 100 que solo ves tú. A los demás les llega una palabra: Voz viva desde %1$lld, Presencia discreta desde %2$lld."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un nombre de 0 à 100 que toi seul·e vois. Les autres voient un mot : Voix vive dès %1$lld, Présence discrète dès %2$lld."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un numero da 0 a 100 che vedi solo tu. Agli altri arriva una parola: Voce viva da %1$lld, Presenza discreta da %2$lld."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um número de 0 a 100 que só você vê. Aos outros chega uma palavra: Voz viva a partir de %1$lld, Presença discreta a partir de %2$lld."
+          }
+        }
+      }
+    },
+    "regola.presenza.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Präsenz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presence"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La presencia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La présence"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La presenza"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A presença"
+          }
+        }
+      }
+    },
+    "regola.sedia.testo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach %1$lld Tagen Schweigen eine Erinnerung, nach %2$lld wird der Stuhl frei. Wer den Tisch gründet, verliert ihn nie."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After %1$lld days of silence, a reminder; after %2$lld, the chair frees up. Whoever starts the table never loses theirs."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tras %1$lld días de silencio, un recordatorio; tras %2$lld, la silla se libera. Quien funda la mesa nunca la pierde."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après %1$lld jours de silence, un rappel ; après %2$lld, la chaise se libère. Qui fonde la table ne la perd jamais."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo %1$lld giorni di silenzio un promemoria; dopo %2$lld la sedia si libera. Chi fonda il tavolo non la perde mai."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Após %1$lld dias de silêncio, um lembrete; após %2$lld, a cadeira fica livre. Quem funda a mesa nunca a perde."
+          }
+        }
+      }
+    },
+    "regola.sedia.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Stuhl"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your chair"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu silla"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta chaise"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua sedia"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua cadeira"
+          }
+        }
+      }
+    },
+    "regola.tavolo.testo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Themengespräch mit höchstens %1$lld Stühlen. Du kannst an %2$lld Tischen sitzen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A themed conversation with at most %1$lld chairs. You can sit at %2$lld tables."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una conversación temática con %1$lld sillas como máximo. Puedes sentarte a %2$lld mesas."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une conversation à thème, %1$lld chaises au plus. Tu peux t'asseoir à %2$lld tables."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una conversazione a tema, con %1$lld sedie al massimo. Puoi sederti a %2$lld tavoli."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma conversa temática com no máximo %1$lld cadeiras. Você pode se sentar a %2$lld mesas."
+          }
+        }
+      }
+    },
+    "regola.tavolo.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Tisch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The table"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mesa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La table"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tavolo"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A mesa"
           }
         }
       }
@@ -2755,47 +4056,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ pede para se sentar em \"%2$@\""
-          }
-        }
-      }
-    },
-    "salotto.conversazioni.section": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Deine Tische"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your tables"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tus mesas"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes tables"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I tuoi tavoli"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suas mesas"
           }
         }
       }
@@ -2909,6 +4169,88 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "salotto.sottotitolo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Tische, heute."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your tables, today."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus mesas, hoy."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes tables, aujourd'hui."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tuoi tavoli, oggi."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suas mesas, hoje."
+          }
+        }
+      }
+    },
+    "salotto.tavolo.attesa": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wartet auf weitere Gäste"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for other guests"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esperando a otros comensales"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente d'autres convives"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In attesa di altri commensali"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À espera de outros convivas"
           }
         }
       }
@@ -3036,43 +4378,84 @@
         }
       }
     },
+    "salotto.vuoto.codice": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hast du einen Code?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got a code?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Tienes un código?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as un code ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai un codice?"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tem um código?"
+          }
+        }
+      }
+    },
     "salotto.vuoto.cta": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tisch finden"
+            "value": "Tische entdecken"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Find a table"
+            "value": "Explore tables"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Encuentra una mesa"
+            "value": "Explora las mesas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trouve une table"
+            "value": "Explore les tables"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trova un tavolo"
+            "value": "Esplora i tavoli"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Encontre uma mesa"
+            "value": "Explore as mesas"
           }
         }
       }
@@ -3083,37 +4466,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bei Sobremesa geschieht alles an Tischen: Themengespräche, wenige Stühle, eine Glut, die man am Leben hält. Finde einen offenen Tisch oder gründe deinen eigenen."
+            "value": "Wähle einen Tisch oder nutze einen Code."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "At Sobremesa everything happens at tables: themed conversations, few chairs, an ember to keep alive. Find an open table, or start your own."
+            "value": "Pick a table or use a code."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En Sobremesa todo sucede en las mesas: conversaciones temáticas, pocas sillas, una brasa que mantener viva. Encuentra una mesa abierta, o funda la tuya."
+            "value": "Elige una mesa o usa un código."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chez Sobremesa, tout se passe autour des tables : conversations à thème, peu de chaises, une braise à garder vivante. Trouve une table ouverte, ou fonde la tienne."
+            "value": "Choisis une table ou utilise un code."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "A Sobremesa tutto succede ai tavoli: conversazioni a tema, poche sedie, una brace da tenere viva. Trova un tavolo aperto, o fondane uno tuo."
+            "value": "Scegli un tavolo o usa un codice."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Sobremesa tudo acontece nas mesas: conversas temáticas, poucas cadeiras, uma brasa para manter viva. Encontre uma mesa aberta, ou funde a sua."
+            "value": "Escolha uma mesa ou use um código."
           }
         }
       }
@@ -3124,37 +4507,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du sitzt noch an keinem Tisch"
+            "value": "Noch kein Tisch."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You're not sitting at any table yet"
+            "value": "No tables, for now."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aún no te sientas a ninguna mesa"
+            "value": "Ninguna mesa, por ahora."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu n'es encore assis à aucune table"
+            "value": "Aucune table, pour l'instant."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non siedi ancora a nessun tavolo"
+            "value": "Nessun tavolo, per ora."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você ainda não se senta a nenhuma mesa"
+            "value": "Nenhuma mesa, por enquanto."
           }
         }
       }
@@ -3241,6 +4624,406 @@
         }
       }
     },
+    "sedia.ti.aspetta": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Dein Stuhl wartet · seit 1 Tag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Dein Stuhl wartet · seit %lld Tagen"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Your chair is waiting · 1 day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Your chair is waiting · %lld days"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tu silla te espera · desde hace 1 día"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Tu silla te espera · desde hace %lld días"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta chaise t'attend · depuis 1 jour"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ta chaise t'attend · depuis %lld jours"
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "La tua sedia ti aspetta · da 1 giorno"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "La tua sedia ti aspetta · da %lld giorni"
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Sua cadeira espera por você · há 1 dia"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Sua cadeira espera por você · há %lld dias"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "segnala.intervento": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beitrag melden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report remark"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denunciar intervención"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaler l'intervention"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segnala intervento"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denunciar intervenção"
+          }
+        }
+      }
+    },
+    "segnala.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du siehst ihn nicht mehr. Wir prüfen ihn."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You won't see it again. We'll review it."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No la verás más. La revisamos nosotros."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu ne la verras plus. Nous l'examinons."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non lo vedrai più. Lo esaminiamo noi."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não a verá mais. Nós a revisamos."
+          }
+        }
+      }
+    },
+    "segnala.motivo.altro": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etwas anderes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something else"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otro motivo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autre chose"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altro"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outro motivo"
+          }
+        }
+      }
+    },
+    "segnala.motivo.molesto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belästigung oder Drohung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harassment or threat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acoso o amenaza"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harcèlement ou menace"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Molestia o minaccia"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assédio ou ameaça"
+          }
+        }
+      }
+    },
+    "segnala.motivo.offensivo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beleidigend oder hasserfüllt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offensive or hateful"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ofensivo o de odio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offensant ou haineux"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offensivo o d'odio"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ofensivo ou de ódio"
+          }
+        }
+      }
+    },
+    "segnala.motivo.spam": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam oder Betrug"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam or scam"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam o estafa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam ou arnaque"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam o truffa"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spam ou golpe"
+          }
+        }
+      }
+    },
+    "segnala.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warum meldest du diesen Beitrag?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Why are you reporting this remark?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Por qué denuncias esta intervención?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pourquoi signales-tu cette intervention ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perché segnali questo intervento?"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por que você denuncia esta intervenção?"
+          }
+        }
+      }
+    },
     "stanza.alzati": {
       "extractionState": "manual",
       "localizations": {
@@ -3278,6 +5061,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Levante-se da mesa"
+          }
+        }
+      }
+    },
+    "stanza.animatore": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gastgeber"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Host"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anfitrión"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hôte"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Animatore"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anfitrião"
           }
         }
       }
@@ -3329,37 +5153,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dieser Tisch hat geschlossen: Der Animator ist aufgestanden, das Gespräch ist zu Ende."
+            "value": "Dieser Tisch ist geschlossen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This table has closed: the animator stood up and the conversation ended."
+            "value": "This table has closed."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esta mesa se ha cerrado: el animador se levantó y la conversación terminó."
+            "value": "Esta mesa se ha cerrado."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cette table a fermé : l'animateur s'est levé et la conversation s'est achevée."
+            "value": "Cette table est fermée."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Questo tavolo si è chiuso: l'animatore si è alzato e la conversazione è finita."
+            "value": "Questo tavolo si è chiuso."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esta mesa fechou: o animador se levantou e a conversa terminou."
+            "value": "Esta mesa foi fechada."
           }
         }
       }
@@ -3405,6 +5229,160 @@
         }
       }
     },
+    "stanza.commensali": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 Gast"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Gäste"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 guest"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld guests"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 comensal"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld comensales"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 convive"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld convives"
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 commensale"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld commensali"
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 conviva"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld convivas"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "stanza.hai.parlato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast hier %@ gesprochen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You spoke here %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hablaste aquí %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as parlé ici %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai parlato qui %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você falou aqui %@"
+          }
+        }
+      }
+    },
     "stanza.invita": {
       "extractionState": "manual",
       "localizations": {
@@ -3442,6 +5420,119 @@
           "stringUnit": {
             "state": "translated",
             "value": "Convide para a mesa"
+          }
+        }
+      }
+    },
+    "stanza.nuovi.sotto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 neuer Beitrag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld neue Beiträge"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 new remark"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld new remarks"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 intervención nueva"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld intervenciones nuevas"
+                }
+              }
+            }
+          }
+        },
+        "fr": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nouvelle intervention"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nouvelles interventions"
+                }
+              }
+            }
+          }
+        },
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nuovo intervento"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nuovi interventi"
+                }
+              }
+            }
+          }
+        },
+        "pt": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 nova intervenção"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld novas intervenções"
+                }
+              }
+            }
           }
         }
       }
@@ -3493,37 +5584,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Glut entzündet sich, wenn sich jemand zu dir setzt. Schick den Code, wem du an deiner Seite willst."
+            "value": "Lade jemanden ein: Zu zweit brennt die Kerze."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The ember will light when someone sits with you. Send the code to whoever you want beside you."
+            "value": "Invite someone: with two of you, the candle lights up."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La brasa se encenderá cuando alguien se siente contigo. Envía el código a quien quieras a tu lado."
+            "value": "Invita a alguien: entre dos, la vela se enciende."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La braise s'allumera quand quelqu'un s'assiéra avec toi. Envoie le code à qui tu veux à tes côtés."
+            "value": "Invite quelqu'un : à deux, la bougie s'allume."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La brace si accenderà quando qualcuno si siederà con te. Manda il codice a chi vuoi accanto."
+            "value": "Invita qualcuno: in due la candela si accende."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "A brasa se acenderá quando alguém se sentar com você. Envie o código a quem quiser ao seu lado."
+            "value": "Convide alguém: a dois, a vela acende."
           }
         }
       }
@@ -3534,37 +5625,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Am Tisch spricht man mindestens zu zweit"
+            "value": "Noch bist du allein."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A table needs at least two voices"
+            "value": "For now, it's just you."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "En la mesa se habla al menos entre dos"
+            "value": "Por ahora estás tú solo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "À table, on parle au moins à deux"
+            "value": "Pour l'instant, tu es seul·e."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "A tavola si parla almeno in due"
+            "value": "Per ora siete in uno."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "À mesa se fala pelo menos em dois"
+            "value": "Por enquanto, é só você."
           }
         }
       }
@@ -3610,43 +5701,84 @@
         }
       }
     },
+    "stanza.tuo.posto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Platz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your seat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu sitio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta place"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo posto"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu lugar"
+          }
+        }
+      }
+    },
     "stanza.vuota": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Tisch ist gedeckt und die Glut bereit. Eröffne du das Gespräch."
+            "value": "Schreib du das erste Wort."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The table is set and the ember is ready. You open the conversation."
+            "value": "Write the first word."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La mesa está puesta y la brasa lista. Abre tú la conversación."
+            "value": "Escribe tú la primera palabra."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La table est dressée et la braise est prête. Ouvre la conversation."
+            "value": "Écris le premier mot."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tavolo è apparecchiato e la brace è pronta. Apri tu la conversazione."
+            "value": "Scrivi tu la prima parola."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "A mesa está posta e a brasa pronta. Abra você a conversa."
+            "value": "Escreva você a primeira palavra."
           }
         }
       }
@@ -3657,37 +5789,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Tisch ist gedeckt. Während du auf Gesellschaft wartest, kannst du den ersten Gedanken dalassen: Wer sich setzt, findet ihn vor."
+            "value": "Hinterlass den ersten Gedanken: Wer kommt, findet ihn."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The table is set. While you wait for company, you can leave the first thought: whoever sits down will find it waiting."
+            "value": "Leave the first thought: whoever arrives will find it."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La mesa está puesta. Mientras esperas compañía, puedes dejar el primer pensamiento: quien se siente lo encontrará esperando."
+            "value": "Deja el primer pensamiento: quien llegue lo encontrará."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La table est dressée. En attendant la compagnie, tu peux laisser la première pensée : qui s'assiéra la trouvera."
+            "value": "Laisse la première pensée : qui arrivera la trouvera."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tavolo è apparecchiato. Mentre aspetti compagnia, puoi lasciare il primo pensiero: chi si siederà lo troverà ad accoglierlo."
+            "value": "Lascia il primo pensiero: chi arriva lo troverà."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "A mesa está posta. Enquanto espera companhia, pode deixar o primeiro pensamento: quem se sentar o encontrará à espera."
+            "value": "Deixe o primeiro pensamento: quem chegar vai encontrá-lo."
           }
         }
       }
@@ -3969,43 +6101,84 @@
         }
       }
     },
+    "tavoli.catalogo.nessuno": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Tisch mit diesen Worten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No tables match these words."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ninguna mesa con estas palabras."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune table avec ces mots."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessun tavolo con queste parole."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma mesa com essas palavras."
+          }
+        }
+      }
+    },
     "tavoli.catalogo.section": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Offene Tische"
+            "value": "Tische entdecken"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open tables"
+            "value": "Discover tables"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesas abiertas"
+            "value": "Descubre mesas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tables ouvertes"
+            "value": "Découvre les tables"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tavoli aperti"
+            "value": "Scopri i tavoli"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mesas abertas"
+            "value": "Descubra mesas"
           }
         }
       }
@@ -4016,37 +6189,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zurzeit keine offenen Tische. Gründe selbst einen: Wer dein Thema sucht, findet ihn hier."
+            "value": "Noch kein Tisch. Gründe einen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No open tables for now. Start one yourself: whoever seeks your theme will find it here."
+            "value": "No tables yet. Start one."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ninguna mesa abierta, por ahora. Funda una tú: quien busque tu mismo tema la encontrará aquí."
+            "value": "Ninguna mesa, por ahora. Funda una."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune table ouverte pour l'instant. Fondes-en une : qui cherche ton thème la trouvera ici."
+            "value": "Aucune table pour l'instant. Fondes-en une."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nessun tavolo aperto, per ora. Fondane uno tu: chi cerca il tuo stesso tema lo troverà qui."
+            "value": "Nessun tavolo, per ora. Fondane uno."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nenhuma mesa aberta, por enquanto. Funde uma você: quem buscar o seu tema a encontrará aqui."
+            "value": "Nenhuma mesa, por enquanto. Funde uma."
           }
         }
       }
@@ -4174,88 +6347,6 @@
         }
       }
     },
-    "tavoli.fonda.cta": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tisch decken"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Set the table"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pon la mesa"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dresse la table"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apparecchia"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ponha a mesa"
-          }
-        }
-      }
-    },
-    "tavoli.fonda.hint": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ein Thema, höchstens %1$lld Stühle. Du kannst an höchstens %2$lld Tischen sitzen."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "One theme, at most %1$lld chairs. You can sit at up to %2$lld tables."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un tema, como máximo %1$lld sillas. Puedes sentarte como máximo a %2$lld mesas."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un thème, au plus %1$lld chaises. Tu peux t'asseoir à %2$lld tables au maximum."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un tema, al massimo %1$lld sedie. Puoi sederti al massimo a %2$lld tavoli."
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Um tema, no máximo %1$lld cadeiras. Você pode se sentar a no máximo %2$lld mesas."
-          }
-        }
-      }
-    },
     "tavoli.fonda.title": {
       "extractionState": "manual",
       "localizations": {
@@ -4303,37 +6394,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hast du einen Einladungscode erhalten?"
+            "value": "Hast du einen Code?"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Did you receive an invite code?"
+            "value": "Got a code?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿Recibiste un código de invitación?"
+            "value": "¿Tienes un código?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu as reçu un code d'invitation ?"
+            "value": "Tu as un code ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hai ricevuto un codice d'invito?"
+            "value": "Hai un codice?"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recebeu um código de convite?"
+            "value": "Tem um código?"
           }
         }
       }
@@ -4344,37 +6435,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wenige Tische, wenige Stühle: Gespräche, die nähren."
+            "value": "Entdecke Tische."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Few tables, few chairs: conversations that nourish."
+            "value": "Discover tables."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pocas mesas, pocas sillas: conversaciones que nutren."
+            "value": "Descubre mesas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Peu de tables, peu de chaises : des conversations qui nourrissent."
+            "value": "Découvre les tables."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pochi tavoli, poche sedie: conversazioni che nutrono."
+            "value": "Scopri i tavoli."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Poucas mesas, poucas cadeiras: conversas que nutrem."
+            "value": "Descubra mesas."
           }
         }
       }
@@ -4543,6 +6634,47 @@
         }
       }
     },
+    "toast.bloccato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast %@ blockiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You blocked %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Has bloqueado a %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as bloqué %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai bloccato %@."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você bloqueou %@."
+          }
+        }
+      }
+    },
     "toast.brace.viva": {
       "extractionState": "manual",
       "localizations": {
@@ -4631,37 +6763,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ungültiger Code, oder dein Tisch ist voll."
+            "value": "Ungültiger oder bereits genutzter Code, oder der Tisch ist voll."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invalid code, or your table is full."
+            "value": "Invalid or already used code, or the table is full."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Código no válido, o tu mesa está llena."
+            "value": "Código no válido o ya usado, o la mesa está completa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Code invalide, ou ta table est pleine."
+            "value": "Code invalide ou déjà utilisé, ou la table est complète."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Codice non valido, o la tua tavola è piena."
+            "value": "Codice non valido, già usato, o il tavolo è al completo."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Código inválido, ou sua mesa está cheia."
+            "value": "Código inválido ou já usado, ou a mesa está completa."
           }
         }
       }
@@ -4672,37 +6804,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ihr sitzt jetzt am selben Tisch."
+            "value": "Der Code hat funktioniert: Du sitzt am Tisch."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You are now seated at the same table."
+            "value": "The code worked: you're at the table."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Os habéis sentado a la misma mesa."
+            "value": "El código funcionó: estás en la mesa."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vous voilà assis à la même table."
+            "value": "Le code a fonctionné : tu es à table."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vi siete seduti alla stessa tavola."
+            "value": "Il codice ha funzionato: sei a tavola."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vocês agora estão sentados à mesma mesa."
+            "value": "O código funcionou: você está à mesa."
           }
         }
       }
@@ -4826,37 +6958,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa erreicht den gemeinsamen Tisch nicht: Deine letzte Aktion kam nicht am Server an."
+            "value": "Sobremesa erreicht den Server nicht: Die letzte Aktion ist nicht angekommen. Versuch es gleich noch einmal."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa can't reach the common table: your last action didn't reach the server."
+            "value": "Sobremesa can't reach the server: your last action didn't arrive. Try again shortly."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa no llega a la mesa común: tu última acción no ha llegado al servidor."
+            "value": "Sobremesa no llega al servidor: la última acción no ha llegado. Inténtalo de nuevo en breve."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa n'atteint pas la table commune : ta dernière action n'est pas parvenue au serveur."
+            "value": "Sobremesa n'atteint pas le serveur : la dernière action n'est pas arrivée. Réessaie bientôt."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa non raggiunge la tavola comune: l'ultima azione non è arrivata al server."
+            "value": "Sobremesa non raggiunge il server: l'ultima azione non è arrivata. Riprova tra poco."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O Sobremesa não alcança a mesa comum: sua última ação não chegou ao servidor."
+            "value": "O Sobremesa não alcança o servidor: a última ação não chegou. Tente de novo em breve."
           }
         }
       }
@@ -4984,6 +7116,129 @@
         }
       }
     },
+    "toast.sbloccato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast %@ entsperrt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You unblocked %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Has desbloqueado a %@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu as débloqué %@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai sbloccato %@."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você desbloqueou %@."
+          }
+        }
+      }
+    },
+    "toast.seduto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen an „%@“."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Here you are at \"%@\"."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ya estás en «%@»."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te voilà à « %@ »."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eccoti a «%@»."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você está em \"%@\"."
+          }
+        }
+      }
+    },
+    "toast.segnalato": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danke. Die Meldung ist angekommen, du siehst diesen Beitrag nicht mehr."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you. Your report arrived and you won't see this remark again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gracias. La denuncia ha llegado y no volverás a ver esta intervención."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merci. Le signalement est arrivé et tu ne verras plus cette intervention."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grazie. La segnalazione è arrivata e non vedrai più questo intervento."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obrigado. A denúncia chegou e você não verá mais esta intervenção."
+          }
+        }
+      }
+    },
     "toast.tavolo.fondato": {
       "extractionState": "manual",
       "localizations": {
@@ -5025,43 +7280,412 @@
         }
       }
     },
+    "tu.assistenza.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreib uns: Wir lesen jede Meldung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write to us: we read every report."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escríbenos: leemos cada denuncia."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écris-nous : nous lisons chaque signalement."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrivici: leggiamo ogni segnalazione."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escreva para nós: lemos cada denúncia."
+          }
+        }
+      }
+    },
+    "tu.assistenza.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hilfe und Meldungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support and reports"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asistencia y denuncias"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistance et signalements"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistenza e segnalazioni"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suporte e denúncias"
+          }
+        }
+      }
+    },
+    "tu.bloccati.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du siehst nicht mehr, was sie schreiben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You no longer see what they write."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ya no ves lo que escriben."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu ne vois plus ce qu'ils écrivent."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non vedi più ciò che scrivono."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não vê mais o que escrevem."
+          }
+        }
+      }
+    },
+    "tu.bloccati.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blockierte Personen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocked people"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personas bloqueadas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnes bloquées"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persone bloccate"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pessoas bloqueadas"
+          }
+        }
+      }
+    },
+    "tu.bloccati.vuoto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niemand blockiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No blocked people."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ninguna persona bloqueada."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune personne bloquée."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna persona bloccata."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma pessoa bloqueada."
+          }
+        }
+      }
+    },
+    "tu.comefunziona.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Manifest und die Tischregeln"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The manifesto and the table rules"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El manifiesto y las reglas de la mesa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le manifeste et les règles de la table"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il manifesto e le regole del tavolo"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O manifesto e as regras da mesa"
+          }
+        }
+      }
+    },
+    "tu.comefunziona.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So funktioniert's"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How it works"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cómo funciona"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment ça marche"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Come funziona"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Como funciona"
+          }
+        }
+      }
+    },
+    "tu.crediti.design": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visuelle Leitung „Ultima luce“. Sobremesa ist ein Projekt der GLV srl."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visual direction \"Ultima luce\". Sobremesa is a GLV srl project."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dirección visual «Ultima luce». Sobremesa es un proyecto de GLV srl."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direction visuelle « Ultima luce ». Sobremesa est un projet de GLV srl."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direzione visiva «Ultima luce». Sobremesa è un progetto di GLV srl."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direção visual \"Ultima luce\". Sobremesa é um projeto da GLV srl."
+          }
+        }
+      }
+    },
+    "tu.crediti.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Schriften und wer sie gestaltet hat"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The typefaces and their designers"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las tipografías y quién las diseñó"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les caractères et leurs créateurs"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I caratteri e chi li ha disegnati"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As fontes e quem as desenhou"
+          }
+        }
+      }
+    },
     "tu.lingua.hint": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa spricht Italienisch, Englisch, Spanisch, Französisch, Deutsch und Portugiesisch. Standardmäßig folgt sie der Sprache des Telefons; hier wählst du selbst."
+            "value": "Standardmäßig wie das Telefon."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa speaks Italian, English, Spanish, French, German and Portuguese. By default it follows your phone's language; here you can choose your own."
+            "value": "By default it follows your phone."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa habla italiano, inglés, español, francés, alemán y portugués. De serie sigue el idioma del teléfono; aquí puedes elegirlo tú."
+            "value": "Por defecto sigue al teléfono."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa parle italien, anglais, espagnol, français, allemand et portugais. Par défaut, elle suit la langue du téléphone ; ici, c'est vous qui choisissez."
+            "value": "Par défaut, elle suit le téléphone."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa parla italiano, inglese, spagnolo, francese, tedesco e portoghese. Di serie segue la lingua del telefono; da qui puoi sceglierla tu."
+            "value": "Di serie segue il telefono."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa fala italiano, inglês, espanhol, francês, alemão e português. Por padrão segue o idioma do telefone; aqui você pode escolher."
+            "value": "Por padrão, segue o telefone."
           }
         }
       }
@@ -5154,78 +7778,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa ist die Zeit, die man nach dem Essen am Tisch verweilt, wenn niemand aufstehen will. Hier ist die Knappheit das Wesen: zwölf Stühle, fünf Zirkel, eine Glut, die es wach zu halten gilt. Keine Follower, kein Algorithmus, kein Applaus zum Zählen – nur ausgewählte Menschen, Gespräche, die nähren, und die Sorgfalt, da zu sein. Kultur nährt, sie wird nicht konsumiert."
+            "value": "Sobremesa ist die Zeit, die nach dem Essen am Tisch bleibt. Wenige Stühle, wenige Tische, kein Algorithmus: nur Gespräche."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa is the time you linger at the table after the meal, when nobody wants to get up. Here, scarcity is the feature: twelve chairs, five circles, an ember to keep alive. No followers, no algorithm, no applause to count — only chosen people, conversations that nourish, and the care of showing up. Culture nourishes; it is not consumed."
+            "value": "Sobremesa is the time that lingers at the table after the meal. Few chairs, few tables, no algorithm: just conversations."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La sobremesa es el tiempo que uno se queda en la mesa cuando la comida ha terminado y nadie quiere levantarse. Aquí la escasez es la esencia: doce sillas, cinco círculos, unas brasas que mantener vivas. Sin seguidores, sin algoritmo, sin aplausos que contar: solo personas elegidas, conversaciones que nutren y el cuidado de estar presente. La cultura nutre, no se consume."
+            "value": "Sobremesa es el tiempo que queda en la mesa cuando la comida ha terminado. Pocas sillas, pocas mesas, ningún algoritmo: solo conversaciones."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa, c'est le temps passé à table après le repas, quand personne ne veut se lever. Ici, la rareté est l'essence : douze chaises, cinq cercles, une braise à garder vivante. Pas d'abonnés, pas d'algorithme, pas d'applaudissements à compter — seulement des personnes choisies, des conversations qui nourrissent et le soin d'être présent. La culture nourrit, elle ne se consomme pas."
+            "value": "Sobremesa, c'est le temps qui reste à table après le repas. Peu de chaises, peu de tables, aucun algorithme : seulement des conversations."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa è il tempo che resta a tavola quando il pasto è finito e nessuno ha voglia di alzarsi. Qui la scarsità è la feature: dodici sedie, cinque circoli, una brace da tenere viva. Niente follower, niente algoritmo, niente applausi da contare: solo persone scelte, conversazioni che nutrono e la cura di esserci. La cultura nutre, non si consuma."
+            "value": "Sobremesa è il tempo che resta a tavola quando il pasto è finito. Poche sedie, pochi tavoli, nessun algoritmo: solo conversazioni."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa — em espanhol, a conversa que fica à mesa depois da refeição — é o nome e o espírito deste lugar. Aqui a escassez é a essência: doze cadeiras, cinco círculos, uma brasa a manter acesa. Sem seguidores, sem algoritmo, sem aplausos para contar: só pessoas escolhidas, conversas que nutrem e o cuidado de estar presente. A cultura nutre, não se consome."
-          }
-        }
-      }
-    },
-    "tu.manifesto.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das Manifest"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The manifesto"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El manifiesto"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le manifeste"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il manifesto"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O manifesto"
+            "value": "Sobremesa é o tempo que fica à mesa depois da refeição. Poucas cadeiras, poucas mesas, nenhum algoritmo: só conversas."
           }
         }
       }
@@ -5271,43 +7854,166 @@
         }
       }
     },
+    "tu.presenza.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Präsenz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presence"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presencia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Présence"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presenza"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presença"
+          }
+        }
+      }
+    },
+    "tu.presenza.spiega": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprechen lässt deine Präsenz wachsen, langes Schweigen lässt sie sinken."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speaking makes your presence grow; a long silence makes it fall."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hablar hace crecer tu presencia; un largo silencio la hace bajar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parler fait grandir ta présence ; un long silence la fait baisser."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parlare fa crescere la presenza; un lungo silenzio la fa calare."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falar faz a presença crescer; um longo silêncio a faz cair."
+          }
+        }
+      }
+    },
+    "tu.privacy.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datenschutzerklärung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy policy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Politique de confidentialité"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informativa sulla privacy"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidade"
+          }
+        }
+      }
+    },
     "tu.reset": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Von vorn beginnen"
+            "value": "Konto und Daten löschen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start over from zero"
+            "value": "Delete account and data"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Empezar de cero"
+            "value": "Eliminar cuenta y datos"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repartir de zéro"
+            "value": "Supprimer le compte et les données"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ricomincia da zero"
+            "value": "Elimina account e dati"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recomeçar do zero"
+            "value": "Excluir conta e dados"
           }
         }
       }
@@ -5318,37 +8024,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alles löschen"
+            "value": "Endgültig löschen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete everything"
+            "value": "Delete forever"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Borrar todo"
+            "value": "Eliminar para siempre"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tout supprimer"
+            "value": "Supprimer définitivement"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancella tutto"
+            "value": "Elimina per sempre"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apagar tudo"
+            "value": "Excluir para sempre"
           }
         }
       }
@@ -5359,37 +8065,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Löscht dein Profil und alle Inhalte. Du kehrst zur Anmeldung zurück."
+            "value": "Konto, Beiträge und deine Tische verschwinden für immer, vom Telefon und vom Server."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deletes your profile and all content. You'll return to sign-in."
+            "value": "Your account, remarks and the tables you host disappear forever, from the phone and the server."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Borra el perfil y todo el contenido. Volverás al acceso."
+            "value": "Tu cuenta, intervenciones y mesas que animas desaparecen para siempre, del teléfono y del servidor."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprime le profil et tout le contenu. Tu reviendras à la connexion."
+            "value": "Ton compte, tes interventions et les tables que tu animes disparaissent pour toujours, du téléphone et du serveur."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancella il profilo e tutti i contenuti. Tornerai all'accesso."
+            "value": "Account, interventi e tavoli che animi spariscono per sempre, dal telefono e dal server."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apaga o perfil e todo o conteúdo. Você voltará ao acesso."
+            "value": "Conta, intervenções e mesas que você anima somem para sempre, do telefone e do servidor."
           }
         }
       }
@@ -5400,37 +8106,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Von vorn beginnen?"
+            "value": "Konto und Daten löschen?"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start over from zero?"
+            "value": "Delete your account and data?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "¿Empezar de cero?"
+            "value": "¿Eliminar la cuenta y los datos?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Repartir de zéro ?"
+            "value": "Supprimer le compte et les données ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ricominciare da zero?"
+            "value": "Eliminare account e dati?"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recomeçar do zero?"
+            "value": "Excluir a conta e os dados?"
           }
         }
       }
@@ -5482,37 +8188,160 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Danksagungen"
+            "value": "Credits"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Acknowledgements"
+            "value": "Credits"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reconocimientos"
+            "value": "Créditos"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remerciements"
+            "value": "Crédits"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Riconoscimenti"
+            "value": "Crediti"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reconhecimentos"
+            "value": "Créditos"
+          }
+        }
+      }
+    },
+    "tu.rituale.alle": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um %@ · Zeit für die Sobremesa"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At %@ · sobremesa time"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A las %@ · hora de la sobremesa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À %@ · l'heure de la sobremesa"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle %@ · è l'ora della sobremesa"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Às %@ · hora da sobremesa"
+          }
+        }
+      }
+    },
+    "tu.rituale.anteprima": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorschau der Mitteilung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notification preview"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista previa de la notificación"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu de la notification"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anteprima della notifica"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévia da notificação"
+          }
+        }
+      }
+    },
+    "tu.rituale.attiva": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnere mich jeden Tag"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me every day"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recuérdamelo cada día"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappelle-le-moi chaque jour"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ricordamelo ogni giorno"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembre-me todos os dias"
           }
         }
       }
@@ -5523,37 +8352,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein einziger Ruf am Tag, zur Zeit deiner Wahl: der Moment, am Tisch zu bleiben. Kein weiteres Drängen, nie."
+            "value": "Eine Erinnerung am Tag, zur Uhrzeit deiner Wahl."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One single call a day, at the time you choose: the moment to linger at the table. No other nagging, ever."
+            "value": "One reminder a day, at the time you choose."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Una sola llamada al día, a la hora que elijas: el momento de quedarse en la mesa. Ninguna otra insistencia, nunca."
+            "value": "Un solo recordatorio al día, a la hora que elijas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un seul rappel par jour, à l'heure que tu choisis : le moment de rester à table. Aucune autre insistance, jamais."
+            "value": "Un seul rappel par jour, à l'heure que tu choisis."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un solo richiamo al giorno, all'ora che scegli tu: il momento di restare a tavola. Nessun'altra insistenza, mai."
+            "value": "Un solo promemoria al giorno, all'ora che scegli."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um único chamado por dia, na hora que você escolher: o momento de ficar à mesa. Nenhuma outra insistência, nunca."
+            "value": "Um só lembrete por dia, na hora que você escolher."
           }
         }
       }
@@ -5636,6 +8465,170 @@
           "stringUnit": {
             "state": "translated",
             "value": "A hora"
+          }
+        }
+      }
+    },
+    "tu.rituale.spento": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apagado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactivé"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spento"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desligado"
+          }
+        }
+      }
+    },
+    "tu.sicurezza.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sicherheit und Datenschutz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safety and privacy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguridad y privacidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sécurité et confidentialité"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sicurezza e privacy"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segurança e privacidade"
+          }
+        }
+      }
+    },
+    "tu.sottotitolo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Präsenz."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your presence."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu presencia."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta présence."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua presenza."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua presença."
+          }
+        }
+      }
+    },
+    "tu.termini.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutzungsbedingungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of use"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condiciones de uso"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditions d'utilisation"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Condizioni d'uso"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termos de uso"
           }
         }
       }

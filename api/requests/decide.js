@@ -1,7 +1,6 @@
 // POST /api/requests/decide { requestId, accept: bool } — solo l'animatore.
-import { sql, myTableIds, seatCount } from "../_lib/db.js";
+import { sql, seat } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
-import { RULES } from "../_lib/rules.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST" });
@@ -16,19 +15,13 @@ export default async function handler(req, res) {
   if (!request) return res.status(404).json({ error: "richiesta inesistente" });
   if (request.animator !== me.id) return res.status(403).json({ error: "non sei l'animatore" });
 
-  if (accept) {
-    // Anche chi entra siede al massimo a 5 tavoli, e il tavolo ha 12 sedie.
-    if ((await myTableIds(request.user_id)).length >= RULES.maxCircles) {
-      await sql`DELETE FROM join_requests WHERE id = ${requestId}`;
-      return res.status(409).json({ error: "il richiedente non ha tavoli liberi" });
-    }
-    const { rowCount } = await sql`
-      INSERT INTO memberships (user_id, circle_id)
-      SELECT ${request.user_id}, ${request.circle_id}
-      WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${request.circle_id}) < ${RULES.maxFriends}
-      ON CONFLICT DO NOTHING`;
-    if (!rowCount) return res.status(409).json({ error: "il tavolo è al completo" });
-  }
+  // La richiesta, comunque vada, è decisa: non resta appesa.
   await sql`DELETE FROM join_requests WHERE id = ${requestId}`;
+  if (accept) {
+    // Anche chi entra siede al massimo a 5 tavoli, e il tavolo ha 12 sedie:
+    // lo garantisce il database (v. seat()).
+    const result = await seat(request.user_id, request.circle_id);
+    if (!result.ok) return res.status(result.status).json({ error: result.error });
+  }
   res.status(200).json({ ok: true, accepted: !!accept });
 }

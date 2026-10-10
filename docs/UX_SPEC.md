@@ -235,3 +235,33 @@ L'app parte **da zero**: onboarding con Sign in with Apple (solo nome; se Apple 
 **Meccaniche:** messaggio +1 e brace ravvivata; ripresa +1; silenzio −2 (una volta per periodo); espulsione al 7° giorno −5 (mai l'animatore, mai nei tavoli sotto 2 persone). L'invito è A un tavolo: il codice porta a sedersi lì (limiti: 12 sedie, 5 tavoli). L'animatore che si alza chiude il tavolo per tutti — detto chiaramente prima.
 
 **Lessico:** mai "gruppo", "chat", "membri", "amici" — tavolo, sedie, sedersi, alzarsi, apparecchiare, commensali, animatore. Il rifiuto è gentile, la penalità spiegata, i numeri di business SOLO da ProductRules.
+
+---
+
+## Addendum v3 — "Ultima luce" (ottobre 2026)
+
+Direzione artistica concordata con Astra (v. `BRAINSTORM_ASTRA.md`). Sostituisce le parti visive precedenti; il lessico resta.
+
+**Palette (colorset)** — Background #101C19 · Surface #1C2B25 · Elevated #293B32 · TextPrimary #F5EFE3 · TextSecondary #CDD2C4 · TextMuted #A6B2A5 · Divider #405349 · Outline #708574 · Brass #E7BC6C (azione) · BrassInk #2B210F (testo su ottone) · EmberAlive #FFAF68 · EmberFading #DFA27D · EmberWaiting #ADB9AC · Warning #F0A69A. Regola: l'**ottone** è ciò che posso fare, la **brace** è ciò che vive il tavolo.
+
+**Tipografia** — Young Serif: titoli schermata 32, titolo tavolo 27–28, numeri identitari 22. Source Serif 4: interventi 17 (interlinea +3), testi narrativi 16–17. Inter: UI 15, metadata 13, microetichette 12 maiuscolo spaziato. Tutto su Dynamic Type.
+
+**Spazi e forme** — margini 20, griglia 4/8 (Space.xs…xxl), pannelli r12 solo quando servono, composer r20 alto ≥52, CTA pillola ≥48, target ≥44, filetti 0,5 pt, ombre solo su toast e pillole sovrapposte.
+
+**Il tavolo (TableGlyph)** — vista dall'alto, 12 posti a 30° da ore 12: occupati pieni ottone, liberi solo contorno Outline, il mio con alone ottone. Tre scale: 44 (liste), 88 (stanza, toccabile → Commensali), 228 (SeatRing con iniziali). VoiceOver: "n posti occupati su 12" + stato della brace.
+
+**La brace (EmberCore)** — nucleo irregolare con gradiente radiale. Viva: pieno + alone, respiro ±1,5% in 4,5 s (solo stanza e onboarding, mai nelle liste, mai con Reduce Motion). Si affievolisce: più piccolo, senza alone. In attesa: solo contorno. Sempre accompagnata dall'etichetta testuale dove lo stato conta. Nelle schermate vuote: In attesa (mai una brace accesa falsa).
+
+**Contratto temporale** — In attesa (< 2 persone) ha la precedenza; Viva se l'ultimo intervento di chiunque è < 48 h; altrimenti Si affievolisce. Avviso personale "La tua sedia ti aspetta · da N giorni" da 96 h, mai all'animatore né a un tavolo in attesa; TextSecondary, Warning solo dal 6° giorno; azione "Riprendi la parola".
+
+**Salotto** — titolo + "I tuoi tavoli, oggi."; "Richieste ai tuoi tavoli" (pannelli Fai sedere / Non ora); righe senza card (glifo 44, nome Young Serif 20, ora, "n/12 · stato", anteprima o "N interventi nuovi" o avviso personale), filetti; vuoto: glifo In attesa 168 + Esplora i tavoli + Hai un codice?
+
+**Stanza** — testata (glifo 88, titolo, tema, "N commensali · stato", riga personale); il nome passa nella barra quando la testata esce; conversazione editoriale (altrui sul fondo, miei su Elevated, nome+ora, raggruppamento < 10 min, OGGI/IERI); Nutre: foglia vuota/piena, nessun numero, sui miei "Ha nutrito"; pressione lunga: Copia · Nutre · Segnala intervento · Blocca persona (con conferma). Autoscroll solo se sei in fondo o hai scritto tu, altrimenti pillola ottone "N nuovi interventi ↓" sopra il composer. Da soli: pannello "Per ora siete in uno." + Invita.
+
+**Fogli** — Commensali (anello 228, ordine d'arrivo, fascia a parola, "Il tuo posto" bordato ottone, "Animatore", menu ⋯ Blocca/Sblocca, "Bloccato"); Invita ("Un codice, una sedia.", codice monouso a blocchi, Condividi, Copia codice); Fonda (Apparecchia).
+
+**Tavoli** — Hai un codice? (trattini e minuscole indifferenti), ricerca, "Scopri i tavoli" come indice (Siediti / Chiedi / Al completo), "Fonda un tavolo" fisso in basso.
+
+**Tu** — identità (avatar 64, nome modificabile), Presenza (fascia in ottone, n/100, barra, cosa la muove: l'unico posto del numero), indice (Come funziona, Il tuo momento, Lingua, Crediti), **Sicurezza e privacy** (Persone bloccate, Informativa privacy, Condizioni d'uso, Assistenza e segnalazioni), in fondo **Elimina account e dati**.
+
+**Onboarding** — wordmark, "Il tempo che resta a tavola.", glifo 220 con brace viva, intro, Continua con Apple (pillola bianca 52), "6 lingue · Nessun algoritmo · Solo tavoli", privacy in breve, accettazione di Condizioni d'uso e Informativa (link).

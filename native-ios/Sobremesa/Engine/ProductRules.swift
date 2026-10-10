@@ -34,6 +34,11 @@ struct ProductRules: Equatable, Sendable {
     /// da soli non c'è conversazione da tenere viva.
     var emberMinimumMembers: Int = 2
 
+    // MARK: Il calore del tavolo (collettivo — v3 "Ultima luce", DECISIONI #38)
+    /// Il tavolo è "vivo" se QUALCUNO vi ha parlato entro queste ore.
+    /// Distinto dalla brace personale (silenzio del singolo, sopra).
+    var tableWarmthAliveHours: Int = 48
+
     // MARK: Punteggio di partecipazione
     /// Punti per una pubblicazione.
     var pointsPost: Int = 2

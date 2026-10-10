@@ -4,41 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Privacy — Sobremesa</title>
-<meta name="description" content="Informativa privacy dell'app Sobremesa: quali dati servono per sedersi alla stessa tavola, dove stanno, e come si cancella tutto.">
+<meta name="description" content="Informativa privacy dell'app Sobremesa: quali dati servono per sedersi a un tavolo, dove stanno, e come si cancella tutto.">
+<meta name="theme-color" content="#101C19">
 <style>
 @font-face{font-family:"Young Serif";src:url(/native-ios/Sobremesa/Resources/Fonts/YoungSerif-Regular.ttf) format("truetype");font-display:swap}
 @font-face{font-family:"Source Serif 4";src:url(/native-ios/Sobremesa/Resources/Fonts/SourceSerif4-Variable.ttf) format("truetype");font-display:swap}
 @font-face{font-family:"Inter";src:url(/native-ios/Sobremesa/Resources/Fonts/Inter-Variable.ttf) format("truetype");font-display:swap}
-:root{--ink:#14251F;--felt:#1E3A31;--paper:#F4EFE4;--paperdim:#E9E2D2;--brasssoft:#E4C98A}
+:root{--bg:#101C19;--surface:#1C2B25;--text:#F5EFE3;--text2:#CDD2C4;--muted:#A6B2A5;--divider:#405349;--brass:#E7BC6C}
 *{box-sizing:border-box}
-body{margin:0;background:var(--ink);color:var(--paperdim);font-family:Inter,system-ui,sans-serif;line-height:1.65}
-main{max-width:680px;margin:0 auto;padding:48px 24px 24px}
-h1{font-family:"Young Serif",serif;color:var(--paper);font-size:2rem;margin:.2em 0 .6em}
-h2{font-family:"Young Serif",serif;color:var(--brasssoft);font-size:1.2rem;margin-top:1.8em}
-p{font-family:"Source Serif 4",serif;font-size:1.05rem}
-a{color:var(--brasssoft)}
-a:focus-visible{outline:3px solid var(--brasssoft);outline-offset:3px}
-footer{max-width:680px;margin:0 auto;padding:0 24px 40px;border-top:1px solid var(--felt);font-size:.9rem;color:var(--brasssoft)}
+body{margin:0;background:var(--bg);color:var(--text2);font-family:Inter,system-ui,-apple-system,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+header,main,footer{max-width:680px;margin:0 auto;padding-left:24px;padding-right:24px}
+header{padding-top:22px;padding-bottom:22px}
+.wordmark{font-family:"Young Serif",serif;font-size:22px;color:var(--text);text-decoration:none}
+main{padding-top:40px;padding-bottom:40px}
+.label{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+h1{font-family:"Young Serif",serif;font-weight:400;color:var(--text);font-size:clamp(32px,6vw,44px);line-height:1.12;margin:0 0 28px}
+h2{font-family:"Young Serif",serif;font-weight:400;color:var(--text);font-size:22px;margin:44px 0 10px}
+p{font-family:"Source Serif 4",serif;font-size:18px;margin:0 0 14px}
+.lead{background:var(--surface);border-radius:12px;padding:20px 22px;color:var(--text)}
+strong,em{color:var(--text)}
+a{color:var(--brass);text-underline-offset:3px}
+a:focus-visible{outline:3px solid var(--brass);outline-offset:3px;border-radius:4px}
+footer{border-top:1px solid var(--divider);padding-top:24px;padding-bottom:48px;font-size:14px;color:var(--muted)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--text2);padding:6px 0}
+@media (max-width:480px){header,main,footer{padding-left:20px;padding-right:20px}p{font-size:17px}}
 </style>
 </head>
 <body>
+<header><a class="wordmark" href="/">Sobremesa</a></header>
 <main>
+<p class="label">Informativa sulla privacy</p>
 <h1>Privacy di Sobremesa</h1>
-<p><strong>La versione breve: Sobremesa conserva solo ciò che serve a farti sedere alla stessa tavola dei tuoi amici. Niente pubblicità, niente profilazione, niente tracciamento, niente vendita di dati. Mai.</strong></p>
+<p class="lead"><strong>La versione breve:</strong> Sobremesa conserva solo ciò che serve a farti sedere a un tavolo e conversare. Niente pubblicità, niente profilazione, niente tracciamento, niente vendita di dati. Mai.</p>
+
 <h2>Quali dati esistono</h2>
-<p>Quando accedi con Apple, Sobremesa riceve un identificativo tecnico anonimo fornito da Apple e — se scegli di condividerlo — il tuo nome. Non riceviamo la tua email. A questi si aggiunge ciò che crei usando l'app: post, commenti, circoli, inviti, il punteggio di partecipazione. Nient'altro: nessun contatto della rubrica, nessuna posizione, nessun dato del dispositivo.</p>
+<p>Quando accedi con Apple, Sobremesa riceve un identificativo tecnico anonimo fornito da Apple e — se scegli di condividerlo — il tuo nome. Non riceviamo la tua email. A questi si aggiunge ciò che crei usando l'app: i tavoli che fondi, i tavoli a cui siedi, i tuoi interventi, i Nutre, i codici d'invito, il punteggio di presenza e gli eventi che lo muovono. Se segnali un intervento o blocchi una persona, conserviamo anche la segnalazione (con il motivo scelto) e il blocco. Nient'altro: nessun contatto della rubrica, nessuna posizione, nessun dato del dispositivo.</p>
+
+<h2>Chi vede cosa</h2>
+<p>I tuoi interventi li leggono solo le persone sedute allo stesso tavolo. Chi siede con te vede il tuo nome e la tua fascia di presenza (una parola, mai il numero). Il punteggio 0–100 lo vedi solo tu. Chi hai bloccato non compare più nelle tue conversazioni e non può chiedere di sedersi ai tavoli che animi.</p>
+
 <h2>Dove stanno</h2>
-<p>Perché una tavola esista, le persone devono potersi vedere: i dati sono conservati sul server di Sobremesa, un database ospitato nell'Unione Europea (Francoforte, Germania). Sul tuo dispositivo l'app tiene una copia locale per mostrarti tutto rapidamente, e la tua sessione d'accesso è custodita nel portachiavi sicuro di iOS. I dati viaggiano sempre cifrati (HTTPS).</p>
+<p>Perché un tavolo esista, le persone devono potersi leggere: i dati sono conservati sul server di Sobremesa, un database ospitato nell'Unione Europea (Francoforte, Germania). Sul tuo telefono l'app tiene una copia locale per mostrarti tutto rapidamente, e la tua sessione d'accesso è custodita nel portachiavi sicuro di iOS. I dati viaggiano sempre cifrati (HTTPS).</p>
+
 <h2>Per cosa vengono usati</h2>
-<p>Per una cosa sola: far funzionare l'app. Mostrare i tuoi post ai tuoi circoli, i tuoi amici alla tua tavola, il tuo punteggio a chi siede con te. Non ci sono strumenti di analisi, SDK pubblicitari o tracciatori di alcun tipo, e nessun dato viene condiviso con terzi al di fuori dell'infrastruttura tecnica che ospita il servizio (Vercel e Neon, con server nell'UE per il database).</p>
+<p>Per far funzionare l'app e per tenerla sicura. Mostrare i tuoi interventi al tuo tavolo, le sedie occupate, la brace, il tuo punteggio a te; esaminare le segnalazioni di contenuti offensivi. Non ci sono strumenti di analisi, SDK pubblicitari o tracciatori di alcun tipo, e nessun dato viene condiviso con terzi al di fuori dell'infrastruttura tecnica che ospita il servizio (Vercel e Neon, con il database nell'UE).</p>
+
+<h2>Segnalazioni e moderazione</h2>
+<p>Ogni intervento può essere segnalato con una pressione prolungata. Chi segnala non lo vede più; quando lo segnalano più persone sparisce per tutti, in attesa della nostra revisione. Le segnalazioni servono soltanto a questo e vengono cancellate insieme all'intervento o all'account a cui si riferiscono.</p>
+
 <h2>Come si cancella tutto</h2>
-<p>Dall'app: <em>Tu → Ricomincia da zero</em> cancella l'account e ogni contenuto <strong>sia dal dispositivo sia dal server</strong> — post, commenti, circoli, amicizie, tutto. L'operazione è immediata e definitiva. Se vuoi, puoi inoltre scollegare Sobremesa dal tuo ID Apple in <em>Impostazioni → Apple&nbsp;ID → Accesso con Apple</em>, oppure scriverci per qualsiasi richiesta sui tuoi dati (accesso, rettifica, cancellazione, portabilità — i diritti che il GDPR ti riconosce).</p>
+<p>Dall'app: <em>Tu → Elimina account e dati</em> cancella l'account e ogni contenuto <strong>sia dal telefono sia dal server</strong> — profilo, punteggio, interventi, Nutre, inviti e i tavoli che animi, con le loro conversazioni. L'operazione è immediata e definitiva. Puoi inoltre scollegare Sobremesa dal tuo ID Apple in <em>Impostazioni → [il tuo nome] → Accedi con Apple</em>, oppure scriverci per qualsiasi richiesta sui tuoi dati (accesso, rettifica, cancellazione, portabilità — i diritti che il GDPR ti riconosce).</p>
+
 <h2>Notifiche</h2>
-<p>I promemoria della "brace" sono notifiche locali, programmate e consegnate dal tuo stesso dispositivo. Nessun servizio esterno è coinvolto e puoi disattivarle dalle Impostazioni di sistema.</p>
+<p>I promemoria della sedia e il rituale della sera («È l'ora della sobremesa») sono notifiche locali, programmate e consegnate dal tuo stesso telefono. Nessun servizio esterno è coinvolto e puoi disattivarle dalle Impostazioni di sistema o da <em>Tu → Il tuo momento</em>.</p>
+
 <h2>Titolare e contatti</h2>
 <p>GLV srl — per qualsiasi domanda o richiesta sui tuoi dati: <a href="mailto:grecolatinovivo@gmail.com">grecolatinovivo@gmail.com</a>.</p>
-<p>Ultimo aggiornamento: luglio 2026 — questa versione descrive l'introduzione del server di Sobremesa.</p>
+<p>Ultimo aggiornamento: ottobre 2026 — questa versione descrive i tavoli, le segnalazioni e i blocchi.</p>
 </main>
-<footer><p><a href="/">← Torna a Sobremesa</a></p></footer>
+<footer>
+<nav aria-label="Informazioni">
+<a href="/">← Torna a Sobremesa</a>
+<a href="/termini">Condizioni d'uso</a>
+<a href="mailto:grecolatinovivo@gmail.com?subject=Sobremesa%20-%20assistenza%20e%20segnalazioni">Assistenza e segnalazioni</a>
+</nav>
+</footer>
 </body>
 </html>

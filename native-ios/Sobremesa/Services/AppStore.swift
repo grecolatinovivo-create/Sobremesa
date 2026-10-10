@@ -58,6 +58,14 @@ final class AppStore {
     /// Le tre stanze; serve a saltare di stanza dai richiami del Salotto.
     enum Stanza: Hashable { case salotto, tavoli, tu }
     var stanzaCorrente: Stanza = .salotto
+    /// Il percorso di navigazione del Salotto (le stanze aperte).
+    var salottoPath: [Tavolo] = []
+
+    /// Apre la stanza di un tavolo dal Salotto (dopo fondazione o ingresso).
+    func open(_ tavolo: Tavolo) {
+        stanzaCorrente = .salotto
+        salottoPath = [tavolo]
+    }
 
     private var toastTask: Task<Void, Never>?
 
@@ -121,12 +129,18 @@ final class AppStore {
         Task { await performSync() }
     }
 
+    /// L'ultimo errore di sincronizzazione (nil = l'ultimo sync è andato bene).
+    var lastSyncError: String?
+
     private func performSync() async {
         guard SessionStore.token != nil else { return }
         do {
             let nutrePrima = data.myReceivedNutre()
             let payload = try await api.sync(catalogQuery: catalogQuery)
             data.applySync(payload)
+            // Una stanza aperta su un tavolo che il sync ha tolto (fantasma) si chiude.
+            salottoPath.removeAll { $0.modelContext == nil || $0.isDeleted }
+            if let fromServer = payload.blocked { blocked = fromServer }
             refreshEmberReminders()
             // Il gesto più caldo dell'app non deve restare invisibile:
             // se le mie parole hanno nutrito qualcuno, lo dico (aggregato).
@@ -136,8 +150,11 @@ final class AppStore {
                     String(localized: "toast.nutre.ricevuti", bundle: L10n.bundle),
                     nutreDopo - nutrePrima))
             }
+            lastSyncError = nil
         } catch {
-            // Offline: si resta sulla fotografia locale, senza drammi.
+            // Offline: si resta sulla fotografia locale, senza drammi —
+            // ma l'errore resta annotato per la diagnostica.
+            lastSyncError = String(describing: error).prefix(160).description
         }
     }
 
@@ -195,8 +212,33 @@ final class AppStore {
         show(notices: data.createTable(name: name, theme: theme, category: category, isOpen: isOpen))
         notifications.requestAuthorizationIfNeeded()
         refreshEmberReminders()
-        remote { try await self.api.createTable(name: name, theme: theme,
-                                                category: category.rawValue, isOpen: isOpen) }
+        // Appena apparecchiato, ci si siede: la stanza nuova si apre da sola.
+        let nuovo = data.myMemberships().last?.tavolo
+        if let nuovo { open(nuovo) }
+        // Se il server rifiuta la fondazione, il tavolo locale NON deve restare
+        // come fantasma (prima restava per sempre, e l'invito non poteva funzionare).
+        Task {
+            do {
+                try await api.createTable(name: name, theme: theme,
+                                          category: category.rawValue, isOpen: isOpen)
+                data.tableCreationFinished(name: name)
+                await performSync()
+            } catch APIError.notAuthenticated {
+                data.tableCreationFinished(name: name)
+            } catch {
+                data.tableCreationFinished(name: name)
+                let refused: Bool
+                if let apiError = error as? APIError, case .http = apiError { refused = true } else { refused = false }
+                show(message: refused
+                     ? String(localized: "toast.rifiutato", bundle: L10n.bundle)
+                     : String(localized: "toast.offline", bundle: L10n.bundle))
+                if let nuovo, nuovo.serverID == nil {
+                    salottoPath.removeAll { $0 === nuovo }
+                    data.discardUnsyncedTable(nuovo)
+                }
+                await performSync()
+            }
+        }
     }
 
     /// Siediti a un tavolo aperto (dal catalogo).
@@ -206,6 +248,8 @@ final class AppStore {
         if joined {
             notifications.requestAuthorizationIfNeeded()
             refreshEmberReminders()
+            show(message: String(format: String(localized: "toast.seduto", bundle: L10n.bundle), tavolo.name))
+            open(tavolo)
             if let id = tavolo.serverID {
                 remote { try await self.api.tableAction("join", tableID: id) }
             }
@@ -272,6 +316,45 @@ final class AppStore {
         }
     }
 
+    // MARK: Sicurezza dei tavoli (Apple Guideline 1.2)
+
+    /// Le persone che ho bloccato (fotografia del server a ogni sync).
+    var blocked: [RemoteBlocked] = []
+
+    func isBlocked(_ person: Person) -> Bool {
+        guard let id = person.serverID else { return false }
+        return blocked.contains { $0.id == id }
+    }
+
+    /// Segnala un intervento: sparisce subito dalla mia stanza; il server
+    /// lo nasconde a tutti se lo segnalano più persone, e lo mette in coda
+    /// per la revisione.
+    func report(_ messaggio: Messaggio, reason: ReportReason) {
+        guard let id = messaggio.serverID, messaggio.author?.isMe != true else { return }
+        data.removeMessage(messaggio)
+        show(message: String(localized: "toast.segnalato", bundle: L10n.bundle))
+        remote { try await self.api.report(messageID: id, reason: reason) }
+    }
+
+    /// Blocca una persona: i suoi interventi spariscono subito, e non potrà
+    /// più chiedere di sedersi ai tavoli che animo.
+    func block(_ person: Person) {
+        guard let id = person.serverID, !person.isMe else { return }
+        if !blocked.contains(where: { $0.id == id }) {
+            blocked.append(RemoteBlocked(id: id, name: person.name))
+        }
+        data.removeMessages(fromAuthorServerID: id)
+        show(message: String(format: String(localized: "toast.bloccato", bundle: L10n.bundle), person.name))
+        remote { try await self.api.setBlocked(true, userID: id) }
+    }
+
+    /// Sblocca: i suoi interventi tornano col prossimo sync.
+    func unblock(_ person: RemoteBlocked) {
+        blocked.removeAll { $0.id == person.id }
+        show(message: String(format: String(localized: "toast.sbloccato", bundle: L10n.bundle), person.name))
+        remote { try await self.api.setBlocked(false, userID: person.id) }
+    }
+
     /// La stanza è stata letta fino ad adesso (alimenta i "nuovi interventi").
     func markRead(_ tavolo: Tavolo) {
         data.markRead(tavolo)
@@ -308,20 +391,60 @@ final class AppStore {
     // MARK: Inviti al tavolo
 
     /// Genera un codice d'invito per un tavolo (share sheet).
+    /// Robusto: un tavolo appena fondato non ha ancora l'id del server (la
+    /// fondazione è ottimistica) e la sedia dell'animatore può non essere
+    /// ancora registrata. Si risincronizza e si riprova qualche volta,
+    /// invece di arrendersi al primo colpo (era il bug della rotellina).
     func createInviteCode(for tavolo: Tavolo) async -> String? {
-        guard let id = tavolo.serverID else { return nil }
-        return try? await api.createInvite(tableID: id)
+        await inviteCode(for: tavolo).code
+    }
+
+    /// Come sopra, ma dice anche PERCHÉ non è arrivato (il foglio lo mostra
+    /// in piccolo: serve a capire subito dove si rompe, senza indovinare).
+    func inviteCode(for tavolo: Tavolo) async -> (code: String?, detail: String?) {
+        guard SessionStore.token != nil else { return (nil, "sessione assente: l'app non ha ancora un accesso al server") }
+        var detail: String?
+        for attempt in 0..<4 {
+            if tavolo.serverID == nil { await performSync() }
+            if tavolo.modelContext == nil || tavolo.isDeleted {
+                return (nil, "il tavolo non esiste sul server: rifondalo")
+            }
+            if let id = tavolo.serverID {
+                do {
+                    return (try await api.createInvite(tableID: id), nil)
+                } catch APIError.http(let status, let body) {
+                    detail = "HTTP \(status) · \(body.prefix(120))"
+                    // 4xx: il server ha risposto e ha detto no; riprovare non serve.
+                    if (400..<500).contains(status) { return (nil, detail) }
+                } catch APIError.notAuthenticated {
+                    return (nil, "sessione assente")
+                } catch {
+                    detail = "rete · \(error.localizedDescription)"
+                }
+            } else {
+                detail = lastSyncError.map { "sync · \($0)" } ?? "tavolo non ancora sul server"
+            }
+            try? await Task.sleep(for: .seconds(attempt == 0 ? 1 : 2))
+            await performSync()
+        }
+        return (nil, detail)
     }
 
     /// Riscatta un codice ricevuto: ci si siede a quel tavolo.
     func redeemInvite(code: String) {
-        let clean = code.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Il codice si mostra "Q7M4-K2LP": trattini e spazi non contano.
+        let clean = code.uppercased().filter { $0.isLetter || $0.isNumber }
         guard !clean.isEmpty else { return }
         Task {
             do {
-                try await api.redeemInvite(code: clean)
+                let tableID = try await api.redeemInvite(code: clean)
                 show(message: String(localized: "toast.invito.seduti", bundle: L10n.bundle))
                 await performSync()
+                // Seduti: la stanza si apre da sola.
+                if let tableID,
+                   let tavolo = data.myMemberships().compactMap(\.tavolo).first(where: { $0.serverID == tableID }) {
+                    open(tavolo)
+                }
             } catch {
                 show(message: String(localized: "toast.invito.errore", bundle: L10n.bundle))
             }
@@ -347,6 +470,7 @@ final class AppStore {
             Task.detached { try? await client.deleteAccount(token: token) }
         }
         SessionStore.clear()
+        blocked = []
         data.resetAllData()
         notifications.reschedule(memberships: [])
         toastTask?.cancel()

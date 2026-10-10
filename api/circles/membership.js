@@ -1,6 +1,7 @@
 // POST /api/circles/membership { circleId, action: "join" | "leave" | "retake" }
-// join: circolo aperto → si entra; chiuso → richiesta all'animatore.
-import { sql, myTableIds, seatCount, applyScore } from "../_lib/db.js";
+// join: tavolo aperto → ci si siede; chiuso → richiesta all'animatore.
+// I vincoli (12 sedie, 5 tavoli) li garantisce il database (v. seat()).
+import { sql, myTableIds, seatCount, applyScore, seat, schemaV3 } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
 import { RULES } from "../_lib/rules.js";
 
@@ -13,9 +14,13 @@ export default async function handler(req, res) {
   if (!circleId || !action) return res.status(400).json({ error: "parametri mancanti" });
   const { rows: circles } = await sql`SELECT * FROM circles WHERE id = ${circleId}`;
   const circle = circles[0];
-  if (!circle) return res.status(404).json({ error: "circolo inesistente" });
+  if (!circle) return res.status(404).json({ error: "tavolo inesistente" });
 
   if (action === "join") {
+    const { rows: already } = await sql`
+      SELECT 1 FROM memberships WHERE user_id = ${me.id} AND circle_id = ${circleId}`;
+    if (already.length) return res.status(200).json({ joined: true });
+    // Controlli rapidi per un messaggio chiaro; la garanzia vera è in seat().
     if ((await myTableIds(me.id)).length >= RULES.maxCircles) {
       return res.status(409).json({ error: "siedi già al massimo dei tavoli" });
     }
@@ -23,24 +28,24 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: "il tavolo è al completo" });
     }
     if (!circle.is_open) {
+      // Chi l'animatore ha bloccato non può bussare al suo tavolo.
+      if (await schemaV3()) {
+        const { rows: blocked } = await sql`
+          SELECT 1 FROM blocks WHERE blocker = ${circle.animator} AND blocked = ${me.id}`;
+        if (blocked.length) return res.status(200).json({ requested: true });
+      }
       await sql`INSERT INTO join_requests (circle_id, user_id)
                 VALUES (${circleId}, ${me.id}) ON CONFLICT DO NOTHING`;
       return res.status(200).json({ requested: true });
     }
-    // INSERT guardato in un solo statement: due join simultanei non possono
-    // superare le 12 sedie (il COUNT è valutato nello stesso comando).
-    const { rowCount } = await sql`
-      INSERT INTO memberships (user_id, circle_id)
-      SELECT ${me.id}, ${circleId}
-      WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${circleId}) < ${RULES.maxFriends}
-      ON CONFLICT DO NOTHING`;
-    if (!rowCount) return res.status(409).json({ error: "il tavolo è al completo" });
+    const result = await seat(me.id, circleId);
+    if (!result.ok) return res.status(result.status).json({ error: result.error });
     return res.status(200).json({ joined: true });
   }
 
   if (action === "leave") {
     // Uscita volontaria: nessuna penalità. L'animatore non abbandona il
-    // proprio circolo: lo chiude (il circolo sparisce con lui).
+    // proprio tavolo: lo chiude (il tavolo sparisce con lui).
     if (circle.animator === me.id) {
       await sql`DELETE FROM circles WHERE id = ${circleId}`;
       return res.status(200).json({ closed: true });
