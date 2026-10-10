@@ -109,7 +109,8 @@ enum AppFont {
     /// Interfaccia e pulsanti (15). v3.1: anche l'interfaccia è in serif
     /// (Source Serif 4), come nei mockup di Astra — più caldo, più "libro".
     static func ui(_ size: CGFloat = 15, relativeTo style: Font.TextStyle = .subheadline) -> Font {
-        custom(sourceSerif, size: size + 1, relativeTo: style, fallback: .serif)
+        // Specifiche di Astra: l'interfaccia funzionale (bottoni, nomi) resta Inter.
+        custom(inter, size: size, relativeTo: style, fallback: .default)
     }
 
     /// Metadati (13), in serif.
@@ -132,14 +133,14 @@ struct Panel: ViewModifier {
     var fill: Color = .surface
     var padding: CGFloat = Space.l
     func body(content: Content) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: 14, style: .continuous)
         content
             .padding(padding)
             .background(
                 shape.fill(LinearGradient(colors: [Color.elevated.opacity(0.9), fill],
                                           startPoint: .top, endPoint: .bottom))
             )
-            .overlay(shape.strokeBorder(Color.brass.opacity(0.28), lineWidth: 1))
+            .overlay(shape.strokeBorder(Color.brass.opacity(0.6), lineWidth: 0.8))
     }
 }
 
@@ -236,8 +237,8 @@ struct AvatarView: View {
                     .font(AppFont.title(size * 0.38, relativeTo: .caption))
                     .foregroundStyle(Color.flameGold)
             )
-            .overlay(SwiftUI.Circle().strokeBorder(Color.brass.opacity(highlighted ? 1 : 0.55),
-                                                   lineWidth: highlighted ? 1.5 : 1))
+            .overlay(SwiftUI.Circle().strokeBorder(Color.brass.opacity(highlighted ? 0.85 : 0.7),
+                                                   lineWidth: size > 60 ? 2 : 1))
             .frame(width: size, height: size)
             .accessibilityHidden(true)
     }
@@ -340,7 +341,7 @@ struct Hairline: View {
     var inset: CGFloat = 0
     var body: some View {
         Rectangle()
-            .fill(Color.divider)
+            .fill(Color.brass.opacity(0.25))
             .frame(height: 0.5)
             .padding(.leading, inset)
             .accessibilityHidden(true)
@@ -356,7 +357,7 @@ struct ScreenTitle: View {
         // Come nei mockup: titolo grande e centrato, sottotitolo corsivo.
         VStack(spacing: Space.xs) {
             Text(titleKey)
-                .font(AppFont.display(42))
+                .font(AppFont.display(40))
                 .foregroundStyle(Color.textPrimary)
                 .accessibilityAddTraits(.isHeader)
             if let subtitleKey {

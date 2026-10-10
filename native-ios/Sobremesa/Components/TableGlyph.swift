@@ -76,10 +76,10 @@ struct TableDrawing {
     let time: Double
 
     /// Proporzioni (frazioni del lato).
-    static let tableRadius: CGFloat = 0.30
-    static let chairRing: CGFloat = 0.405
-    static let chairWidth: CGFloat = 0.13
-    static let chairDepth: CGFloat = 0.12
+    static let tableRadius: CGFloat = 0.355
+    static let chairRing: CGFloat = 0.415
+    static let chairWidth: CGFloat = 0.15
+    static let chairDepth: CGFloat = 0.14
 
     /// L'angolo della sedia `index` (0 = ore 12, senso orario).
     static func angle(of index: Int, of count: Int) -> Double {
@@ -128,8 +128,8 @@ struct TableDrawing {
             chair.rotate(by: .radians(angle + .pi / 2))
             // Nello spazio della sedia: −y = verso l'esterno (lo schienale).
             let occupiedSeat = isOccupied(index)
-            let seatHeight = depth * 0.62
-            let seatY = -seatHeight / 2 + depth * 0.18
+            let seatHeight = depth * 0.66
+            let seatY = -seatHeight / 2 + depth * 0.12
             let seat = Path(roundedRect: CGRect(x: -width / 2, y: seatY, width: width, height: seatHeight),
                             cornerRadius: width * 0.22)
             if occupiedSeat {
@@ -138,7 +138,7 @@ struct TableDrawing {
                     center: CGPoint(x: 0, y: seatY + seatHeight * 0.4),
                     startRadius: 0, endRadius: width * 0.8))
             } else {
-                chair.fill(seat, with: .color(.chairEmpty))
+                chair.fill(seat, with: .color(.chairEmpty.opacity(0.35)))
             }
             let wire: Color = occupiedSeat ? .brass : .brass.opacity(0.32)
             chair.stroke(seat, with: .color(wire), lineWidth: line)
@@ -160,9 +160,9 @@ struct TableDrawing {
                              style: StrokeStyle(lineWidth: max(0.4, side * 0.006), lineCap: .round))
             }
             if isMine(index) {
-                let frame = Path(roundedRect: CGRect(x: -width * 0.78, y: -depth * 0.62,
-                                                     width: width * 1.56, height: depth * 1.35),
-                                 cornerRadius: width * 0.42)
+                let frame = Path(roundedRect: CGRect(x: -width * 0.68, y: -depth * 0.58,
+                                                     width: width * 1.36, height: depth * 1.16),
+                                 cornerRadius: width * 0.4)
                 chair.stroke(frame, with: .color(.brass.opacity(0.9)), lineWidth: max(1, side * 0.01))
             }
         }
@@ -174,7 +174,7 @@ struct TableDrawing {
         let radius = side * Self.tableRadius
         let disc = Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius,
                                           width: radius * 2, height: radius * 2))
-        context.fill(disc, with: .radialGradient(Gradient(colors: [.surface, .feltEdge]),
+        context.fill(disc, with: .radialGradient(Gradient(colors: [.elevated, .surface, .feltEdge]),
                                                  center: center, startRadius: 0, endRadius: radius))
         // La luce della candela sul feltro (respira con la fiamma).
         if lit > 0 {
@@ -203,7 +203,7 @@ struct TableDrawing {
     private func drawCandle(_ context: inout GraphicsContext, side: CGFloat, center: CGPoint) {
         let small = side < 60
         // Il piattino d'ottone.
-        let dishRadius = side * 0.04
+        let dishRadius = side * 0.06
         let dishCenter = CGPoint(x: center.x, y: center.y + side * 0.012)
         let dish = Path(ellipseIn: CGRect(x: dishCenter.x - dishRadius, y: dishCenter.y - dishRadius,
                                           width: dishRadius * 2, height: dishRadius * 2))
@@ -222,11 +222,11 @@ struct TableDrawing {
 
         let strength: CGFloat = warmth == .viva ? 1 : 0.62
         // Respiro lento (±5 %) + tremolio minimo, mai nervoso.
-        let breath = 1 + 0.05 * sin(time * 1.4) + 0.03 * sin(time * 7.7) + 0.015 * sin(time * 13.1)
-        let height = side * (small ? 0.16 : 0.11) * strength * breath
-        let width = side * (small ? 0.085 : 0.055) * strength
+        let breath = 1 + 0.035 * sin(time * 1.4) + 0.025 * sin(time * 7.7) + 0.012 * sin(time * 13.1)
+        let height = side * (small ? 0.17 : 0.13) * strength * breath
+        let width = side * (small ? 0.08 : 0.06) * strength
         let sway = side * 0.012 * strength * sin(time * 3.3)
-        let base = CGPoint(x: center.x, y: center.y + side * 0.025)
+        let base = CGPoint(x: center.x, y: center.y + side * 0.03)
 
         // L'alone della fiamma.
         let glowRadius = height * (small ? 1.6 : 1.3)

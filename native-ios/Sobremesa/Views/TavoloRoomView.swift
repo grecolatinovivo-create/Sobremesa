@@ -292,7 +292,7 @@ struct TavoloRoomView: View {
             .padding(.bottom, Space.xs)
 
             Text(verbatim: tavolo.name)
-                .font(AppFont.title(34, relativeTo: .title))
+                .font(AppFont.title(28, relativeTo: .title))
                 .foregroundStyle(Color.textPrimary)
                 .multilineTextAlignment(.center)
                 .accessibilityAddTraits(.isHeader)
@@ -467,9 +467,10 @@ struct TavoloRoomView: View {
                 .padding(.horizontal, Space.l)
                 .padding(.vertical, 14)
                 .frame(minHeight: 52)
-                .background(Color.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(composerFocused ? Color.outline : Color.divider, lineWidth: 1))
+                .background(LinearGradient(colors: [Color.surface, Color.feltEdge], startPoint: .top, endPoint: .bottom),
+                            in: RoundedRectangle(cornerRadius: 26, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 26, style: .continuous)
+                    .strokeBorder(Color.brass.opacity(composerFocused ? 0.6 : 0.35), lineWidth: 0.8))
             Button {
                 send()
             } label: {
@@ -548,10 +549,10 @@ private struct ConversationEntry: View {
                 if continued {
                     Color.clear
                 } else {
-                    AvatarView(initials: messaggio.author?.initials ?? "?", size: 36, highlighted: mio)
+                    AvatarView(initials: messaggio.author?.initials ?? "?", size: 30, highlighted: mio)
                 }
             }
-            .frame(width: 36)
+            .frame(width: 30)
 
             VStack(alignment: .leading, spacing: 4) {
                 if !continued {
@@ -813,7 +814,7 @@ private struct InviteSheet: View {
         ScrollView {
             VStack(spacing: Space.l) {
                 Text("stanza.invita")
-                    .font(AppFont.title(24, relativeTo: .title2))
+                    .font(AppFont.title(28, relativeTo: .title2))
                     .foregroundStyle(Color.textPrimary)
                     .padding(.top, Space.s)
 
@@ -871,8 +872,8 @@ private struct InviteSheet: View {
         Group {
             if let code {
                 Text(verbatim: spaced(code))
-                    .font(AppFont.title(36, relativeTo: .largeTitle).monospacedDigit())
-                    .kerning(7)
+                    .font(AppFont.ui(30, relativeTo: .largeTitle).weight(.medium).monospacedDigit())
+                    .kerning(2)
                     .foregroundStyle(Color.textPrimary)
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
@@ -894,9 +895,9 @@ private struct InviteSheet: View {
         }
         .frame(maxWidth: .infinity, minHeight: 96)
         .padding(.horizontal, Space.l)
-        .background(Color.feltEdge, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .strokeBorder(Color.brass.opacity(0.7), lineWidth: 1))
+        .background(Color.background, in: RoundedRectangle(cornerRadius: 13, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 13, style: .continuous)
+            .strokeBorder(Color.brass.opacity(0.8), lineWidth: 1))
         .shadow(color: Color.brass.opacity(0.12), radius: 12)
         .animation(.easeOut(duration: 0.25), value: code)
     }

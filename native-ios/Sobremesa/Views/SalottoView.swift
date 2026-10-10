@@ -212,7 +212,7 @@ private struct TableRow: View {
             }
             Image(systemName: "chevron.right")
                 .font(.footnote.weight(.semibold))
-                .foregroundStyle(Color.textMuted)
+                .foregroundStyle(Color.brass.opacity(0.7))
                 .accessibilityHidden(true)
         }
         .padding(.vertical, Space.l)

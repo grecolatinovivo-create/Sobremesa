@@ -29,7 +29,7 @@ struct OnboardingView: View {
 
             VStack(spacing: Space.s) {
                 Text(verbatim: "Sobremesa")
-                    .font(AppFont.display(50, relativeTo: .largeTitle))
+                    .font(AppFont.display(44, relativeTo: .largeTitle))
                     .foregroundStyle(Color.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 Text("onboarding.tagline")
@@ -46,7 +46,7 @@ struct OnboardingView: View {
             TableGlyph(occupied: store.rules.maxFriends - 1,
                        maxSeats: store.rules.maxFriends,
                        warmth: .viva,
-                       size: 290,
+                       size: 230,
                        breathing: true,
                        startIndex: 1)
                 .opacity(appeared ? 1 : 0)
@@ -56,7 +56,7 @@ struct OnboardingView: View {
 
             // Una frase sola: cosa fa l'app.
             Text("onboarding.intro")
-                .font(AppFont.bodySerif(21, relativeTo: .title3))
+                .font(AppFont.bodySerif(20, relativeTo: .title3))
                 .foregroundStyle(Color.textPrimary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)

@@ -64,7 +64,7 @@ enum SystemAppearance {
 
         let tab = UITabBarAppearance()
         tab.configureWithOpaqueBackground()
-        tab.backgroundColor = background
+        tab.backgroundColor = UIColor(named: "FeltEdge") ?? background
         tab.shadowColor = divider
         let item = UITabBarItemAppearance()
         item.normal.iconColor = muted

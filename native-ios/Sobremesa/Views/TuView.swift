@@ -122,10 +122,10 @@ private struct IdentityHeader: View {
     var body: some View {
         VStack(spacing: Space.l) {
             VStack(spacing: Space.s) {
-                AvatarView(initials: me.initials, size: 92, highlighted: true)
+                AvatarView(initials: me.initials, size: 76, highlighted: true)
                 // Il nome è tuo: si corregge quando vuoi (tocca e scrivi).
                 TextField("tu.nome.placeholder", text: $draftName)
-                    .font(AppFont.title(24, relativeTo: .title2))
+                    .font(AppFont.title(25, relativeTo: .title2))
                     .foregroundStyle(Color.textPrimary)
                     .multilineTextAlignment(.center)
                     .tint(.brass)
@@ -225,7 +225,7 @@ private struct IndexRow: View {
             }
             Image(systemName: external ? "arrow.up.right" : "chevron.right")
                 .font(.footnote.weight(.semibold))
-                .foregroundStyle(Color.textMuted)
+                .foregroundStyle(Color.brass.opacity(0.6))
                 .accessibilityHidden(true)
         }
         .padding(.vertical, Space.m)
