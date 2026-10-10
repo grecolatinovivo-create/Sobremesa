@@ -271,7 +271,7 @@ struct TavoloRoomView: View {
                 .padding(.horizontal, Space.l)
                 .frame(minHeight: 44)
                 .background(Capsule().fill(Color.brass))
-                .shadow(color: .black.opacity(0.3), radius: 8, y: 2)
+                .shadow(color: Color.background.opacity(0.7), radius: 8, y: 2)
         }
         .buttonStyle(.plain)
         .padding(.bottom, Space.s)

@@ -277,7 +277,7 @@ struct ToastView: View {
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(Color.elevated)
-                .shadow(color: .black.opacity(0.35), radius: 16, y: 6)
+                .shadow(color: Color.background.opacity(0.8), radius: 16, y: 6)
         )
         .padding(.horizontal, Space.gutter)
     }

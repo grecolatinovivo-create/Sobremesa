@@ -108,10 +108,31 @@ $do$;`).catch((error) => {
   return schemaReady;
 }
 
+/// Lo schema v3 è pronto? Mai un'eccezione: se la migrazione automatica
+/// fallisse, l'app deve continuare a funzionare col comportamento v2.
+export async function schemaV3() {
+  try {
+    await ensureSchema();
+    return true;
+  } catch (error) {
+    console.error("ensureSchema fallita, si resta in modalità v2:", error);
+    return false;
+  }
+}
+
 /// Siede una persona a un tavolo, con i vincoli garantiti dal database.
 /// Risponde { ok: true } oppure { status, error } già pronto per l'API.
 export async function seat(userId, tableId) {
-  await ensureSchema();
+  if (!(await schemaV3())) {
+    // Ripiego v2: INSERT guardato (senza trigger).
+    const { rowCount } = await sql`
+      INSERT INTO memberships (user_id, circle_id)
+      SELECT ${userId}, ${tableId}
+      WHERE (SELECT COUNT(*) FROM memberships WHERE circle_id = ${tableId}) < ${RULES.maxFriends}
+        AND (SELECT COUNT(*) FROM memberships WHERE user_id = ${userId}) < ${RULES.maxCircles}
+      ON CONFLICT DO NOTHING`;
+    return rowCount ? { ok: true } : { status: 409, error: "il tavolo è al completo" };
+  }
   try {
     await sql`INSERT INTO memberships (user_id, circle_id) VALUES (${userId}, ${tableId})`;
     return { ok: true };

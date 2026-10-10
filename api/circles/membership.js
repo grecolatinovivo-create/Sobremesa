@@ -1,7 +1,7 @@
 // POST /api/circles/membership { circleId, action: "join" | "leave" | "retake" }
 // join: tavolo aperto → ci si siede; chiuso → richiesta all'animatore.
 // I vincoli (12 sedie, 5 tavoli) li garantisce il database (v. seat()).
-import { sql, myTableIds, seatCount, applyScore, seat, ensureSchema } from "../_lib/db.js";
+import { sql, myTableIds, seatCount, applyScore, seat, schemaV3 } from "../_lib/db.js";
 import { requireAuth } from "../_lib/auth.js";
 import { RULES } from "../_lib/rules.js";
 
@@ -29,10 +29,11 @@ export default async function handler(req, res) {
     }
     if (!circle.is_open) {
       // Chi l'animatore ha bloccato non può bussare al suo tavolo.
-      await ensureSchema();
-      const { rows: blocked } = await sql`
-        SELECT 1 FROM blocks WHERE blocker = ${circle.animator} AND blocked = ${me.id}`;
-      if (blocked.length) return res.status(200).json({ requested: true });
+      if (await schemaV3()) {
+        const { rows: blocked } = await sql`
+          SELECT 1 FROM blocks WHERE blocker = ${circle.animator} AND blocked = ${me.id}`;
+        if (blocked.length) return res.status(200).json({ requested: true });
+      }
       await sql`INSERT INTO join_requests (circle_id, user_id)
                 VALUES (${circleId}, ${me.id}) ON CONFLICT DO NOTHING`;
       return res.status(200).json({ requested: true });
