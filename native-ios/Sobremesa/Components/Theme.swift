@@ -40,6 +40,16 @@ extension Color {
     static let emberWaiting  = Color("EmberWaiting")  // #ADB9AC
     // Avvisi personali (con tatto: mai rosso pieno)
     static let warning       = Color("Warning")       // #F0A69A
+
+    // v3.1 — materiali del tavolo (mockup di Astra, round 6): cuoio delle
+    // sedie, feltro illuminato dalla candela, la fiamma.
+    static let chairLeather     = Color("ChairLeather")     // #5E4A26 cuscino occupato
+    static let chairLeatherDeep = Color("ChairLeatherDeep") // #3A2E18 ombra del cuoio, piattino
+    static let chairEmpty       = Color("ChairEmpty")       // #17241F sedia libera
+    static let feltEdge         = Color("FeltEdge")         // #14211C bordo del feltro
+    static let feltLit          = Color("FeltLit")          // #6B5A2E feltro sotto la luce
+    static let flameCore        = Color("FlameCore")        // #FFF4DC cuore della fiamma
+    static let flameGold        = Color("FlameGold")        // #FFD27A corpo della fiamma
 }
 
 // MARK: - Spaziature (scala unica)
@@ -96,14 +106,15 @@ enum AppFont {
         custom(sourceSerif, size: size, relativeTo: style, fallback: .serif)
     }
 
-    /// Interfaccia e pulsanti (15).
+    /// Interfaccia e pulsanti (15). v3.1: anche l'interfaccia è in serif
+    /// (Source Serif 4), come nei mockup di Astra — più caldo, più "libro".
     static func ui(_ size: CGFloat = 15, relativeTo style: Font.TextStyle = .subheadline) -> Font {
-        custom(inter, size: size, relativeTo: style, fallback: .default)
+        custom(sourceSerif, size: size + 1, relativeTo: style, fallback: .serif)
     }
 
-    /// Metadati (13).
+    /// Metadati (13), in serif.
     static func caption(_ size: CGFloat = 13, relativeTo style: Font.TextStyle = .caption) -> Font {
-        custom(inter, size: size, relativeTo: style, fallback: .default)
+        custom(sourceSerif, size: size + 1, relativeTo: style, fallback: .serif)
     }
 
     /// Microetichette maiuscole spaziate (12), es. "DA DECIDERE".
@@ -114,15 +125,21 @@ enum AppFont {
 
 // MARK: - Pannello (l'eccezione, non la regola)
 
-/// Superficie per i pochi elementi che lo meritano (composer, codice d'invito,
-/// richieste da decidere). Raggio 12, nessuna ombra.
+/// Superficie per i pochi elementi che lo meritano (richieste, codice
+/// d'invito, presenza). v3.1: profondità come nei mockup — una luce
+/// appena più chiara in alto e un filo d'ottone tenue sul bordo.
 struct Panel: ViewModifier {
     var fill: Color = .surface
     var padding: CGFloat = Space.l
     func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
         content
             .padding(padding)
-            .background(fill, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(
+                shape.fill(LinearGradient(colors: [Color.elevated.opacity(0.9), fill],
+                                          startPoint: .top, endPoint: .bottom))
+            )
+            .overlay(shape.strokeBorder(Color.brass.opacity(0.28), lineWidth: 1))
     }
 }
 
@@ -131,9 +148,19 @@ extension View {
         modifier(Panel(fill: fill, padding: padding))
     }
 
-    /// Sfondo standard di ogni schermata.
+    /// Sfondo standard di ogni schermata: non piatto — una luce bassa e
+    /// calda dall'alto che sfuma nel verde quasi nero (vignettatura).
     func screenBackground() -> some View {
-        background(Color.background.ignoresSafeArea())
+        background(
+            ZStack {
+                Color.background
+                RadialGradient(colors: [Color.feltLit.opacity(0.22), Color.clear],
+                               center: UnitPoint(x: 0.5, y: 0), startRadius: 0, endRadius: 520)
+                LinearGradient(colors: [Color.clear, Color.feltEdge.opacity(0.6)],
+                               startPoint: .center, endPoint: .bottom)
+            }
+            .ignoresSafeArea()
+        )
     }
 }
 
@@ -148,7 +175,14 @@ struct PrimaryButtonStyle: ButtonStyle {
             .font(AppFont.ui(16, relativeTo: .body).weight(.semibold))
             .padding(.horizontal, 22)
             .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 48)
-            .background(Capsule().fill(Color.brass))
+            // Ottone in rilievo: più chiaro in alto, un filo di luce sul bordo.
+            .background(
+                Capsule()
+                    .fill(LinearGradient(colors: [Color.flameGold, Color.brass, Color.brass.opacity(0.85)],
+                                         startPoint: .top, endPoint: .bottom))
+                    .overlay(Capsule().strokeBorder(Color.flameCore.opacity(0.45), lineWidth: 0.75))
+                    .shadow(color: Color.brass.opacity(0.25), radius: 10, y: 3)
+            )
             .foregroundStyle(Color.brassInk)
             .opacity(configuration.isPressed ? 0.8 : (isEnabled ? 1 : 0.4))
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
@@ -159,13 +193,13 @@ struct PrimaryButtonStyle: ButtonStyle {
 /// Azione secondaria: contorno, su fondo trasparente. Altezza 44.
 struct SecondaryButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
-    var tint: Color = .textSecondary
+    var tint: Color = .textPrimary
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(AppFont.ui(15, relativeTo: .subheadline).weight(.medium))
             .padding(.horizontal, 18)
             .frame(minHeight: 44)
-            .overlay(Capsule().strokeBorder(Color.outline, lineWidth: 1))
+            .overlay(Capsule().strokeBorder(Color.brass.opacity(0.45), lineWidth: 1))
             .foregroundStyle(tint)
             .contentShape(Capsule())
             .opacity(configuration.isPressed ? 0.6 : (isEnabled ? 1 : 0.4))
@@ -193,14 +227,17 @@ struct AvatarView: View {
     var highlighted = false
 
     var body: some View {
+        // Avatar caldi (senza foto): cuoio con un anello d'ottone.
         SwiftUI.Circle()
-            .fill(Color.elevated)
+            .fill(RadialGradient(colors: [Color.chairLeather, Color.chairLeatherDeep],
+                                 center: UnitPoint(x: 0.4, y: 0.35), startRadius: 0, endRadius: size * 0.6))
             .overlay(
                 Text(verbatim: initials)
-                    .font(AppFont.ui(size * 0.38, relativeTo: .caption).weight(.medium))
-                    .foregroundStyle(Color.textSecondary)
+                    .font(AppFont.title(size * 0.38, relativeTo: .caption))
+                    .foregroundStyle(Color.flameGold)
             )
-            .overlay(SwiftUI.Circle().strokeBorder(highlighted ? Color.brass : Color.divider, lineWidth: 1))
+            .overlay(SwiftUI.Circle().strokeBorder(Color.brass.opacity(highlighted ? 1 : 0.55),
+                                                   lineWidth: highlighted ? 1.5 : 1))
             .frame(width: size, height: size)
             .accessibilityHidden(true)
     }
@@ -316,19 +353,22 @@ struct ScreenTitle: View {
     var subtitleKey: LocalizedStringKey? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Space.xs) {
+        // Come nei mockup: titolo grande e centrato, sottotitolo corsivo.
+        VStack(spacing: Space.xs) {
             Text(titleKey)
-                .font(AppFont.display())
+                .font(AppFont.display(42))
                 .foregroundStyle(Color.textPrimary)
                 .accessibilityAddTraits(.isHeader)
             if let subtitleKey {
                 Text(subtitleKey)
-                    .font(AppFont.bodySerif(16, relativeTo: .callout))
+                    .font(AppFont.bodySerif(18, relativeTo: .callout))
                     .italic()
-                    .foregroundStyle(Color.textMuted)
+                    .foregroundStyle(Color.textSecondary)
+                    .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity)
+        .padding(.top, Space.l)
     }
 }

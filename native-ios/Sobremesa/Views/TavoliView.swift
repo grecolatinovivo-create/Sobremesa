@@ -65,13 +65,11 @@ struct TavoliView: View {
 
     private var codicePanel: some View {
         let empty = redeemCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        // Mockup di Astra: il codice è una riga sola, campo + Entra.
         return VStack(alignment: .leading, spacing: Space.m) {
-            Text("tavoli.invito.title")
-                .font(AppFont.title(20, relativeTo: .title3))
-                .foregroundStyle(Color.textPrimary)
             HStack(spacing: Space.s) {
                 TextField("invito.codice.campo", text: $redeemCode)
-                    .font(.system(.body, design: .monospaced))
+                    .font(AppFont.ui(16, relativeTo: .body))
                     .foregroundStyle(Color.textPrimary)
                     .tint(.brass)
                     .textInputAutocapitalization(.characters)
@@ -81,15 +79,14 @@ struct TavoliView: View {
                     .onSubmit(redeem)
                     .padding(.horizontal, Space.m)
                     .frame(minHeight: 48)
-                    .background(Color.background, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .background(Color.feltEdge.opacity(0.7), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .strokeBorder(codeFocused ? Color.outline : Color.divider, lineWidth: 1))
+                        .strokeBorder(codeFocused ? Color.brass.opacity(0.7) : Color.brass.opacity(0.25), lineWidth: 1))
                 Button("invito.usa", action: redeem)
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(empty)
             }
         }
-        .panel()
     }
 
     private func redeem() {
@@ -128,18 +125,15 @@ struct TavoliView: View {
         }
         .padding(.leading, Space.m)
         .frame(minHeight: 48)
-        .background(Color.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .background(Color.feltEdge.opacity(0.7), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .strokeBorder(Color.brass.opacity(0.25), lineWidth: 1))
     }
 
     // MARK: Il catalogo (indice editoriale)
 
     private var catalogoSection: some View {
         VStack(alignment: .leading, spacing: Space.s) {
-            Text("tavoli.catalogo.section")
-                .font(AppFont.title(20, relativeTo: .title3))
-                .foregroundStyle(Color.textPrimary)
-                .accessibilityAddTraits(.isHeader)
-
             if !puoSedersi {
                 Text(verbatim: String.localizedStringWithFormat(
                     String(localized: "tavoli.pieni", bundle: L10n.bundle), store.rules.maxCircles))
@@ -160,7 +154,7 @@ struct TavoliView: View {
                     ForEach(Array(catalogo.enumerated()), id: \.element.persistentModelID) { index, tavolo in
                         rigaCatalogo(tavolo)
                         if index < catalogo.count - 1 {
-                            Hairline(inset: 44 + Space.l)
+                            Hairline(inset: 56 + Space.l)
                         }
                     }
                 }
@@ -174,11 +168,11 @@ struct TavoliView: View {
         let pieno = tavolo.memberCount >= store.rules.maxFriends
         return HStack(alignment: .center, spacing: Space.l) {
             TableGlyph(occupied: tavolo.memberCount, maxSeats: store.rules.maxFriends,
-                       warmth: warmth, size: 44)
+                       warmth: warmth, size: 56)
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(verbatim: tavolo.name)
-                        .font(AppFont.title(18, relativeTo: .headline))
+                        .font(AppFont.title(19, relativeTo: .headline))
                         .foregroundStyle(Color.textPrimary)
                         .lineLimit(2)
                     if !tavolo.isOpen {
@@ -188,10 +182,6 @@ struct TavoliView: View {
                             .accessibilityLabel(Text("a11y.tavolo.chiuso"))
                     }
                 }
-                Text(verbatim: tavolo.theme.isEmpty ? tavolo.category.labelKey.loc : tavolo.theme)
-                    .font(AppFont.caption(13))
-                    .foregroundStyle(Color.textMuted)
-                    .lineLimit(2)
                 Text(verbatim: "\(tavolo.category.labelKey.loc) · \(tavolo.memberCount)/\(store.rules.maxFriends)")
                     .font(AppFont.caption(12, relativeTo: .caption2).monospacedDigit())
                     .foregroundStyle(Color.textMuted)
@@ -225,7 +215,7 @@ struct TavoliView: View {
         Button {
             showCreate = true
         } label: {
-            Label("tavoli.fonda.title", systemImage: "plus")
+            Text("tavoli.fonda.title")
         }
         .buttonStyle(PrimaryButtonStyle(fullWidth: true))
         .disabled(!puoSedersi)

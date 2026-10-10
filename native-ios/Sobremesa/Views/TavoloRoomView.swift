@@ -25,7 +25,6 @@ struct TavoloRoomView: View {
     @Query private var allTables: [Tavolo]
 
     @State private var draft = ""
-    @State private var inviteCode: String?
     @State private var showInvite = false
     @State private var showMembers = false
     @State private var confirmLeave = false
@@ -206,7 +205,7 @@ struct TavoloRoomView: View {
             CommensaliSheet(tavolo: tavolo, sedie: sedie, warmth: warmth)
         }
         .sheet(isPresented: $showInvite) {
-            InviteSheet(tavolo: tavolo, code: inviteCode)
+            InviteSheet(tavolo: tavolo)
         }
         .onAppear { store.markRead(tavolo) }
         .onDisappear { if isAlive { store.markRead(tavolo) } }
@@ -284,15 +283,16 @@ struct TavoloRoomView: View {
             Button {
                 showMembers = true
             } label: {
+                // Il tavolo in grande, con la candela che vive (mockup di Astra).
                 TableGlyph(occupied: tavolo.memberCount, maxSeats: store.rules.maxFriends,
-                           warmth: warmth, mySeat: mySeat, size: 88, breathing: true)
+                           warmth: warmth, mySeat: mySeat, size: 210, breathing: true)
             }
             .buttonStyle(.plain)
             .accessibilityHint(Text("a11y.commensali"))
             .padding(.bottom, Space.xs)
 
             Text(verbatim: tavolo.name)
-                .font(AppFont.title(28, relativeTo: .title))
+                .font(AppFont.title(34, relativeTo: .title))
                 .foregroundStyle(Color.textPrimary)
                 .multilineTextAlignment(.center)
                 .accessibilityAddTraits(.isHeader)
@@ -372,7 +372,7 @@ struct TavoloRoomView: View {
             Button {
                 openInvite()
             } label: {
-                Label("stanza.invita", systemImage: "paperplane")
+                Text("stanza.invita")
             }
             .buttonStyle(PrimaryButtonStyle())
             .padding(.top, Space.xs)
@@ -451,9 +451,6 @@ struct TavoloRoomView: View {
 
     private func openInvite() {
         showInvite = true
-        if inviteCode == nil {
-            Task { inviteCode = await store.createInviteCode(for: tavolo) }
-        }
     }
 
     // MARK: Il composer
@@ -551,17 +548,20 @@ private struct ConversationEntry: View {
                 if continued {
                     Color.clear
                 } else {
-                    AvatarView(initials: messaggio.author?.initials ?? "?", size: 30, highlighted: mio)
+                    AvatarView(initials: messaggio.author?.initials ?? "?", size: 36, highlighted: mio)
                 }
             }
-            .frame(width: 30)
+            .frame(width: 36)
 
             VStack(alignment: .leading, spacing: 4) {
                 if !continued {
                     HStack(alignment: .firstTextBaseline, spacing: Space.s) {
+                        // Nome in maiuscoletto dorato, come una firma.
                         Text(verbatim: autore)
-                            .font(AppFont.ui(14, relativeTo: .subheadline).weight(.semibold))
-                            .foregroundStyle(mio ? Color.brass : Color.textPrimary)
+                            .font(AppFont.ui(12, relativeTo: .caption).weight(.semibold))
+                            .textCase(.uppercase)
+                            .kerning(1.4)
+                            .foregroundStyle(Color.brass)
                         Text(messaggio.createdAt, format: .dateTime.hour().minute())
                             .font(AppFont.caption(12, relativeTo: .caption2))
                             .foregroundStyle(Color.textMuted)
@@ -583,8 +583,11 @@ private struct ConversationEntry: View {
         .padding(.horizontal, mio ? Space.m : 0)
         .background {
             if mio {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.elevated)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(LinearGradient(colors: [Color.elevated, Color.surface],
+                                         startPoint: .top, endPoint: .bottom))
+                    .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(Color.brass.opacity(0.22), lineWidth: 1))
             }
         }
         .contentShape(Rectangle())
@@ -600,8 +603,7 @@ private struct ConversationEntry: View {
                 Button {
                     store.toggleNutre(on: messaggio)
                 } label: {
-                    Label(messaggio.nutritoDaMe ? "a11y.nutre.on" : "post.nutre",
-                          systemImage: messaggio.nutritoDaMe ? "leaf.fill" : "leaf")
+                    Text(messaggio.nutritoDaMe ? "a11y.nutre.on" : "post.nutre")
                 }
                 Divider()
                 Button(role: .destructive, action: onReport) {
@@ -637,26 +639,21 @@ private struct ConversationEntry: View {
     private var nutre: some View {
         if mio {
             if totaleNutre > 0 {
-                HStack(spacing: 4) {
-                    Image(systemName: "leaf.fill").imageScale(.small)
-                    Text("nutre.ha.nutrito")
-                        .font(AppFont.caption(12, relativeTo: .caption2))
-                }
-                .foregroundStyle(Color.emberAlive)
+                Text("nutre.ha.nutrito")
+                    .font(AppFont.caption(12, relativeTo: .caption2))
+                    .foregroundStyle(Color.brass)
                 .accessibilityHidden(true)
             }
         } else {
             Button {
                 store.toggleNutre(on: messaggio)
             } label: {
-                HStack(spacing: 4) {
-                    Image(systemName: messaggio.nutritoDaMe ? "leaf.fill" : "leaf")
-                        .imageScale(.small)
-                        .symbolEffect(.bounce, value: messaggio.nutritoDaMe)
-                    Text("post.nutre")
-                        .font(AppFont.caption(12, relativeTo: .caption2).weight(.medium))
-                }
-                .foregroundStyle(messaggio.nutritoDaMe ? Color.emberAlive : Color.textMuted)
+                // Un gesto testuale, senza icone né numeri.
+                Text(messaggio.nutritoDaMe ? "post.nutrito" : "post.nutre")
+                    .font(AppFont.caption(12, relativeTo: .caption2)
+                        .weight(messaggio.nutritoDaMe ? .semibold : .regular))
+                    .foregroundStyle(messaggio.nutritoDaMe ? Color.brass : Color.textMuted)
+                    .contentTransition(.opacity)
                 .frame(minWidth: 44, minHeight: 32)
                 .contentShape(Rectangle())
             }
@@ -799,76 +796,121 @@ private struct CommensaliSheet: View {
 
 // MARK: - Foglio dell'invito
 
+/// Il codice compare SUBITO e grande. Il foglio se lo procura da solo:
+/// se il tavolo è appena nato e il server non lo conosce ancora, aspetta
+/// il sync e riprova; se proprio non riesce, lo dice e offre "Riprova"
+/// (prima restava una rotellina infinita). Ogni apertura = un codice
+/// nuovo, perché il codice è monouso.
 private struct InviteSheet: View {
+    @Environment(AppStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
     let tavolo: Tavolo
-    let code: String?
+    @State private var code: String?
+    @State private var failed = false
     @State private var copied = false
 
     var body: some View {
-        VStack(spacing: Space.l) {
-            Text("stanza.invita")
-                .font(AppFont.title(24, relativeTo: .title2))
-                .foregroundStyle(Color.textPrimary)
-            Text("invito.titoletto")
-                .font(AppFont.title(19, relativeTo: .title3))
-                .foregroundStyle(Color.textPrimary)
-            Text("invito.spiega")
-                .font(AppFont.bodySerif(16, relativeTo: .callout))
-                .foregroundStyle(Color.textSecondary)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+        ScrollView {
+            VStack(spacing: Space.l) {
+                Text("stanza.invita")
+                    .font(AppFont.title(24, relativeTo: .title2))
+                    .foregroundStyle(Color.textPrimary)
+                    .padding(.top, Space.s)
 
-            Group {
+                codeBox
+
+                Text("invito.titoletto")
+                    .font(AppFont.bodySerif(16, relativeTo: .callout))
+                    .foregroundStyle(Color.textSecondary)
+                    .multilineTextAlignment(.center)
+
                 if let code {
-                    Text(verbatim: spaced(code))
-                        .font(.system(size: 34, weight: .medium, design: .monospaced))
-                        .kerning(1)
-                        .foregroundStyle(Color.textPrimary)
-                        .minimumScaleFactor(0.6)
-                        .lineLimit(1)
-                        .textSelection(.enabled)
-                        .accessibilityLabel(Text(verbatim: code.map(String.init).joined(separator: " ")))
-                } else {
-                    ProgressView().tint(.brass)
+                    VStack(spacing: Space.s) {
+                        ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle),
+                                               tavolo.name, spaced(code))) {
+                            Text("tavola.invito.condividi")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(PrimaryButtonStyle(fullWidth: true))
+                        Button {
+                            UIPasteboard.general.string = code
+                            copied = true
+                        } label: {
+                            Text(copied ? "invito.copiato" : "invito.copia")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+                        .sensoryFeedback(.success, trigger: copied)
+                    }
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 80)
-            .background(Color.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(Color.divider, lineWidth: 1))
-
-            if let code {
-                VStack(spacing: Space.s) {
-                    ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle),
-                                           tavolo.name, code)) {
-                        Label("tavola.invito.condividi", systemImage: "square.and.arrow.up")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(PrimaryButtonStyle(fullWidth: true))
-                    Button {
-                        UIPasteboard.general.string = code
-                        copied = true
-                    } label: {
-                        Label(copied ? "invito.copiato" : "invito.copia",
-                              systemImage: copied ? "checkmark" : "doc.on.doc")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(SecondaryButtonStyle())
-                    .sensoryFeedback(.success, trigger: copied)
-                }
-            }
-            Spacer(minLength: 0)
-            Text("invito.chiosa")
-                .font(AppFont.bodySerif(15, relativeTo: .footnote))
-                .italic()
-                .foregroundStyle(Color.textMuted)
-                .multilineTextAlignment(.center)
+            .padding(.horizontal, Space.xl)
+            .padding(.vertical, Space.l)
         }
-        .padding(Space.xl)
-        .presentationDetents([.medium])
+        .scrollBounceBehavior(.basedOnSize)
+        .overlay(alignment: .topTrailing) {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(Color.brass)
+                    .frame(width: 44, height: 44)
+            }
+            .accessibilityLabel(Text("a11y.toast.chiudi"))
+            .padding(Space.s)
+        }
+        .presentationDetents([.height(430), .large])
+        .presentationDragIndicator(.visible)
         .presentationBackground(Color.background)
+        .task { await load() }
     }
 
-    /// "Q7WX K2MP": il codice si legge a blocchi di quattro.
+    @ViewBuilder
+    private var codeBox: some View {
+        Group {
+            if let code {
+                Text(verbatim: spaced(code))
+                    .font(AppFont.title(36, relativeTo: .largeTitle).monospacedDigit())
+                    .kerning(7)
+                    .foregroundStyle(Color.textPrimary)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
+                    .textSelection(.enabled)
+                    .accessibilityLabel(Text(verbatim: code.map(String.init).joined(separator: " ")))
+                    .transition(.opacity)
+            } else if failed {
+                VStack(spacing: Space.s) {
+                    Text("invito.errore")
+                        .font(AppFont.ui(15))
+                        .foregroundStyle(Color.textSecondary)
+                        .multilineTextAlignment(.center)
+                    Button("invito.riprova") { Task { await load() } }
+                        .buttonStyle(TextActionStyle())
+                }
+            } else {
+                ProgressView().tint(.brass)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 96)
+        .padding(.horizontal, Space.l)
+        .background(Color.feltEdge, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .strokeBorder(Color.brass.opacity(0.7), lineWidth: 1))
+        .shadow(color: Color.brass.opacity(0.12), radius: 12)
+        .animation(.easeOut(duration: 0.25), value: code)
+    }
+
+    private func load() async {
+        failed = false
+        if let fresh = await store.createInviteCode(for: tavolo) {
+            code = fresh
+        } else {
+            failed = true
+        }
+    }
+
+    /// "Q7M4-K2LP": il codice si legge a blocchi di quattro (il trattino non conta).
     private func spaced(_ code: String) -> String {
         guard code.count == 8 else { return code }
         return String(code.prefix(4)) + "-" + String(code.suffix(4))

@@ -24,25 +24,14 @@ struct TuView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: Space.xl) {
-                    ScreenTitle(titleKey: "tu.title")
+                VStack(spacing: Space.xl) {
+                    ScreenTitle(titleKey: "tu.title", subtitleKey: "tu.sottotitolo")
                     if let me {
                         IdentityHeader(me: me)
                     }
                     indice
-                    sicurezza
-                    Button(role: .destructive) {
-                        confirmReset = true
-                    } label: {
-                        Label("tu.reset", systemImage: "trash")
-                            .font(AppFont.ui(15).weight(.medium))
-                            .foregroundStyle(Color.warning)
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                    }
-                    .padding(.top, Space.l)
                 }
                 .padding(.horizontal, Space.gutter)
-                .padding(.top, Space.l)
                 .padding(.bottom, Space.xxl)
             }
             .screenBackground()
@@ -60,70 +49,55 @@ struct TuView: View {
         }
     }
 
-    // MARK: L'indice
+    // MARK: L'indice (mockup di Astra: una sola lista sobria, niente icone)
 
     private var indice: some View {
         VStack(spacing: 0) {
-            NavigationLink {
-                ComeFunzionaView()
-            } label: {
-                IndexRow(icon: "book", titleKey: "tu.comefunziona.title", subtitleKey: "tu.comefunziona.sub")
+            NavigationLink { ComeFunzionaView() } label: {
+                IndexRow(icon: "", titleKey: "tu.comefunziona.title")
             }
-            Hairline(inset: 40)
-            NavigationLink {
-                RitualeView()
-            } label: {
-                IndexRow(icon: "clock", titleKey: "tu.rituale.label",
-                         subtitle: store.ritualEnabled ? ritualTime : nil,
-                         subtitleKey: store.ritualEnabled ? nil : "tu.rituale.spento")
+            Hairline()
+            NavigationLink { RitualeView() } label: {
+                IndexRow(icon: "", titleKey: "tu.rituale.label",
+                         value: store.ritualEnabled ? ritualTime : nil)
             }
-            Hairline(inset: 40)
-            NavigationLink {
-                LinguaView()
-            } label: {
-                IndexRow(icon: "globe", titleKey: "tu.lingua.label",
+            Hairline()
+            NavigationLink { LinguaView() } label: {
+                IndexRow(icon: "", titleKey: "tu.lingua.label",
                          value: store.language == .system
                             ? String(localized: "tu.lingua.sistema", bundle: L10n.bundle)
                             : store.language.endonym)
             }
-            Hairline(inset: 40)
-            NavigationLink {
-                CreditiView()
+            Hairline()
+            NavigationLink { BloccatiView() } label: {
+                IndexRow(icon: "", titleKey: "tu.bloccati.title",
+                         value: store.blocked.isEmpty ? nil : "\(store.blocked.count)")
+            }
+            Hairline()
+            Link(destination: SobremesaLinks.privacy) {
+                IndexRow(icon: "", titleKey: "tu.privacy.title", external: true)
+            }
+            Hairline()
+            Link(destination: SobremesaLinks.terms) {
+                IndexRow(icon: "", titleKey: "tu.termini.title", external: true)
+            }
+            Hairline()
+            Link(destination: SobremesaLinks.support) {
+                IndexRow(icon: "", titleKey: "tu.assistenza.title", external: true)
+            }
+            Hairline()
+            NavigationLink { CreditiView() } label: {
+                IndexRow(icon: "", titleKey: "tu.riconoscimenti.title")
+            }
+            Rectangle().fill(Color.brass.opacity(0.3)).frame(height: 0.5).padding(.top, Space.m)
+            // In fondo, detta col suo nome.
+            Button {
+                confirmReset = true
             } label: {
-                IndexRow(icon: "textformat", titleKey: "tu.riconoscimenti.title", subtitleKey: "tu.crediti.sub")
+                IndexRow(icon: "", titleKey: "tu.reset", tint: .warning)
             }
         }
         .buttonStyle(RowPressStyle())
-    }
-
-    // MARK: Sicurezza e privacy
-
-    private var sicurezza: some View {
-        VStack(alignment: .leading, spacing: Space.s) {
-            SectionLabel(textKey: "tu.sicurezza.section")
-            VStack(spacing: 0) {
-                NavigationLink {
-                    BloccatiView()
-                } label: {
-                    IndexRow(icon: "hand.raised", titleKey: "tu.bloccati.title",
-                             value: store.blocked.isEmpty ? nil : "\(store.blocked.count)")
-                }
-                Hairline(inset: 40)
-                Link(destination: SobremesaLinks.privacy) {
-                    IndexRow(icon: "lock", titleKey: "tu.privacy.title", external: true)
-                }
-                Hairline(inset: 40)
-                Link(destination: SobremesaLinks.terms) {
-                    IndexRow(icon: "doc.text", titleKey: "tu.termini.title", external: true)
-                }
-                Hairline(inset: 40)
-                Link(destination: SobremesaLinks.support) {
-                    IndexRow(icon: "envelope", titleKey: "tu.assistenza.title",
-                             subtitleKey: "tu.assistenza.sub", external: true)
-                }
-            }
-            .buttonStyle(RowPressStyle())
-        }
     }
 
     private var ritualTime: String {
@@ -146,45 +120,39 @@ private struct IdentityHeader: View {
     private var band: ScoreBand { store.engine.band(for: me.score) }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Space.l) {
-            HStack(alignment: .center, spacing: Space.l) {
-                AvatarView(initials: me.initials, size: 64, highlighted: true)
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
-                        // Il nome è tuo: si corregge quando vuoi.
-                        TextField("tu.nome.placeholder", text: $draftName)
-                            .font(AppFont.title(24, relativeTo: .title2))
-                            .foregroundStyle(Color.textPrimary)
-                            .tint(.brass)
-                            .submitLabel(.done)
-                            .focused($editing)
-                            .onAppear { draftName = me.name }
-                            .onSubmit { store.updateName(draftName) }
-                            .accessibilityLabel(Text("tu.nome.placeholder"))
-                        if !editing {
-                            Image(systemName: "pencil")
-                                .imageScale(.small)
-                                .foregroundStyle(Color.textMuted)
-                                .accessibilityHidden(true)
-                        }
-                    }
-                    Text("tu.sottotitolo")
-                        .font(AppFont.caption(13))
-                        .foregroundStyle(Color.textMuted)
-                }
+        VStack(spacing: Space.l) {
+            VStack(spacing: Space.s) {
+                AvatarView(initials: me.initials, size: 92, highlighted: true)
+                // Il nome è tuo: si corregge quando vuoi (tocca e scrivi).
+                TextField("tu.nome.placeholder", text: $draftName)
+                    .font(AppFont.title(24, relativeTo: .title2))
+                    .foregroundStyle(Color.textPrimary)
+                    .multilineTextAlignment(.center)
+                    .tint(.brass)
+                    .submitLabel(.done)
+                    .focused($editing)
+                    .onAppear { draftName = me.name }
+                    .onSubmit { store.updateName(draftName) }
+                    .accessibilityLabel(Text("tu.nome.placeholder"))
             }
+            .frame(maxWidth: .infinity)
 
             // La presenza: l'unico posto dove vive il numero.
             VStack(alignment: .leading, spacing: Space.s) {
+                Text("tu.presenza.label")
+                    .font(AppFont.label(11).weight(.semibold))
+                    .textCase(.uppercase)
+                    .kerning(2)
+                    .foregroundStyle(Color.textMuted)
                 HStack(alignment: .firstTextBaseline) {
                     Text(verbatim: band.localizedName)
-                        .font(AppFont.title(20, relativeTo: .title3))
-                        .foregroundStyle(Color.brass)
+                        .font(AppFont.title(26, relativeTo: .title2))
+                        .foregroundStyle(Color.textPrimary)
                     Spacer()
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text(verbatim: "\(me.score)")
-                            .font(AppFont.title(22, relativeTo: .title3).monospacedDigit())
-                            .foregroundStyle(Color.textPrimary)
+                            .font(AppFont.title(28, relativeTo: .title2).monospacedDigit())
+                            .foregroundStyle(Color.brass)
                         Text(verbatim: "/ \(store.rules.scoreMax)")
                             .font(AppFont.caption(13))
                             .foregroundStyle(Color.textMuted)
@@ -195,9 +163,8 @@ private struct IdentityHeader: View {
                                       store.rules.pointsComment,
                                       store.rules.pointsRetake,
                                       abs(store.rules.pointsSilencePenalty)))
-                    .font(AppFont.bodySerif(15, relativeTo: .footnote))
-                    .italic()
-                    .foregroundStyle(Color.textSecondary)
+                    .font(AppFont.bodySerif(14, relativeTo: .footnote))
+                    .foregroundStyle(Color.textMuted)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .panel()
@@ -231,18 +198,15 @@ private struct IndexRow: View {
     var value: String? = nil
     /// Apre fuori dall'app (sito, posta): freccia obliqua invece del chevron.
     var external = false
+    var tint: Color = .textPrimary
 
     var body: some View {
+        // Un indice sobrio, senza icone decorative (feedback di Giampiero).
         HStack(spacing: Space.l) {
-            Image(systemName: icon)
-                .font(.body)
-                .foregroundStyle(Color.textSecondary)
-                .frame(width: 24)
-                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(titleKey)
-                    .font(AppFont.ui(16, relativeTo: .body).weight(.medium))
-                    .foregroundStyle(Color.textPrimary)
+                    .font(AppFont.ui(17, relativeTo: .body))
+                    .foregroundStyle(tint)
                 if let subtitle {
                     Text(verbatim: subtitle)
                         .font(AppFont.caption(13))
@@ -264,8 +228,8 @@ private struct IndexRow: View {
                 .foregroundStyle(Color.textMuted)
                 .accessibilityHidden(true)
         }
-        .padding(.vertical, Space.l)
-        .frame(minHeight: 60)
+        .padding(.vertical, Space.m)
+        .frame(minHeight: 52)
         .contentShape(Rectangle())
     }
 }
@@ -318,11 +282,6 @@ struct ComeFunzionaView: View {
 
     private func regola(icon: String, titleKey: LocalizedStringKey, text: String) -> some View {
         HStack(alignment: .top, spacing: Space.l) {
-            Image(systemName: icon)
-                .font(.body)
-                .foregroundStyle(Color.brass)
-                .frame(width: 24)
-                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: Space.xs) {
                 Text(titleKey)
                     .font(AppFont.title(18, relativeTo: .headline))

@@ -786,37 +786,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du siehst ihre Beiträge nicht mehr, und sie kann nicht mehr an deinen Tischen um einen Platz bitten. Entsperren unter Du → Blockierte Personen."
+            "value": "Du siehst ihre Beiträge nicht mehr. Entsperren unter Du."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You won't see their remarks anymore, and they can't ask to sit at tables you host. You can unblock from You → Blocked people."
+            "value": "You won't see their remarks anymore. You can unblock from You."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No verás más sus intervenciones y no podrá pedir sentarse a las mesas que animas. Puedes desbloquear desde Tú → Personas bloqueadas."
+            "value": "No verás más sus intervenciones. Puedes desbloquear desde Tú."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu ne verras plus ses interventions et cette personne ne pourra plus demander à s'asseoir aux tables que tu animes. Débloque depuis Toi → Personnes bloquées."
+            "value": "Tu ne verras plus ses interventions. Débloque depuis Toi."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non vedrai più i suoi interventi e non potrà chiedere di sedersi ai tavoli che animi. Puoi sbloccare da Tu → Persone bloccate."
+            "value": "Non vedrai più i suoi interventi. Puoi sbloccare da Tu."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você não verá mais as intervenções dessa pessoa, e ela não poderá pedir para se sentar às mesas que você anima. Desbloqueie em Você → Pessoas bloqueadas."
+            "value": "Você não verá mais as intervenções. Desbloqueie em Você."
           }
         }
       }
@@ -1401,37 +1401,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Stuhl wird frei und das Gespräch geht ohne dich weiter. Keine Strafe."
+            "value": "Dein Stuhl wird frei. Keine Strafe."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your chair frees up and the conversation continues without you. No penalty."
+            "value": "Your chair frees up. No penalty."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu silla se libera y la conversación sigue sin ti. Sin penalización."
+            "value": "Tu silla se libera. Sin penalización."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ta chaise se libère et la conversation continue sans toi. Aucune pénalité."
+            "value": "Ta chaise se libère. Aucune pénalité."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "La tua sedia si libera e la conversazione prosegue senza di te. Nessuna penalità."
+            "value": "La tua sedia si libera. Nessuna penalità."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sua cadeira se libera e a conversa continua sem você. Nenhuma penalidade."
+            "value": "Sua cadeira fica livre. Sem penalidade."
           }
         }
       }
@@ -1524,37 +1524,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du bist der Animator: Wenn du aufstehst, schließt der Tisch für alle und das Gespräch endet."
+            "value": "Du leitest den Tisch: Er schließt sich für alle."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You're the animator: if you stand up, the table closes for everyone and the conversation ends."
+            "value": "You're the host: the table closes for everyone."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eres el animador: si te levantas, la mesa se cierra para todos y la conversación termina."
+            "value": "Eres el anfitrión: la mesa se cierra para todos."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu es l'animateur : si tu te lèves, la table ferme pour tous et la conversation s'achève."
+            "value": "Tu es l'hôte : la table se ferme pour tous."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sei l'animatore: se ti alzi, il tavolo si chiude per tutti e la conversazione finisce."
+            "value": "Sei l'animatore: il tavolo si chiude per tutti."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você é o animador: se se levantar, a mesa fecha para todos e a conversa termina."
+            "value": "Você é o anfitrião: a mesa fecha para todos."
           }
         }
       }
@@ -1770,37 +1770,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Alle können Platz nehmen, wenn sie ihn unter den Tischen zum Entdecken finden oder mit einem Code."
+            "value": "Alle dürfen Platz nehmen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anyone can sit down by finding it among the tables to discover, or with a code."
+            "value": "Anyone can sit down."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cualquiera puede sentarse encontrándola entre las mesas por descubrir o con un código."
+            "value": "Cualquiera puede sentarse."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "N'importe qui peut s'asseoir en la trouvant parmi les tables à découvrir, ou avec un code."
+            "value": "Tout le monde peut s'asseoir."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chiunque può sedersi trovandolo tra i tavoli da scoprire o con un codice."
+            "value": "Chiunque può sedersi."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Qualquer pessoa pode se sentar ao encontrá-la entre as mesas para descobrir ou com um código."
+            "value": "Qualquer pessoa pode se sentar."
           }
         }
       }
@@ -2543,6 +2543,47 @@
         }
       }
     },
+    "invito.errore": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Code ist nicht angekommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The code didn't arrive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El código no ha llegado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le code n'est pas arrivé."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il codice non è arrivato."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O código não chegou."
+          }
+        }
+      }
+    },
     "invito.messaggio": {
       "extractionState": "manual",
       "localizations": {
@@ -2580,6 +2621,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sente-se comigo em \"%1$@\" no Sobremesa. O código da mesa é: %2$@"
+          }
+        }
+      }
+    },
+    "invito.riprova": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut versuchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reintentar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riprova"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tentar de novo"
           }
         }
       }
@@ -3082,37 +3164,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kulturelle Gespräche, langsam und lebendig. Setz dich an einen Tisch, hör zu, sprich mit, bleib."
+            "value": "Setz dich an einen Tisch und sprich über Bücher, Filme und Ideen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cultural conversations, slow and alive. Sit at a table, listen, speak, stay."
+            "value": "Take a seat at a table to talk about books, films and ideas."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Conversaciones culturales, lentas y vivas. Siéntate a una mesa, escucha, interviene, quédate."
+            "value": "Siéntate a una mesa para hablar de libros, películas e ideas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Des conversations culturelles, lentes et vivantes. Assieds-toi à une table, écoute, interviens, reste."
+            "value": "Assieds-toi à une table pour parler de livres, de films et d'idées."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Conversazioni culturali, lente e vive. Siediti a un tavolo, ascolta, intervieni, resta."
+            "value": "Siediti a un tavolo per parlare di libri, film e idee."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Conversas culturais, lentas e vivas. Sente-se a uma mesa, ouça, participe, fique."
+            "value": "Sente-se a uma mesa para falar de livros, filmes e ideias."
           }
         }
       }
@@ -3410,37 +3492,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wenn du fortfährst, akzeptierst du die [Nutzungsbedingungen](https://sobremesa-psi.vercel.app/termini) und die [Datenschutzerklärung](https://sobremesa-psi.vercel.app/privacy). Am Tisch ist kein Platz für Beleidigungen und Belästigung."
+            "value": "Mit dem Fortfahren akzeptierst du [Nutzungsbedingungen](https://sobremesa-psi.vercel.app/termini) und [Datenschutzerklärung](https://sobremesa-psi.vercel.app/privacy)."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "By continuing you accept the [Terms of use](https://sobremesa-psi.vercel.app/termini) and the [Privacy policy](https://sobremesa-psi.vercel.app/privacy). There's no room at the table for abuse or harassment."
+            "value": "By continuing you accept the [Terms of use](https://sobremesa-psi.vercel.app/termini) and [Privacy policy](https://sobremesa-psi.vercel.app/privacy)."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Al continuar aceptas las [Condiciones de uso](https://sobremesa-psi.vercel.app/termini) y la [Política de privacidad](https://sobremesa-psi.vercel.app/privacy). En la mesa no hay sitio para ofensas ni acoso."
+            "value": "Al continuar aceptas las [Condiciones de uso](https://sobremesa-psi.vercel.app/termini) y la [Política de privacidad](https://sobremesa-psi.vercel.app/privacy)."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "En continuant, tu acceptes les [Conditions d'utilisation](https://sobremesa-psi.vercel.app/termini) et la [Politique de confidentialité](https://sobremesa-psi.vercel.app/privacy). À table, pas de place pour les insultes ni le harcèlement."
+            "value": "En continuant, tu acceptes les [Conditions d'utilisation](https://sobremesa-psi.vercel.app/termini) et la [Politique de confidentialité](https://sobremesa-psi.vercel.app/privacy)."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continuando accetti le [Condizioni d'uso](https://sobremesa-psi.vercel.app/termini) e l'[Informativa privacy](https://sobremesa-psi.vercel.app/privacy). Ai tavoli non c'è posto per offese e molestie."
+            "value": "Continuando accetti [Condizioni d'uso](https://sobremesa-psi.vercel.app/termini) e [Informativa privacy](https://sobremesa-psi.vercel.app/privacy)."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ao continuar, você aceita os [Termos de uso](https://sobremesa-psi.vercel.app/termini) e a [Política de privacidade](https://sobremesa-psi.vercel.app/privacy). À mesa não há lugar para ofensas nem assédio."
+            "value": "Ao continuar, você aceita os [Termos de uso](https://sobremesa-psi.vercel.app/termini) e a [Política de privacidade](https://sobremesa-psi.vercel.app/privacy)."
           }
         }
       }
@@ -3486,43 +3568,84 @@
         }
       }
     },
+    "post.nutrito": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genährt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourished"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nourri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrito"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutrido"
+          }
+        }
+      }
+    },
     "regola.brace.testo": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sie ist die Wärme des Tisches: Sie bleibt lebendig, wenn in den letzten %lld Stunden jemand gesprochen hat, dann verglimmt sie. Mit nur einer Person wartet sie."
+            "value": "Die Kerze brennt, wenn in den letzten %lld Stunden jemand gesprochen hat."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "It's the table's warmth: it stays alive if someone has spoken in the last %lld hours, then it fades. With just one person, it waits."
+            "value": "The candle is lit if someone has spoken in the last %lld hours."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Es el calor de la mesa: sigue viva si alguien habló en las últimas %lld horas; luego se apaga. Con una sola persona, espera."
+            "value": "La vela está encendida si alguien habló en las últimas %lld horas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "C'est la chaleur de la table : elle reste vive si quelqu'un a parlé dans les %lld dernières heures, puis elle s'affaiblit. Avec une seule personne, elle attend."
+            "value": "La bougie est allumée si quelqu'un a parlé dans les %lld dernières heures."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "È il calore del tavolo: resta viva se qualcuno ha parlato nelle ultime %lld ore, poi si affievolisce. Con una sola persona, aspetta."
+            "value": "La candela è accesa se qualcuno ha parlato nelle ultime %lld ore."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "É o calor da mesa: fica viva se alguém falou nas últimas %lld horas; depois esmorece. Com uma só pessoa, espera."
+            "value": "A vela está acesa se alguém falou nas últimas %lld horas."
           }
         }
       }
@@ -3574,37 +3697,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kein Like: eine stille Geste für „das hat mich genährt“. Kein öffentlicher Zähler, keine Rangliste."
+            "value": "Kein Like: Es sagt „das hat mich genährt“. Keine Zahlen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not a like: a quiet gesture to say \"this nourished me\". No public counter, no ranking."
+            "value": "Not a like: it says \"this nourished me\". No numbers."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No es un like: un gesto discreto para decir «esto me ha nutrido». Sin contador público, sin ranking."
+            "value": "No es un like: dice «esto me ha nutrido». Sin números."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pas un like : un geste discret pour dire « cela m'a nourri ». Aucun compteur public, aucun classement."
+            "value": "Pas un like : il dit « cela m'a nourri ». Aucun chiffre."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non un like: un gesto discreto per dire «questo mi ha nutrito». Nessun contatore pubblico, nessuna classifica."
+            "value": "Non un like: dice «questo mi ha nutrito». Nessun numero."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Não é um like: um gesto discreto para dizer \"isto me nutriu\". Sem contador público, sem ranking."
+            "value": "Não é um like: diz \"isto me nutriu\". Sem números."
           }
         }
       }
@@ -3656,37 +3779,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eine Zahl von 0 bis 100, die mit deiner Teilnahme wächst: Lebendige Stimme ab %1$lld, Stille Präsenz ab %2$lld. Nur du siehst sie; die anderen sehen ein Wort, nie die Zahl."
+            "value": "Eine Zahl von 0 bis 100, die nur du siehst. Die anderen sehen ein Wort: Lebendige Stimme ab %1$lld, Stille Präsenz ab %2$lld."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A number from 0 to 100 that grows as you take part: Living voice from %1$lld, Quiet presence from %2$lld. Only you see it; others see a word, never the number."
+            "value": "A number from 0 to 100 that only you see. Others see a word: Living voice from %1$lld, Quiet presence from %2$lld."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un número de 0 a 100 que crece participando: Voz viva desde %1$lld, Presencia discreta desde %2$lld. Solo lo ves tú; a los demás les llega una palabra, nunca el número."
+            "value": "Un número de 0 a 100 que solo ves tú. A los demás les llega una palabra: Voz viva desde %1$lld, Presencia discreta desde %2$lld."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un nombre de 0 à 100 qui grandit en participant : Voix vive dès %1$lld, Présence discrète dès %2$lld. Toi seul·e le vois ; les autres voient un mot, jamais le nombre."
+            "value": "Un nombre de 0 à 100 que toi seul·e vois. Les autres voient un mot : Voix vive dès %1$lld, Présence discrète dès %2$lld."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un numero da 0 a 100 che cresce partecipando: Voce viva da %1$lld, Presenza discreta da %2$lld. Lo vedi solo tu; agli altri arriva una parola, mai il numero."
+            "value": "Un numero da 0 a 100 che vedi solo tu. Agli altri arriva una parola: Voce viva da %1$lld, Presenza discreta da %2$lld."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um número de 0 a 100 que cresce participando: Voz viva a partir de %1$lld, Presença discreta a partir de %2$lld. Só você o vê; aos outros chega uma palavra, nunca o número."
+            "value": "Um número de 0 a 100 que só você vê. Aos outros chega uma palavra: Voz viva a partir de %1$lld, Presença discreta a partir de %2$lld."
           }
         }
       }
@@ -3738,37 +3861,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schweigst du seit %1$lld Tagen, erinnern wir dich behutsam; nach %2$lld wird der Stuhl für jemand anderen frei. Wer den Tisch gegründet hat, verliert ihn nie."
+            "value": "Nach %1$lld Tagen Schweigen eine Erinnerung, nach %2$lld wird der Stuhl frei. Wer den Tisch gründet, verliert ihn nie."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "If you've been silent for %1$lld days we'll gently remind you; after %2$lld the chair frees up for someone else. Whoever started the table never loses theirs."
+            "value": "After %1$lld days of silence, a reminder; after %2$lld, the chair frees up. Whoever starts the table never loses theirs."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si callas durante %1$lld días te lo recordamos con tacto; después de %2$lld la silla se libera para otra persona. Quien fundó la mesa nunca la pierde."
+            "value": "Tras %1$lld días de silencio, un recordatorio; tras %2$lld, la silla se libera. Quien funda la mesa nunca la pierde."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Si tu te tais depuis %1$lld jours, on te le rappelle avec tact ; après %2$lld, la chaise se libère pour quelqu'un d'autre. Qui a fondé la table ne la perd jamais."
+            "value": "Après %1$lld jours de silence, un rappel ; après %2$lld, la chaise se libère. Qui fonde la table ne la perd jamais."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se taci da %1$lld giorni te lo ricordiamo con garbo; dopo %2$lld la sedia si libera per qualcun altro. Chi ha fondato il tavolo non la perde mai."
+            "value": "Dopo %1$lld giorni di silenzio un promemoria; dopo %2$lld la sedia si libera. Chi fonda il tavolo non la perde mai."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Se você se cala há %1$lld dias, lembramos com delicadeza; depois de %2$lld a cadeira fica livre para outra pessoa. Quem fundou a mesa nunca a perde."
+            "value": "Após %1$lld dias de silêncio, um lembrete; após %2$lld, a cadeira fica livre. Quem funda a mesa nunca a perde."
           }
         }
       }
@@ -3820,37 +3943,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein Themengespräch mit höchstens %1$lld Stühlen. Du kannst an %2$lld Tischen gleichzeitig sitzen: wenige, ausgewählte."
+            "value": "Ein Themengespräch mit höchstens %1$lld Stühlen. Du kannst an %2$lld Tischen sitzen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A themed conversation with at most %1$lld chairs. You can sit at %2$lld tables at once: few, chosen."
+            "value": "A themed conversation with at most %1$lld chairs. You can sit at %2$lld tables."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Una conversación temática con como máximo %1$lld sillas. Puedes sentarte a %2$lld mesas a la vez: pocas, elegidas."
+            "value": "Una conversación temática con %1$lld sillas como máximo. Puedes sentarte a %2$lld mesas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Une conversation à thème, avec au plus %1$lld chaises. Tu peux t'asseoir à %2$lld tables à la fois : peu, choisies."
+            "value": "Une conversation à thème, %1$lld chaises au plus. Tu peux t'asseoir à %2$lld tables."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Una conversazione a tema, con al massimo %1$lld sedie. Puoi sedere a %2$lld tavoli insieme: pochi, scelti."
+            "value": "Una conversazione a tema, con %1$lld sedie al massimo. Puoi sederti a %2$lld tavoli."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uma conversa temática com no máximo %1$lld cadeiras. Você pode se sentar a %2$lld mesas ao mesmo tempo: poucas, escolhidas."
+            "value": "Uma conversa temática com no máximo %1$lld cadeiras. Você pode se sentar a %2$lld mesas."
           }
         }
       }
@@ -4343,37 +4466,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Salon wartet: Entdecke Tische oder gib einen Code ein, um einem Gespräch beizutreten."
+            "value": "Wähle einen Tisch oder nutze einen Code."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The parlor is waiting: discover tables or enter a code to join a conversation."
+            "value": "Pick a table or use a code."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "El salón te espera: descubre mesas o introduce un código para unirte a una conversación."
+            "value": "Elige una mesa o usa un código."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le salon t'attend : découvre les tables ou saisis un code pour rejoindre une conversation."
+            "value": "Choisis une table ou utilise un code."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il Salotto ti aspetta: scopri i tavoli o inserisci un codice per unirti a una conversazione."
+            "value": "Scegli un tavolo o usa un codice."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "O salão espera por você: descubra mesas ou digite um código para entrar numa conversa."
+            "value": "Escolha uma mesa ou use um código."
           }
         }
       }
@@ -4661,37 +4784,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du siehst ihn nicht mehr. Meldet ihn noch jemand, verschwindet er für alle, bis wir ihn geprüft haben."
+            "value": "Du siehst ihn nicht mehr. Wir prüfen ihn."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You won't see it again. If someone else reports it too, it disappears for everyone pending our review."
+            "value": "You won't see it again. We'll review it."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "No la verás más. Si otra persona también la denuncia, desaparece para todos a la espera de nuestra revisión."
+            "value": "No la verás más. La revisamos nosotros."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu ne la verras plus. Si une autre personne la signale aussi, elle disparaît pour tous en attendant notre examen."
+            "value": "Tu ne la verras plus. Nous l'examinons."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Non lo vedrai più. Se lo segnala anche un'altra persona sparisce per tutti, in attesa della nostra revisione."
+            "value": "Non lo vedrai più. Lo esaminiamo noi."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Você não a verá mais. Se outra pessoa também denunciar, ela some para todos até a nossa revisão."
+            "value": "Você não a verá mais. Nós a revisamos."
           }
         }
       }
@@ -5030,37 +5153,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dieser Tisch hat geschlossen: Der Animator ist aufgestanden, das Gespräch ist zu Ende."
+            "value": "Dieser Tisch ist geschlossen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This table has closed: the animator stood up and the conversation ended."
+            "value": "This table has closed."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esta mesa se ha cerrado: el animador se levantó y la conversación terminó."
+            "value": "Esta mesa se ha cerrado."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cette table a fermé : l'animateur s'est levé et la conversation s'est achevée."
+            "value": "Cette table est fermée."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Questo tavolo si è chiuso: l'animatore si è alzato e la conversazione è finita."
+            "value": "Questo tavolo si è chiuso."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Esta mesa fechou: o animador se levantou e a conversa terminou."
+            "value": "Esta mesa foi fechada."
           }
         }
       }
@@ -5461,37 +5584,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobald ihr mindestens zu zweit seid, beginnt die Glut zu leben. Lade jemanden ein, Platz zu nehmen."
+            "value": "Lade jemanden ein: Zu zweit brennt die Kerze."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Once there are at least two of you, the ember will come alive. Invite someone to sit down."
+            "value": "Invite someone: with two of you, the candle lights up."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cuando seáis al menos dos, la brasa empezará a vivir. Invita a alguien a sentarse."
+            "value": "Invita a alguien: entre dos, la vela se enciende."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quand vous serez au moins deux, la braise commencera à vivre. Invite quelqu'un à s'asseoir."
+            "value": "Invite quelqu'un : à deux, la bougie s'allume."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quando sarete almeno in due, la brace comincerà a vivere. Invita qualcuno a sedersi."
+            "value": "Invita qualcuno: in due la candela si accende."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quando forem pelo menos dois, a brasa começará a viver. Convide alguém para se sentar."
+            "value": "Convide alguém: a dois, a vela acende."
           }
         }
       }
@@ -5625,37 +5748,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Tisch ist bereit. Brich du das Schweigen: Das erste Wort entfacht die Glut."
+            "value": "Schreib du das erste Wort."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The table is set. Break the silence: the first word lights the ember."
+            "value": "Write the first word."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La mesa está lista. Rompe tú el silencio: la primera palabra enciende la brasa."
+            "value": "Escribe tú la primera palabra."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La table est prête. Romps le silence : le premier mot allume la braise."
+            "value": "Écris le premier mot."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tavolo è pronto. Rompi tu il silenzio: la prima parola accende la brace."
+            "value": "Scrivi tu la prima parola."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "A mesa está pronta. Quebre você o silêncio: a primeira palavra acende a brasa."
+            "value": "Escreva você a primeira palavra."
           }
         }
       }
@@ -5666,37 +5789,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Tisch ist gedeckt. Während du auf Gesellschaft wartest, kannst du den ersten Gedanken dalassen: Wer sich setzt, findet ihn vor."
+            "value": "Hinterlass den ersten Gedanken: Wer kommt, findet ihn."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The table is set. While you wait for company, you can leave the first thought: whoever sits down will find it waiting."
+            "value": "Leave the first thought: whoever arrives will find it."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La mesa está puesta. Mientras esperas compañía, puedes dejar el primer pensamiento: quien se siente lo encontrará esperando."
+            "value": "Deja el primer pensamiento: quien llegue lo encontrará."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La table est dressée. En attendant la compagnie, tu peux laisser la première pensée : qui s'assiéra la trouvera."
+            "value": "Laisse la première pensée : qui arrivera la trouvera."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Il tavolo è apparecchiato. Mentre aspetti compagnia, puoi lasciare il primo pensiero: chi si siederà lo troverà ad accoglierlo."
+            "value": "Lascia il primo pensiero: chi arriva lo troverà."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "A mesa está posta. Enquanto espera companhia, pode deixar o primeiro pensamento: quem se sentar o encontrará à espera."
+            "value": "Deixe o primeiro pensamento: quem chegar vai encontrá-lo."
           }
         }
       }
@@ -5984,37 +6107,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kein Tisch mit diesen Worten. Gründe ihn selbst: Vielleicht sucht jemand danach."
+            "value": "Kein Tisch mit diesen Worten."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No table with these words. Start it yourself: someone may be looking for it."
+            "value": "No tables match these words."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ninguna mesa con estas palabras. Fúndala tú: quizá alguien la esté buscando."
+            "value": "Ninguna mesa con estas palabras."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune table avec ces mots. Fonde-la : quelqu'un la cherche peut-être."
+            "value": "Aucune table avec ces mots."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nessun tavolo con queste parole. Fondalo tu: forse qualcuno lo sta cercando."
+            "value": "Nessun tavolo con queste parole."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nenhuma mesa com estas palavras. Funde-a você: talvez alguém a esteja procurando."
+            "value": "Nenhuma mesa com essas palavras."
           }
         }
       }
@@ -6066,37 +6189,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zurzeit keine offenen Tische. Gründe selbst einen: Wer dein Thema sucht, findet ihn hier."
+            "value": "Noch kein Tisch. Gründe einen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No open tables for now. Start one: whoever seeks your theme will find it here."
+            "value": "No tables yet. Start one."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ninguna mesa abierta, por ahora. Funda una tú: quien busque tu tema la encontrará aquí."
+            "value": "Ninguna mesa, por ahora. Funda una."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aucune table ouverte pour l'instant. Fondes-en une : qui cherche ton thème la trouvera ici."
+            "value": "Aucune table pour l'instant. Fondes-en une."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nessun tavolo aperto, per ora. Fondane uno tu: chi cerca il tuo tema lo troverà qui."
+            "value": "Nessun tavolo, per ora. Fondane uno."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nenhuma mesa aberta, por enquanto. Funde uma: quem buscar o seu tema a encontrará aqui."
+            "value": "Nenhuma mesa, por enquanto. Funde uma."
           }
         }
       }
@@ -6312,37 +6435,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Neue Gespräche warten auf dich."
+            "value": "Entdecke Tische."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "New conversations are waiting for you."
+            "value": "Discover tables."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nuevas conversaciones te esperan."
+            "value": "Descubre mesas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "De nouvelles conversations t'attendent."
+            "value": "Découvre les tables."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nuove conversazioni ti aspettano."
+            "value": "Scopri i tavoli."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Novas conversas esperam por você."
+            "value": "Descubra mesas."
           }
         }
       }
@@ -7245,37 +7368,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wen du blockierst, erscheint nicht mehr in deinen Gesprächen und kann nicht an deinen Tischen um einen Platz bitten."
+            "value": "Du siehst nicht mehr, was sie schreiben."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "People you block no longer appear in your conversations and can't ask to sit at tables you host."
+            "value": "You no longer see what they write."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quien bloqueas ya no aparece en tus conversaciones y no puede pedir sentarse a las mesas que animas."
+            "value": "Ya no ves lo que escriben."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les personnes bloquées n'apparaissent plus dans tes conversations et ne peuvent plus demander à s'asseoir aux tables que tu animes."
+            "value": "Tu ne vois plus ce qu'ils écrivent."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chi blocchi non compare più nelle tue conversazioni e non può chiedere di sedersi ai tavoli che animi."
+            "value": "Non vedi più ciò che scrivono."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quem você bloqueia não aparece mais nas suas conversas e não pode pedir para se sentar às mesas que você anima."
+            "value": "Você não vê mais o que escrevem."
           }
         }
       }
@@ -7532,37 +7655,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa spricht Italienisch, Englisch, Spanisch, Französisch, Deutsch und Portugiesisch. Standardmäßig folgt sie der Sprache des Telefons; hier wählst du selbst."
+            "value": "Standardmäßig wie das Telefon."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa speaks Italian, English, Spanish, French, German and Portuguese. By default it follows your phone's language; here you can choose your own."
+            "value": "By default it follows your phone."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa habla italiano, inglés, español, francés, alemán y portugués. De serie sigue el idioma del teléfono; aquí puedes elegirlo tú."
+            "value": "Por defecto sigue al teléfono."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa parle italien, anglais, espagnol, français, allemand et portugais. Par défaut, elle suit la langue du téléphone ; ici, c'est vous qui choisissez."
+            "value": "Par défaut, elle suit le téléphone."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa parla italiano, inglese, spagnolo, francese, tedesco e portoghese. Di serie segue la lingua del telefono; da qui puoi sceglierla tu."
+            "value": "Di serie segue il telefono."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa fala italiano, inglês, espanhol, francês, alemão e português. Por padrão segue o idioma do telefone; aqui você pode escolher."
+            "value": "Por padrão, segue o telefone."
           }
         }
       }
@@ -7655,37 +7778,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa ist die Zeit, die am Tisch bleibt, wenn das Essen vorbei ist und niemand aufstehen mag. Hier ist Knappheit das Besondere: wenige Stühle, wenige Tische, eine Glut, die man am Leben hält. Keine Follower, kein Algorithmus, kein Applaus zum Zählen: nur Gespräche, die nähren, und die Sorgfalt des Daseins."
+            "value": "Sobremesa ist die Zeit, die nach dem Essen am Tisch bleibt. Wenige Stühle, wenige Tische, kein Algorithmus: nur Gespräche."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa is the time that lingers at the table when the meal is over and nobody wants to get up. Here scarcity is the feature: few chairs, few tables, an ember to keep alive. No followers, no algorithm, no applause to count: only conversations that nourish, and the care of being there."
+            "value": "Sobremesa is the time that lingers at the table after the meal. Few chairs, few tables, no algorithm: just conversations."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa es el tiempo que queda en la mesa cuando la comida ha terminado y nadie quiere levantarse. Aquí la escasez es la virtud: pocas sillas, pocas mesas, una brasa que mantener viva. Sin seguidores, sin algoritmo, sin aplausos que contar: solo conversaciones que nutren y el cuidado de estar."
+            "value": "Sobremesa es el tiempo que queda en la mesa cuando la comida ha terminado. Pocas sillas, pocas mesas, ningún algoritmo: solo conversaciones."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa, c'est le temps qui reste à table quand le repas est fini et que personne ne veut se lever. Ici, la rareté est la qualité : peu de chaises, peu de tables, une braise à garder vivante. Pas d'abonnés, pas d'algorithme, pas d'applaudissements à compter : seulement des conversations qui nourrissent et le soin d'être là."
+            "value": "Sobremesa, c'est le temps qui reste à table après le repas. Peu de chaises, peu de tables, aucun algorithme : seulement des conversations."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa è il tempo che resta a tavola quando il pasto è finito e nessuno ha voglia di alzarsi. Qui la scarsità è la feature: poche sedie, pochi tavoli, una brace da tenere viva. Niente follower, niente algoritmo, niente applausi da contare: solo conversazioni che nutrono e la cura di esserci."
+            "value": "Sobremesa è il tempo che resta a tavola quando il pasto è finito. Poche sedie, pochi tavoli, nessun algoritmo: solo conversazioni."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sobremesa é o tempo que fica à mesa quando a refeição acabou e ninguém quer se levantar. Aqui a escassez é a virtude: poucas cadeiras, poucas mesas, uma brasa para manter viva. Sem seguidores, sem algoritmo, sem aplausos para contar: só conversas que nutrem e o cuidado de estar presente."
+            "value": "Sobremesa é o tempo que fica à mesa depois da refeição. Poucas cadeiras, poucas mesas, nenhum algoritmo: só conversas."
           }
         }
       }
@@ -7731,43 +7854,84 @@
         }
       }
     },
+    "tu.presenza.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Präsenz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presence"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presencia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Présence"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presenza"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presença"
+          }
+        }
+      }
+    },
     "tu.presenza.spiega": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jeder Beitrag zählt +%1$lld, das Wort wieder ergreifen +%2$lld; langes Schweigen kostet −%3$lld. Es zählt die Sorgfalt des Daseins, nicht die Menge."
+            "value": "Sprechen lässt deine Präsenz wachsen, langes Schweigen lässt sie sinken."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Every remark is worth +%1$lld, retaking the floor +%2$lld; a long silence costs −%3$lld. What counts is the care of being there, not the quantity."
+            "value": "Speaking makes your presence grow; a long silence makes it fall."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cada intervención vale +%1$lld, retomar la palabra +%2$lld; un largo silencio cuesta −%3$lld. Cuenta el cuidado de estar, no la cantidad."
+            "value": "Hablar hace crecer tu presencia; un largo silencio la hace bajar."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chaque intervention vaut +%1$lld, reprendre la parole +%2$lld ; un long silence coûte −%3$lld. Ce qui compte, c'est le soin d'être là, pas la quantité."
+            "value": "Parler fait grandir ta présence ; un long silence la fait baisser."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ogni intervento vale +%1$lld, riprendere la parola +%2$lld; un lungo silenzio costa −%3$lld. Conta la cura di esserci, non la quantità."
+            "value": "Parlare fa crescere la presenza; un lungo silenzio la fa calare."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cada intervenção vale +%1$lld, retomar a palavra +%2$lld; um longo silêncio custa −%3$lld. Conta o cuidado de estar presente, não a quantidade."
+            "value": "Falar faz a presença crescer; um longo silêncio a faz cair."
           }
         }
       }
@@ -7901,37 +8065,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Löscht dein Konto endgültig, vom Telefon und vom Server: Profil, Punktzahl, Beiträge, Nährt, Einladungen und die Tische, die du leitest, samt ihren Gesprächen. Das lässt sich nicht rückgängig machen."
+            "value": "Konto, Beiträge und deine Tische verschwinden für immer, vom Telefon und vom Server."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Permanently deletes your account from this phone and from the server: profile, score, remarks, Nourish, invitations, and the tables you host along with their conversations. This can't be undone."
+            "value": "Your account, remarks and the tables you host disappear forever, from the phone and the server."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Borra para siempre tu cuenta, del teléfono y del servidor: perfil, puntuación, intervenciones, Nutre, invitaciones y las mesas que animas, con sus conversaciones. No se puede deshacer."
+            "value": "Tu cuenta, intervenciones y mesas que animas desaparecen para siempre, del teléfono y del servidor."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Supprime définitivement ton compte, du téléphone et du serveur : profil, score, interventions, Nourrit, invitations et les tables que tu animes, avec leurs conversations. C'est irréversible."
+            "value": "Ton compte, tes interventions et les tables que tu animes disparaissent pour toujours, du téléphone et du serveur."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancella per sempre il tuo account, dal telefono e dal server: profilo, punteggio, interventi, Nutre, inviti e i tavoli che animi, con le loro conversazioni. Non si può annullare."
+            "value": "Account, interventi e tavoli che animi spariscono per sempre, dal telefono e dal server."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apaga para sempre a sua conta, do telefone e do servidor: perfil, pontuação, intervenções, Nutre, convites e as mesas que você anima, com as suas conversas. Não pode ser desfeito."
+            "value": "Conta, intervenções e mesas que você anima somem para sempre, do telefone e do servidor."
           }
         }
       }
@@ -8188,37 +8352,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein einziger Ruf am Tag, zur Zeit deiner Wahl: der Moment, am Tisch zu bleiben. Kein weiteres Drängen, nie."
+            "value": "Eine Erinnerung am Tag, zur Uhrzeit deiner Wahl."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "One single call a day, at the time you choose: the moment to linger at the table. No other nagging, ever."
+            "value": "One reminder a day, at the time you choose."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Una sola llamada al día, a la hora que elijas: el momento de quedarse en la mesa. Ninguna otra insistencia, nunca."
+            "value": "Un solo recordatorio al día, a la hora que elijas."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un seul rappel par jour, à l'heure que tu choisis : le moment de rester à table. Aucune autre insistance, jamais."
+            "value": "Un seul rappel par jour, à l'heure que tu choisis."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un solo richiamo al giorno, all'ora che scegli tu: il momento di restare a tavola. Nessun'altra insistenza, mai."
+            "value": "Un solo promemoria al giorno, all'ora che scegli."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Um único chamado por dia, na hora que você escolher: o momento de ficar à mesa. Nenhuma outra insistência, nunca."
+            "value": "Um só lembrete por dia, na hora que você escolher."
           }
         }
       }
@@ -8393,37 +8557,37 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tippe auf deinen Namen, um ihn zu ändern"
+            "value": "Deine Präsenz."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap your name to edit it"
+            "value": "Your presence."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toca tu nombre para corregirlo"
+            "value": "Tu presencia."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touche ton nom pour le corriger"
+            "value": "Ta présence."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tocca il nome per correggerlo"
+            "value": "La tua presenza."
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toque no nome para corrigi-lo"
+            "value": "Sua presença."
           }
         }
       }

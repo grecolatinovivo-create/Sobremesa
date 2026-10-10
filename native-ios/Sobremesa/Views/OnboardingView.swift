@@ -29,7 +29,7 @@ struct OnboardingView: View {
 
             VStack(spacing: Space.s) {
                 Text(verbatim: "Sobremesa")
-                    .font(AppFont.display(44, relativeTo: .largeTitle))
+                    .font(AppFont.display(50, relativeTo: .largeTitle))
                     .foregroundStyle(Color.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 Text("onboarding.tagline")
@@ -41,20 +41,23 @@ struct OnboardingView: View {
 
             Spacer(minLength: Space.xl)
 
-            // Il tavolo apparecchiato: dodici posti vuoti, la brace accesa.
-            TableGlyph(occupied: 0,
+            // Il tavolo apparecchiato (mockup di Astra): undici sedie e una
+            // libera in alto — c'è sempre una sedia per te — e la candela accesa.
+            TableGlyph(occupied: store.rules.maxFriends - 1,
                        maxSeats: store.rules.maxFriends,
                        warmth: .viva,
-                       size: 220,
-                       breathing: true)
+                       size: 290,
+                       breathing: true,
+                       startIndex: 1)
                 .opacity(appeared ? 1 : 0)
                 .scaleEffect(appeared || reduceMotion ? 1 : 0.96)
 
             Spacer(minLength: Space.xl)
 
+            // Una frase sola: cosa fa l'app.
             Text("onboarding.intro")
-                .font(AppFont.bodySerif(17, relativeTo: .body))
-                .foregroundStyle(Color.textSecondary)
+                .font(AppFont.bodySerif(21, relativeTo: .title3))
+                .foregroundStyle(Color.textPrimary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, Space.s)
@@ -106,11 +109,9 @@ struct OnboardingView: View {
                 .foregroundStyle(Color.textMuted)
                 .multilineTextAlignment(.center)
 
-            Text("onboarding.privacy")
-                .font(AppFont.caption(12, relativeTo: .caption2))
-                .foregroundStyle(Color.textMuted)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+            Hairline()
+                .frame(width: 96)
+                .padding(.vertical, Space.xs)
 
             // Apple 1.2: si entra accettando condizioni con tolleranza zero
             // verso i contenuti offensivi. I link (markdown) aprono il sito.

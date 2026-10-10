@@ -67,7 +67,7 @@ struct SalottoView: View {
                     }
                     .buttonStyle(RowPressStyle())
                     if index < mieSedie.count - 1 {
-                        Hairline(inset: 44 + Space.l)
+                        Hairline(inset: 60 + Space.l)
                     }
                 }
             }
@@ -94,10 +94,6 @@ struct SalottoView: View {
 
     private var daDecidere: some View {
         VStack(alignment: .leading, spacing: Space.m) {
-            Text("decidere.section")
-                .font(AppFont.title(20, relativeTo: .title3))
-                .foregroundStyle(Color.textPrimary)
-                .accessibilityAddTraits(.isHeader)
             ForEach(joinRequests, id: \.persistentModelID) { request in
                 if let person = request.person, let tavolo = request.tavolo {
                     VStack(alignment: .leading, spacing: Space.m) {
@@ -147,13 +143,13 @@ struct SalottoView: View {
                 Button {
                     store.stanzaCorrente = .tavoli
                 } label: {
-                    Label("salotto.vuoto.cta", systemImage: "magnifyingglass")
+                    Text("salotto.vuoto.cta")
                 }
                 .buttonStyle(PrimaryButtonStyle(fullWidth: true))
                 Button {
                     store.stanzaCorrente = .tavoli
                 } label: {
-                    Label("salotto.vuoto.codice", systemImage: "ticket")
+                    Text("salotto.vuoto.codice")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(SecondaryButtonStyle())
@@ -185,10 +181,9 @@ private struct TableRow: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: Space.l) {
+        HStack(alignment: .center, spacing: Space.l) {
             TableGlyph(occupied: tavolo.memberCount, maxSeats: store.rules.maxFriends,
-                       warmth: warmth, mySeat: mySeat, size: 44)
-                .padding(.top, 2)
+                       warmth: warmth, mySeat: mySeat, size: 60)
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline) {
@@ -206,10 +201,6 @@ private struct TableRow: View {
                 }
 
                 HStack(spacing: 6) {
-                    Image(systemName: "person")
-                        .imageScale(.small)
-                        .foregroundStyle(Color.textMuted)
-                        .accessibilityHidden(true)
                     Text(verbatim: "\(tavolo.memberCount)/\(store.rules.maxFriends)")
                         .font(AppFont.caption(13).monospacedDigit())
                         .foregroundStyle(Color.textMuted)
@@ -219,6 +210,10 @@ private struct TableRow: View {
 
                 preview
             }
+            Image(systemName: "chevron.right")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(Color.textMuted)
+                .accessibilityHidden(true)
         }
         .padding(.vertical, Space.l)
         .frame(minHeight: 88)

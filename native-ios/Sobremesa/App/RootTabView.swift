@@ -17,10 +17,10 @@ struct RootTabView: View {
         @Bindable var store = store
         TabView(selection: $store.stanzaCorrente) {
             SalottoView()
-                .tabItem { Label("tab.salotto", systemImage: "house") }
+                .tabItem { Label("tab.salotto", systemImage: "sofa") }
                 .tag(AppStore.Stanza.salotto)
             TavoliView()
-                .tabItem { Label("tab.tavoli", systemImage: "magnifyingglass") }
+                .tabItem { Label("tab.tavoli", systemImage: "table.furniture") }
                 .tag(AppStore.Stanza.tavoli)
             TuView()
                 .tabItem { Label("tab.tu", systemImage: "person") }

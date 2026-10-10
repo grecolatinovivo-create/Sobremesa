@@ -360,9 +360,21 @@ final class AppStore {
     // MARK: Inviti al tavolo
 
     /// Genera un codice d'invito per un tavolo (share sheet).
+    /// Robusto: un tavolo appena fondato non ha ancora l'id del server (la
+    /// fondazione è ottimistica) e la sedia dell'animatore può non essere
+    /// ancora registrata. Si risincronizza e si riprova qualche volta,
+    /// invece di arrendersi al primo colpo (era il bug della rotellina).
     func createInviteCode(for tavolo: Tavolo) async -> String? {
-        guard let id = tavolo.serverID else { return nil }
-        return try? await api.createInvite(tableID: id)
+        for attempt in 0..<4 {
+            if tavolo.serverID == nil { await performSync() }
+            if let id = tavolo.serverID,
+               let code = try? await api.createInvite(tableID: id) {
+                return code
+            }
+            try? await Task.sleep(for: .seconds(attempt == 0 ? 1 : 2))
+            await performSync()
+        }
+        return nil
     }
 
     /// Riscatta un codice ricevuto: ci si siede a quel tavolo.
