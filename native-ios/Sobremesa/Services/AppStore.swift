@@ -107,6 +107,7 @@ final class AppStore {
                                    appleUserID: appleUserID)
                 withAnimation { needsOnboarding = !data.hasProfile() }
                 await performSync()
+                redeemPendingInvite()
             } catch {
                 authError = true
             }
@@ -185,10 +186,32 @@ final class AppStore {
         syncNow()
     }
 
+    // MARK: Promemoria per tavolo
+
+    /// Tavoli con i promemoria spenti (scelta per tavolo, sul dispositivo).
+    var quietTables: Set<String> = Set(UserDefaults.standard.stringArray(forKey: "sobremesa.tavoli.silenziosi") ?? [])
+
+    private func reminderKey(_ tavolo: Tavolo) -> String {
+        tavolo.serverID ?? "nome:\(tavolo.name)"
+    }
+
+    func remindersOn(for tavolo: Tavolo) -> Bool {
+        !quietTables.contains(reminderKey(tavolo))
+    }
+
+    func setReminders(_ on: Bool, for tavolo: Tavolo) {
+        let key = reminderKey(tavolo)
+        if on { quietTables.remove(key) } else { quietTables.insert(key) }
+        UserDefaults.standard.set(Array(quietTables), forKey: "sobremesa.tavoli.silenziosi")
+        if on { notifications.requestAuthorizationIfNeeded() }
+        refreshEmberReminders()
+    }
+
     /// Riallinea i richiami locali della brace alle date reali.
+    /// Solo per i tavoli con i promemoria accesi.
     private func refreshEmberReminders() {
         let memberships = data.myMemberships().compactMap { membership -> (String, Date, Bool, Bool)? in
-            guard let tavolo = membership.tavolo else { return nil }
+            guard let tavolo = membership.tavolo, remindersOn(for: tavolo) else { return nil }
             return (tavolo.name,
                     membership.lastActivity,
                     tavolo.memberCount < rules.emberMinimumMembers,
@@ -430,6 +453,43 @@ final class AppStore {
         return (nil, detail)
     }
 
+    // MARK: Link d'invito
+
+    private static func tableID(inErrorBody body: String) -> String? {
+        guard let data = body.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
+        return object["tableId"] as? String
+    }
+
+    /// Il link d'invito: https://sobremesa-psi.vercel.app/i/CODICE
+    /// (la pagina web apre l'app con sobremesa://invito/CODICE).
+    static func inviteLink(for code: String) -> URL {
+        URL(string: "https://sobremesa-psi.vercel.app/i/\(code)")!
+    }
+
+    /// Un codice arrivato da link prima che la persona avesse fatto l'accesso:
+    /// si riscatta da solo appena l'accesso è completo.
+    private var pendingInviteCode: String?
+
+    /// Apre un link d'invito, in entrambe le forme:
+    /// sobremesa://invito/CODICE  oppure  https://…/i/CODICE
+    func handle(url: URL) {
+        let parts = ([url.host ?? ""] + url.pathComponents).filter { $0 != "/" && !$0.isEmpty }
+        guard let marker = parts.firstIndex(where: { $0 == "invito" || $0 == "i" }),
+              marker + 1 < parts.count else { return }
+        let code = parts[marker + 1]
+        guard !code.isEmpty else { return }
+        pendingInviteCode = code
+        redeemPendingInvite()
+    }
+
+    private func redeemPendingInvite() {
+        guard let code = pendingInviteCode, !needsOnboarding, SessionStore.token != nil else { return }
+        pendingInviteCode = nil
+        stanzaCorrente = .salotto
+        redeemInvite(code: code)
+    }
+
     /// Riscatta un codice ricevuto: ci si siede a quel tavolo.
     func redeemInvite(code: String) {
         // Il codice si mostra "Q7M4-K2LP": trattini e spazi non contano.
@@ -444,6 +504,15 @@ final class AppStore {
                 if let tableID,
                    let tavolo = data.myMemberships().compactMap(\.tavolo).first(where: { $0.serverID == tableID }) {
                     open(tavolo)
+                }
+            } catch APIError.http(409, let body) where body.contains("tableId") {
+                // Già seduti a quel tavolo (es. link aperto due volte): si apre la stanza.
+                await performSync()
+                if let tableID = Self.tableID(inErrorBody: body),
+                   let tavolo = data.myMemberships().compactMap(\.tavolo).first(where: { $0.serverID == tableID }) {
+                    open(tavolo)
+                } else {
+                    show(message: String(localized: "toast.invito.errore", bundle: L10n.bundle))
                 }
             } catch {
                 show(message: String(localized: "toast.invito.errore", bundle: L10n.bundle))

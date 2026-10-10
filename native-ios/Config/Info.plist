@@ -15,6 +15,18 @@
 		<key>UIColorName</key>
 		<string>Background</string>
 	</dict>
+	<!-- Link d'invito: sobremesa://invito/CODICE apre l'app e siede al tavolo. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>app.sobremesa.invito</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sobremesa</string>
+			</array>
+		</dict>
+	</array>
 	<!-- Niente crittografia proprietaria: evita la domanda a ogni upload su App Store Connect. -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>

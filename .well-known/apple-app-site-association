@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["8F9ADUF7ZU.app.sobremesa"],
+        "components": [
+          { "/": "/i/*", "comment": "Link d'invito: apre Sobremesa e siede al tavolo" }
+        ]
+      }
+    ]
+  }
+}

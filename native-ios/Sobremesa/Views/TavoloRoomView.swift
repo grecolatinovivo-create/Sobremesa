@@ -435,6 +435,11 @@ struct TavoloRoomView: View {
             } label: {
                 Label("azione.riprendi", systemImage: "flame")
             }
+            // Promemoria della brace, scelti tavolo per tavolo.
+            Toggle(isOn: Binding(get: { store.remindersOn(for: tavolo) },
+                                 set: { store.setReminders($0, for: tavolo) })) {
+                Label("stanza.promemoria", systemImage: "bell")
+            }
             Divider()
             Button(role: .destructive) {
                 confirmLeave = true
@@ -836,7 +841,8 @@ private struct InviteSheet: View {
                 if let code {
                     VStack(spacing: Space.s) {
                         ShareLink(item: String(format: String(localized: "invito.messaggio", bundle: L10n.bundle),
-                                               tavolo.name, spaced(code))) {
+                                               tavolo.name, spaced(code),
+                                               AppStore.inviteLink(for: code).absoluteString)) {
                             Text("tavola.invito.condividi")
                                 .frame(maxWidth: .infinity)
                         }

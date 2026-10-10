@@ -341,6 +341,38 @@ struct RitualeView: View {
                 .panel()
                 .animation(.easeInOut(duration: 0.2), value: store.ritualEnabled)
 
+                // Promemoria della brace, tavolo per tavolo.
+                VStack(alignment: .leading, spacing: Space.m) {
+                    Text("tu.promemoria.titolo")
+                        .font(AppFont.title(20))
+                        .foregroundStyle(Color.textPrimary)
+                    Text("tu.promemoria.hint")
+                        .font(AppFont.bodySerif(15, relativeTo: .callout))
+                        .foregroundStyle(Color.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    let tavoli = store.myMemberships.compactMap(\.tavolo)
+                    if tavoli.isEmpty {
+                        Text("tu.promemoria.vuoto")
+                            .font(AppFont.ui(15))
+                            .foregroundStyle(Color.textSecondary)
+                    } else {
+                        VStack(spacing: 0) {
+                            ForEach(Array(tavoli.enumerated()), id: \.offset) { index, tavolo in
+                                if index > 0 { Hairline() }
+                                Toggle(isOn: Binding(get: { store.remindersOn(for: tavolo) },
+                                                     set: { store.setReminders($0, for: tavolo) })) {
+                                    Text(verbatim: tavolo.name)
+                                        .font(AppFont.ui(16, relativeTo: .body))
+                                        .foregroundStyle(Color.textPrimary)
+                                }
+                                .tint(.brass)
+                                .padding(.vertical, Space.s)
+                            }
+                        }
+                        .panel()
+                    }
+                }
+
                 VStack(spacing: Space.xs) {
                     Text("notif.rituale.title")
                         .font(AppFont.ui(14).weight(.semibold))
